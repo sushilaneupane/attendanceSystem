@@ -9,8 +9,7 @@ import RegisterForm from "./pages/Register/index";
 
 import Home from "./pages/Home/index";
 import Dashboard from "./pages/admin/AdminDashboard";
-import TenantSignUp from "./pages/tenant/TenantRegister/index";
-import DepartmentPage from "./pages/tenant/Department/index";
+import TenantSignUp from "./pages/tenant/TenantRegister/tenantSignup";
 
 export default function App() {
   return (
@@ -29,7 +28,6 @@ export default function App() {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/tenant-register" element={<TenantSignUp/>} />
-        <Route path="/department" element={<DepartmentPage />} />
       </Routes>
     </BrowserRouter>
   );

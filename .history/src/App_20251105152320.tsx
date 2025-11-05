@@ -9,7 +9,7 @@ import RegisterForm from "./pages/Register/index";
 
 import Home from "./pages/Home/index";
 import Dashboard from "./pages/admin/AdminDashboard";
-import TenantSignUp from "./pages/tenant/TenantRegister/index";
+import TenantSignUp from "./pages/tenant/";
 import DepartmentPage from "./pages/tenant/Department/index";
 
 export default function App() {
