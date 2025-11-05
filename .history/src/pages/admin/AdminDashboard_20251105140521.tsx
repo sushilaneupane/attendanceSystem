@@ -32,7 +32,7 @@ export default function Dashboard() {
     { name: "Settings", path: "/settings", icon: <Settings size={18} /> },
     { name: "Change Password", path: "/change-password", icon: <KeyRound size={18} /> },
     { name: "Manage User", path: "/user", icon: <Users size={18} /> },
-    { name: "Tenant", path: "/tenant-register", icon: <FileText size={18} /> },
+    { name: "Tenant", path: "/tenant-re", icon: <FileText size={18} /> },
   ];
 
   const handleLogout = (): void => {

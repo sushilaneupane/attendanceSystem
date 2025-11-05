@@ -9,9 +9,7 @@ import RegisterForm from "./pages/Register/index";
 
 import Home from "./pages/Home/index";
 import Dashboard from "./pages/admin/AdminDashboard";
-
-import { TenantsPage } from "./pages/tenant/tenant";
-import TenantSignUp from "./pages/tenant/TenantRegister/index";
+import TenantSignUp from "./pages/tenant/";
 import DepartmentPage from "./pages/tenant/Department/index";
 
 export default function App() {
@@ -31,7 +29,6 @@ export default function App() {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/tenant-register" element={<TenantSignUp/>} />
-        <Route path="/tenant" element={<TenantsPage/>} />
         <Route path="/department" element={<DepartmentPage />} />
       </Routes>
     </BrowserRouter>
