@@ -82,6 +82,10 @@ export default function Dashboard() {
         </div>
 
         <div className="space-y-2">
+          <Button className="w-full flex gap-2">
+            <User size={18} /> Account
+          </Button>
+
           <Button
             className="w-full flex gap-2 bg-red-600 hover:bg-red-700 text-white"
             onClick={handleLogout}

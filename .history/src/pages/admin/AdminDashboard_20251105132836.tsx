@@ -31,6 +31,7 @@ export default function Dashboard() {
     { name: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={18} /> },
     { name: "Settings", path: "/settings", icon: <Settings size={18} /> },
     { name: "Change Password", path: "/change-password", icon: <KeyRound size={18} /> },
+    { name: "History", path: "/history", icon: <History size={18} /> },
     { name: "Manage User", path: "/user", icon: <Users size={18} /> },
     { name: "Tenant", path: "/tenant", icon: <FileText size={18} /> },
   ];
@@ -82,6 +83,10 @@ export default function Dashboard() {
         </div>
 
         <div className="space-y-2">
+          <Button className="w-full flex gap-2">
+            <User size={18} /> Account
+          </Button>
+
           <Button
             className="w-full flex gap-2 bg-red-600 hover:bg-red-700 text-white"
             onClick={handleLogout}
