@@ -22,7 +22,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true); // Loading while restoring session
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         parsedUser = JSON.parse(userDataRaw);
       } catch (error) {
         console.error("Failed to parse user from localStorage:", error);
-        localStorage.removeItem("user");
+        localStorage.removeItem("user"); // Clean up invalid data
       }
     }
 
@@ -47,12 +47,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setLoading(false);
   }, []);
 
+  // Login function
   const login = (token: string, userData: User) => {
     localStorage.setItem("authToken", token);
     localStorage.setItem("user", JSON.stringify(userData));
     setIsAuthenticated(true);
     setUser(userData);
   };
+
+  // Logout function
   const logout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");

@@ -1,10 +1,13 @@
 
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
 import MainLayout from "./layouts/MainLayout";
+
 import LoginForm from "./pages/Login/index";
 import RegisterForm from "./pages/Register/index";
 import Dashboard from "./pages/admin/AdminDashboard";
+
 import { TenantsPage } from "./pages/tenant/TenantPage";
 import TenantSignUp from "./pages/tenant/TenantRegister/index";
 import DepartmentPage from "./pages/tenant/Department/index";
