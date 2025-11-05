@@ -47,12 +47,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setLoading(false);
   }, []);
 
+  // Login function
   const login = (token: string, userData: User) => {
     localStorage.setItem("authToken", token);
     localStorage.setItem("user", JSON.stringify(userData));
     setIsAuthenticated(true);
     setUser(userData);
   };
+
+  // Logout function
   const logout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");
