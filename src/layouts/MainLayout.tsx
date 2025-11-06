@@ -6,7 +6,8 @@ import Sidebar from "../components/sidebar/sidebar.js";
 export default function MainLayout() {
   return (
     <>
-      <Sidebar />
+    <span > <Sidebar /></span>
+     
       <main className="min-h-screen">
         <Outlet />
       </main>

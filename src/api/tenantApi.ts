@@ -22,6 +22,13 @@ export interface RegisterTenantResponse {
   frontendUrl: string;
 }
 
+export interface Tenant {
+  id: string;
+  name: string;
+  frontendUrl: string;
+  isActive: boolean;
+  createdAt: string;
+}
 // Custom error class to preserve backend details but show user-friendly message
 class RegistrationError extends Error {
   public backendError?: any;
@@ -51,4 +58,9 @@ export const registerTenant = async (
       error
     );
   }
+};
+
+export const getAllTenants = async (): Promise<Tenant[]> => {
+  const response = await axios.get<Tenant[]>(`${apiUrl}/Tenants`);
+  return response.data;
 };

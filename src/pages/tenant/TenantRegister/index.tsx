@@ -18,7 +18,7 @@ import {
 } from "../../../components/ui/card";
 
 import { Eye } from "lucide-react";
-import { useTenants } from "../../../hooks/useTenants";
+import { useRegisterTenants } from "../../../hooks/useTenants";
 
 // Zod schema
 const tenantRegisterSchema = z.object({
@@ -38,7 +38,7 @@ type TenantRegisterForm = z.infer<typeof tenantRegisterSchema>;
 
 export default function TenantSignUp() {
   const navigate = useNavigate();
-  const { registerTenantMutation } = useTenants();
+  const { registerTenantMutation } = useRegisterTenants();
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -96,8 +96,8 @@ export default function TenantSignUp() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4 bg-gray-100">
-      <Card className="w-full max-w-md rounded-lg shadow-lg">
+    
+      <Card className="w-full max-w-md rounded-lg border-none -mt-13">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold text-red-500">Register Your Company</CardTitle>
           <CardDescription>Fill in the details to create your tenant account</CardDescription>
@@ -109,28 +109,28 @@ export default function TenantSignUp() {
             className="grid grid-cols-1 gap-4 md:grid-cols-2"
           >
             {/* Company Name */}
-            <div className="flex flex-col gap-2 md:col-span-2">
+            <div className="flex flex-col gap-1 md:col-span-2">
               <Label className="mb-1">Company Name</Label>
               <Input placeholder="Enter company name" {...register("name")} />
               <p className="text-sm text-red-500 min-h-5">{errors.name?.message || " "}</p>
             </div>
 
             {/* Server */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1">
               <Label>Server</Label>
               <Input placeholder="Enter server" {...register("server")} />
               <p className="text-sm text-red-500 min-h-5">{errors.server?.message || " "}</p>
             </div>
 
             {/* Database */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1">
               <Label>Database</Label>
               <Input placeholder="Enter database" {...register("database")} />
               <p className="text-sm text-red-500 min-h-5">{errors.database?.message || " "}</p>
             </div>
 
             {/* Windows Auth Checkbox */}
-            <div className="flex items-center gap-2 md:col-span-2">
+            <div className="flex items-center gap-1 md:col-span-2">
               <input 
                 type="checkbox" 
                 id="useWindowsAuth"
@@ -145,13 +145,13 @@ export default function TenantSignUp() {
             {/* Conditional UserId & Password */}
             {!useWindowsAuth && (
               <>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1">
                   <Label>User ID</Label>
                   <Input placeholder="Enter user ID" {...register("userId")} />
                   <p className="text-sm text-red-500 min-h-5">{errors.userId?.message || " "}</p>
                 </div>
 
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1">
                   <Label>Password</Label>
                   <div className="relative">
                     <Input
@@ -174,7 +174,7 @@ export default function TenantSignUp() {
             )}
 
             {/* Frontend Subdomain */}
-            <div className="flex flex-col gap-2 md:col-span-2">
+            <div className="flex flex-col gap-1 md:col-span-2">
               <Label>Frontend Subdomain</Label>
               <Input placeholder="your-company (for subdomain)" {...register("frontendUrl")} />
               <p className="text-sm text-red-500 min-h-5">{errors.frontendUrl?.message || " "}</p>
@@ -206,6 +206,6 @@ export default function TenantSignUp() {
           </p>
         </CardFooter>
       </Card>
-    </div>
+   
   );
 }
