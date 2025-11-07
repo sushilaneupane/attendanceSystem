@@ -11,7 +11,10 @@ import {
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu"
 import { DataTable } from "../../../components/table/DataTable"
-import Sidebar from "../../../components/sidebar/sidebar"
+import { useTenantsQuery } from "@/hooks/useTenants";
+
+import { DialogBox } from "@/components/Dialogs/Dialogbox"
+import TenantSignUp from "../TenantRegister"
 
 interface Tenant {
   id: string
@@ -23,7 +26,21 @@ interface Tenant {
 
 export function TenantsPage() {
   const [searchTerm, setSearchTerm] = useState("")
-  const [tenants, setTenants] = useState<Tenant[]>([])
+  
+const { data: tenants = [], isLoading, isError, error } = useTenantsQuery();
+
+if (isLoading) {
+    return <p className="p-8 text-muted-foreground">Loading tenants...</p>;
+  }
+
+  if (isError) {
+    return (
+      <p className="p-8 text-destructive">
+        Failed to fetch tenants: {error.message}
+      </p>
+    );
+  }
+  
 
   const filteredTenants = tenants.filter(
     (t) =>
@@ -31,20 +48,25 @@ export function TenantsPage() {
       t.frontendUrl?.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-  const handleAddTenant = () => console.log("Redirect to add tenant")
+  
   const handleEditTenant = (id: string) => console.log("Edit tenant", id)
   const handleDeleteTenant = (id: string) => console.log("Delete tenant", id)
 
   return (
-    <>
-    <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight">Tenants</h2>
-          <p className="text-muted-foreground">
-            Manage your tenants and their information
-          </p>
-        </div>
+    
+     
+      
+      
+      <div className="flex-1 space-y-4 p-4 md:p-8 pt-6 ">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex-1 mt-10">
+            <h2 className="text-3xl font-bold tracking-tight">Tenants</h2>
+            <p className="text-muted-foreground">
+              Manage your tenants and their information
+            </p>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
@@ -55,97 +77,107 @@ export function TenantsPage() {
               />
             </div>
 
-        <Button onClick={handleAddTenant}>
-          <Plus className="mr-2 h-4 w-4" />
-          Add Tenant
-        </Button>
-      </div>
+             
+             <DialogBox
+          triggerButtonText={
+            <>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Tenant
+            </>
+          }
+        
+         
+        >
+          < TenantSignUp/>
+        </DialogBox>
+                   
+            
+           
+          </div>
+        </div>
 
-    
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Tenants List</CardTitle>
-          <CardDescription>
-            {filteredTenants.length} tenant{filteredTenants.length !== 1 ? "s" : ""} found
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <DataTable
-            headers={["Name", "Frontend URL", "Status", "Created At", "Actions"]}
-            data={filteredTenants}
-            emptyMessage="No tenants found. Add your first tenant to get started."
-            renderRow={(tenant) => (
-              <>
-                <td>
-                  <div>
-                    <div className="font-semibold">{tenant.name}</div>
-                    <div className="text-xs text-muted-foreground mt-1">
-                      ID: {tenant.id}
+        <Card>
+          <CardHeader>
+            <CardTitle>Tenants List</CardTitle>
+            <CardDescription>
+              {filteredTenants.length} tenant{filteredTenants.length !== 1 ? "s" : ""} found
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <DataTable
+              headers={["Name", "Frontend URL", "Status", "Created At", "Actions"]}
+              data={filteredTenants}
+              emptyMessage="No tenants found. Add your first tenant to get started."
+              renderRow={(tenant) => (
+                <>
+                  <td>
+                    <div>
+                      <div className="font-semibold">{tenant.name}</div>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        ID: {tenant.id}
+                      </div>
                     </div>
-                  </div>
-                </td>
+                  </td>
 
-                <td>
-                  {tenant.frontendUrl ? (
-                    <a
-                      href={tenant.frontendUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 hover:underline break-all"
-                    >
-                      {tenant.frontendUrl}
-                    </a>
-                  ) : (
-                    <span className="text-muted-foreground">No URL</span>
-                  )}
-                </td>
-
-                <td>
-                  <Badge variant={tenant.isActive ? "default" : "secondary"}>
-                    {tenant.isActive ? "Active" : "Inactive"}
-                  </Badge>
-                </td>
-
-                <td>
-                  {new Date(tenant.createdAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </td>
-
-                <td className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-8 w-8 p-0">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => handleEditTenant(tenant.id)}>
-                        <Edit className="mr-2 h-4 w-4" />
-                        Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        className="text-destructive"
-                        onClick={() => handleDeleteTenant(tenant.id)}
+                  <td>
+                    {tenant.frontendUrl ? (
+                      <a
+                        href={tenant.frontendUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800 hover:underline break-all"
                       >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </td>
-              </>
-            )}
-          />
-        </CardContent>
+                        {tenant.frontendUrl}
+                      </a>
+                    ) : (
+                      <span className="text-muted-foreground">No URL</span>
+                    )}
+                  </td>
 
-      </Card>
-    </div>
-     </>
+                  <td>
+                    <Badge variant={tenant.isActive ? "default" : "secondary"}>
+                      {tenant.isActive ? "Active" : "Inactive"}
+                    </Badge>
+                  </td>
+
+                  <td>
+                    {new Date(tenant.createdAt).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </td>
+
+                  <td className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleEditTenant(tenant.id)}>
+                          <Edit className="mr-2 h-4 w-4" />
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-destructive"
+                          onClick={() => handleDeleteTenant(tenant.id)}
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </td>
+                </>
+              )}
+            />
+          </CardContent>
+        </Card>
+      </div>
+  
   )
 }

@@ -1,7 +1,6 @@
-import axios  from "axios";
+import axios from "axios";
 
 const apiUrl = (import.meta as any).env?.VITE_BASE_URL as string;
-
 
 export interface RegisterTenantData {
   name: string;
@@ -11,19 +10,34 @@ export interface RegisterTenantData {
   userId: string | null;
   password: string | null;
   frontendUrl: string;
- 
 }
 
-
 export interface RegisterTenantResponse {
-   name: string;
+  name: string;
   server: string;
   database: string;
   useWindowsAuth: boolean;
   userId: string | null;
   password: string | null;
   frontendUrl: string;
+}
 
+export interface Tenant {
+  id: string;
+  name: string;
+  frontendUrl: string;
+  isActive: boolean;
+  createdAt: string;
+}
+// Custom error class to preserve backend details but show user-friendly message
+class RegistrationError extends Error {
+  public backendError?: any;
+  
+  constructor(message: string, backendError?: any) {
+    super(message);
+    this.name = "RegistrationError";
+    this.backendError = backendError;
+  }
 }
 
 export const registerTenant = async (
@@ -36,12 +50,17 @@ export const registerTenant = async (
     );
     return response.data;
   } catch (error) {
-    let message = "Failed to register tenant";
-
-    if (axios.isAxiosError(error)) {
-      message = error.response?.data?.message || message;
-    }
-
-    throw new Error(message);
+    console.error("Backend registration error:", error);
+    
+   
+    throw new RegistrationError(
+      "Registration failed. ",
+      error
+    );
   }
+};
+
+export const getAllTenants = async (): Promise<Tenant[]> => {
+  const response = await axios.get<Tenant[]>(`${apiUrl}/Tenants`);
+  return response.data;
 };
