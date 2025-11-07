@@ -11,10 +11,10 @@ export const useDepartments = () => {
     queryKey: ["departments"],
     queryFn: async () => {
       const response = await getDepartments();
-      return response.data; // return only the array of departments
+      return response.data;
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes caching (optional)
-    refetchOnWindowFocus: false, // optional
+    staleTime: 5 * 60 * 1000, 
+    refetchOnWindowFocus: false, 
   });
 };
 

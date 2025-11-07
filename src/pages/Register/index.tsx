@@ -19,7 +19,6 @@ import {
 import { useUser } from "../../hooks/useUser";
 import { Eye } from "lucide-react";
 
-// ✅ Zod Schema
 const schema = z.object({
   firstName: z.string().optional(),
   lastName: z.string().optional(),
@@ -29,10 +28,7 @@ const schema = z.object({
   confirmPassword: z.string().optional(),
 });
 
-// Type for form data inferred from Zod schema
 type RegisterFormInputs = z.infer<typeof schema>;
-
-// Type for backend errors
 type BackendErrors = {
   [key: string]: string[];
 };
