@@ -32,13 +32,13 @@ const Sidebar: React.FC = () => {
     { name: "Settings", path: "/settings", icon: <Settings size={18} /> },
     { name: "Change Password", path: "/change-password", icon: <KeyRound size={18} /> },
     { name: "Manage User", path: "/user", icon: <Users size={18} /> },
-    { name: "Tenant", path: "/tenant-register", icon: <FileText size={18} /> },
-    
-    
+    { name: "Tenant", path: "/tenant", icon: <FileText size={18} /> },
+    { name: "department", path: "/department", icon: <FileText size={18} /> }
   ];
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("user")
     navigate("/login");
   };
 
@@ -85,10 +85,10 @@ const Sidebar: React.FC = () => {
 
         <div className="space-y-2">
           <Button
-            className="w-full flex gap-2 bg-red-600 hover:bg-red-700 text-white"
+            className="w-full flex gap-2 text-black bg-white hover:bg-white hover:text-black "
             onClick={handleLogout}
           >
-            <LogOut size={18} /> Logout
+            <User size={18} /> Logout
           </Button>
         </div>
       </div>

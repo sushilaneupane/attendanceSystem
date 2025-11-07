@@ -3,7 +3,6 @@ import type { RegisterTenantData, RegisterTenantResponse } from "../api/tenantAp
 import { registerTenant } from "../api/tenantApi";
 
 export const useTenants = () => {
-  // Use mutationFn syntax with explicit types
   const registerTenantMutation = useMutation<RegisterTenantResponse, Error, RegisterTenantData>({
     mutationFn: registerTenant,
   });

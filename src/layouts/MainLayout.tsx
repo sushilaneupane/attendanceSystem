@@ -7,7 +7,7 @@ export default function MainLayout() {
   return (
     <>
       <Sidebar />
-      <main className="min-h-screen">
+      <main className="min-h-screen md:ml-64 p-4">
         <Outlet />
       </main>
       <Toaster richColors position="top-right" />

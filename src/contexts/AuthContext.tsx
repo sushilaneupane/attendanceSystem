@@ -27,7 +27,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     const userDataRaw = localStorage.getItem("user");
-
     let parsedUser: User | null = null;
 
     if (userDataRaw && userDataRaw !== "undefined") {
@@ -53,6 +52,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setIsAuthenticated(true);
     setUser(userData);
   };
+
   const logout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");

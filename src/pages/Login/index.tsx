@@ -66,7 +66,7 @@ export default function LoginPage() {
           localStorage.setItem("authToken", token);
           loginContext(token, user);
           toast.success("Logged in successfully!");
-          navigate("/dashboard");
+          navigate("/home");
         }
       },
       onError: (error: any) => {
