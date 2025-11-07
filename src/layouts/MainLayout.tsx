@@ -6,9 +6,9 @@ import Sidebar from "../components/sidebar/sidebar.js";
 export default function MainLayout() {
   return (
     <>
-    <span > <Sidebar /></span>
+     <Sidebar />
      
-      <main className="min-h-screen">
+      <main className="min-h-screen md:ml-64">
         <Outlet />
       </main>
       <Toaster richColors position="top-right" />
