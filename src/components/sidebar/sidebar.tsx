@@ -4,14 +4,13 @@ import {
   Menu,
   X,
   LayoutDashboard,
-  CalendarCheck,
+ 
   Users,
   FileText,
   Settings,
   User,
   LogOut,
-  History,
-  DollarSign,
+ 
   KeyRound,
 } from "lucide-react";
 import { Button } from "../ui/button";
@@ -84,11 +83,12 @@ const Sidebar: React.FC = () => {
         </div>
 
         <div className="space-y-2">
+          
           <Button
             className="w-full flex gap-2 bg-red-600 hover:bg-red-700 text-white"
             onClick={handleLogout}
           >
-            <LogOut size={18} /> Logout
+            <User size={18} /> Logout
           </Button>
         </div>
       </div>
