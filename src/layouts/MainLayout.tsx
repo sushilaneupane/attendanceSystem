@@ -1,14 +1,14 @@
+
 import React from "react";
 import { Toaster } from "sonner";
 import { Outlet } from "react-router-dom";
-import Sidebar from "../components/sidebar/sidebar.js";
+import Sidebar from "../components/sidebar/sidebar";
 
-export default function MainLayout() {
+export default function MainLayout({ navLinks }: { navLinks?: any[] }) {
   return (
     <>
-     <Sidebar />
-     
-      <main className="min-h-screen md:ml-64">
+      <Sidebar navLinks={navLinks} />
+      <main className=" md:ml-64">
         <Outlet />
       </main>
       <Toaster richColors position="top-right" />

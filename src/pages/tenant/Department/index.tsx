@@ -15,6 +15,8 @@ import { DataTable } from "../../../components/table/DataTable";
 import{DialogBox} from "../../../components/Dialogs/Dialogbox";
 import { useDepartments } from "../../../hooks/useDepartments";
 import { Department } from "@/api/departmentApi";
+import MainLayout from "@/layouts/MainLayout";
+import { tenantLinks } from "../TenantDashboard";
 import DepartmentRegister from "./departmentRegister";
 
 export function DepartmentPage() {
@@ -31,6 +33,9 @@ export function DepartmentPage() {
   const handleDeleteDepartment = (id: string) => console.log("Delete department", id);
 
   return (
+    <>
+    <MainLayout navLinks={tenantLinks}/>
+  
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
       <div className="flex items-center justify-between">
         <div>
@@ -116,5 +121,6 @@ export function DepartmentPage() {
         </CardContent>
       </Card>
     </div>
+      </>
   );
 }

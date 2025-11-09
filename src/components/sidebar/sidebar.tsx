@@ -1,17 +1,8 @@
+// src/components/sidebar/sidebar.tsx
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
-  Menu,
-  X,
-  LayoutDashboard,
- 
-  Users,
-  FileText,
-  Settings,
-  User,
-  LogOut,
- 
-  KeyRound,
+  Menu, X, LayoutDashboard, Users, FileText, Settings, User, KeyRound,
 } from "lucide-react";
 import { Button } from "../ui/button";
 
@@ -21,23 +12,29 @@ interface NavLinkItem {
   icon: React.ReactNode;
 }
 
-const Sidebar: React.FC = () => {
-  const [open, setOpen] = useState<boolean>(false);
+interface SidebarProps {
+  navLinks?: NavLinkItem[];
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ navLinks }) => {
+  const [open, setOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
-  const navLinks: NavLinkItem[] = [
+  const defaultLinks: NavLinkItem[] = [
     { name: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={18} /> },
     { name: "Settings", path: "/settings", icon: <Settings size={18} /> },
     { name: "Change Password", path: "/change-password", icon: <KeyRound size={18} /> },
     { name: "Manage User", path: "/user", icon: <Users size={18} /> },
     { name: "Tenant", path: "/tenant", icon: <FileText size={18} /> },
-    { name: "department", path: "/department", icon: <FileText size={18} /> }
+    
   ];
+
+  const finalLinks = navLinks || defaultLinks;
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    localStorage.removeItem("user")
+    localStorage.removeItem("user");
     navigate("/login");
   };
 
@@ -61,7 +58,7 @@ const Sidebar: React.FC = () => {
           </h2>
 
           <ul className="space-y-3">
-            {navLinks.map((item) => (
+            {finalLinks.map((item) => (
               <li key={item.name}>
                 <Link
                   to={item.path}
@@ -71,8 +68,7 @@ const Sidebar: React.FC = () => {
                       location.pathname === item.path
                         ? "bg-blue-600 text-white"
                         : "text-gray-700 hover:bg-blue-100"
-                    }
-                  `}
+                    }`}
                 >
                   {item.icon}
                   {item.name}
