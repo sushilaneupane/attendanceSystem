@@ -53,10 +53,6 @@ if (isLoading) {
   const handleDeleteTenant = (id: string) => console.log("Delete tenant", id)
 
   return (
-    
-     
-      
-      
       <div className="flex-1 space-y-4 p-4 md:p-8 pt-6 ">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex-1 mt-10">
@@ -85,8 +81,6 @@ if (isLoading) {
               Add Tenant
             </>
           }
-        
-         
         >
           < TenantSignUp/>
         </DialogBox>
