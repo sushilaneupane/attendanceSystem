@@ -19,7 +19,7 @@ import {
 } from "../../components/ui/card";
 
 import { useUser} from "../../hooks/useUser";
-import { Eye } from "lucide-react";
+import { Eye, EyeOff} from "lucide-react";
 
 
 const loginSchema = z.object({
@@ -113,11 +113,11 @@ export default function LoginPage() {
                 className="mt-1 pr-10 border border-gray-500 focus:border-transparent focus:outline-none focus:ring-0 hover:border-gray-500"
                 {...register("password")}
               />
-              <span
+                <span
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                <Eye size={20} />
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </span>
               {errors.password && (
                 <p className="text-red-500 text-sm mt-1">
