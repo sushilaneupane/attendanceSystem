@@ -79,12 +79,14 @@ const Sidebar: React.FC<SidebarProps> = ({ navLinks }) => {
         </div>
 
         <div className="space-y-2">
-          <Button
-            className="w-full flex gap-2 text-black bg-white hover:bg-white hover:text-black"
-            onClick={handleLogout}
-          >
-            <User size={18} /> Logout
-          </Button>
+          
+               <Button
+  variant="outline"
+  className="w-fit px-2 py-2 flex justify-end items-center"
+  onClick={handleLogout}
+>
+  <User className="w-4 h-4 ml-2" />
+</Button>
         </div>
       </div>
     </>

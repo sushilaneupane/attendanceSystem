@@ -4,6 +4,7 @@ import { Input } from "../../../components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/card";
 import { Badge } from "../../../components/ui/badge";
 import { Search, Plus, MoreHorizontal, Edit, Trash2 } from "lucide-react";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,16 +12,18 @@ import {
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
 import { DataTable } from "../../../components/table/DataTable";
+import{DialogBox} from "../../../components/Dialogs/Dialogbox";
 import { useDepartments } from "../../../hooks/useDepartments";
 import { Department } from "@/api/departmentApi";
 import MainLayout from "@/layouts/MainLayout";
 import { tenantLinks } from "../TenantDashboard";
+import DepartmentRegister from "./departmentRegister";
 
 export function DepartmentPage() {
   const [searchTerm, setSearchTerm] = useState<string>("");
 
    const { data: departments, isLoading, isError, error, refetch } = useDepartments();
-
+   console.log(departments);
   const filteredDepartments = departments?.filter(
     (d) => d.name.toLowerCase().includes(searchTerm.toLowerCase())
   ) || [];
@@ -50,10 +53,17 @@ export function DepartmentPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <Button onClick={handleAddDepartment}>
-          <Plus className="mr-2 h-4 w-4" />
-          Add Department
-        </Button>
+                 
+                   <DialogBox
+                triggerButtonText={
+                  <>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add department
+                  </>
+                }
+              >
+                <DepartmentRegister/>
+              </DialogBox>
       </div>
 
       <Card>
