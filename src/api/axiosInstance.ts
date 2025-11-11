@@ -3,7 +3,8 @@ import axios from "axios";
 
 // Create Axios instance
 export const axiosInstance = axios.create({
-  baseURL: process.env.VITE_BASE_URL, // Backend URL
+
+   baseURL : (import.meta as any).env?.VITE_BASE_URL as string
 });
 
 // Interceptor to attach auth token and tenantId

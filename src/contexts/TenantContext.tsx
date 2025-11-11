@@ -26,7 +26,7 @@ export const TenantProvider = ({ children }: { children: ReactNode }) => {
         const frontendUrl = window.location.origin;
         const data = await getTenantByFrontendUrl(frontendUrl);
         setTenant(data);
-         localStorage.setItem("tenant", JSON.stringify(data)); // store tenant in localStorage for Axios
+         localStorage.setItem("tenant", JSON.stringify(data)); 
      
       } catch (err) {
         setError("Failed to load tenant");
