@@ -1,4 +1,5 @@
 import axios from "axios";
+import { axiosInstance } from "./axiosInstance";
 
 const apiUrl = (import.meta as any).env?.VITE_BASE_URL as string;
 
@@ -29,7 +30,7 @@ export interface Tenant {
   isActive: boolean;
   createdAt: string;
 }
-// Custom error class to preserve backend details but show user-friendly message
+
 class RegistrationError extends Error {
   public backendError?: any;
   
@@ -63,4 +64,11 @@ export const registerTenant = async (
 export const getAllTenants = async (): Promise<Tenant[]> => {
   const response = await axios.get<Tenant[]>(`${apiUrl}/Tenants`);
   return response.data;
+};
+
+export const getTenantByFrontendUrl = async (frontendUrl: string): Promise<Tenant> => {
+  const res = await axiosInstance.get(`${apiUrl}/Tenants/by-frontend-url`, {
+    params: { frontendUrl },
+  });
+  return res.data;
 };

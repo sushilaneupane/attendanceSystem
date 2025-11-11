@@ -23,7 +23,7 @@ interface EmployeeAttendance {
 
 export const tenantLinks = [
   { name: "Dashboard", path: "/tenant-dashboard", icon: <LayoutDashboard size={18} /> },
-  { name: "Employees", path: "/tenant/employees", icon: <Users size={18} /> },
+  { name: "Employees", path: "/employees", icon: <Users size={18} /> },
   { name: "Department", path: "/department", icon: <Layers size={18} /> },
 ];
 

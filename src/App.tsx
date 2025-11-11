@@ -10,6 +10,7 @@ import HomePage from "./pages/Home/index";
 import { DepartmentPage } from "./pages/tenant/Department";
 import TenantAttendanceDashboard from "./pages/tenant/TenantDashboard";
 import DepartmentRegister from "./pages/tenant/Department/departmentRegister";
+import EmployeePage from "./pages/Employee";
 
 
 export default function App() {
@@ -24,6 +25,9 @@ export default function App() {
          <Route path="/tenant-dashboard" element={<TenantAttendanceDashboard/>} />
         <Route path="/department" element={<DepartmentPage/>} />
         <Route path="/department-Register" element={<DepartmentRegister/>} />
+        <Route path="/employees" element={<EmployeePage/>} />
+        
+
         </Route>
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
