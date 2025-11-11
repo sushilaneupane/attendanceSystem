@@ -1,4 +1,5 @@
 import axios from "axios";
+import { axiosInstance } from "./axiosInstance";
 
 const apiUrl = (import.meta as any).env?.VITE_BASE_URL as string;
 
@@ -36,14 +37,9 @@ export const getEmployeesApi = async (
   token?: string
 ): Promise<EmployeeApiResponse> => {
   try {
-    const response = await axios.get<EmployeeApiResponse>(
-      `${apiUrl}/Employee`,
-      {
-        headers: {
-          "X-Tenant-ID": tenantId,
-          ...(token && { Authorization: `Bearer ${token}` }),
-        },
-      }
+    const response = await axiosInstance.get<EmployeeApiResponse>(
+      "/Employee"
+     
     );
     return response.data;
   } catch (error: any) {

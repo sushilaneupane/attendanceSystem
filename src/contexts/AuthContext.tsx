@@ -1,8 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { useTenant } from "./TenantContext";
+
 export interface User {
   id?: string;
   username?: string;
   email?: string;
+    role?: string;  // "super-admin" | "tenant-admin"
+
   [key: string]: any;
 }
 
@@ -19,7 +23,10 @@ interface AuthProviderProps {
 }
 const AuthContext = createContext<AuthContextType | null>(null);
 
+
+
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const { tenant } = useTenant(); // ✅ inside component
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -39,16 +46,33 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
 
     if (token && parsedUser) {
-      setIsAuthenticated(true);
-      setUser(parsedUser);
+      // ✅ Tenant Admin: check tenantId matches current tenant
+      if (parsedUser.role === "tenant-admin" && tenant) {
+        if (parsedUser.tenantId === tenant.id) {
+          setIsAuthenticated(true);
+          setUser(parsedUser);
+        } else {
+          logout();
+        }
+      } else {
+        // Super Admin or roles without tenant restriction
+        setIsAuthenticated(true);
+        setUser(parsedUser);
+      }
     }
 
     setLoading(false);
-  }, []);
+  }, [tenant]);
 
   const login = (token: string, userData: User) => {
+  
+    if (userData.role === "tenant-admin" && tenant) {
+      userData.tenantId = tenant.id;
+    }
+
     localStorage.setItem("authToken", token);
     localStorage.setItem("user", JSON.stringify(userData));
+
     setIsAuthenticated(true);
     setUser(userData);
   };
@@ -66,6 +90,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     </AuthContext.Provider>
   );
 };
+
+
 
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);  
