@@ -24,7 +24,6 @@ export default function App() {
          <Route path="/tenant-dashboard" element={<TenantAttendanceDashboard/>} />
         <Route path="/department" element={<DepartmentPage/>} />
         <Route path="/department-Register" element={<DepartmentRegister/>} />
-       
         </Route>
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
