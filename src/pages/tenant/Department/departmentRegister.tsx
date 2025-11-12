@@ -1,72 +1,69 @@
-
-import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import { ControlledInput } from "@/components/Form/ControlledInput";
+import { toast } from "sonner";
 import { useCreateDepartment } from "@/hooks/useDepartments";
 
-export default function DepartmentForm() {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [message, setMessage] = useState<string | null>(null);
-  const [isError, setIsError] = useState(false);
+const departmentSchema = z.object({
+  name: z.string().min(1, "Department name is required"),
+  description: z.string().optional(),
+});
+
+type DepartmentFormType = z.infer<typeof departmentSchema>;
+
+export default function DepartmentRegister() {
   const { mutate: createDepartment, isPending } = useCreateDepartment();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setMessage(null);
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<DepartmentFormType>({
+    resolver: zodResolver(departmentSchema),
+  });
 
+  const onSubmit = (data: DepartmentFormType) => {
     createDepartment(
       {
-        name,
-        description,
+        name: data.name,
+        description: data.description || "",
         isActive: true,
       },
       {
         onSuccess: () => {
-          setMessage("Department registered successfully!");
-          setIsError(false);
-          setName("");
-          setDescription("");
+          toast.success("Department registered successfully!");
+          reset();
         },
         onError: () => {
-          setMessage("Failed to register department");
-          setIsError(true);
+          toast.error("Failed to register department.");
         },
       }
     );
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <Label htmlFor="name">Department Name</Label>
-        <Input
-          id="name"
-          placeholder="Enter department name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-      </div>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-md mx-auto">
+      <ControlledInput
+        name="name"
+        control={control}
+        label="Department Name"
+        placeholder="Enter department name"
+        errors={errors}
+      />
 
-      <div>
-        <Label htmlFor="description">Description</Label>
-        <Input
-          id="description"
-          placeholder="Enter department description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </div>
+      <ControlledInput
+        name="description"
+        control={control}
+        label="Description"
+        placeholder="Enter department description"
+        errors={errors}
+      />
 
-      {message && (
-        <p className={`text-sm ${isError ? "text-red-500" : "text-green-600"}`}>
-          {message}
-        </p>
-      )}
-
-      <Button type="submit" className="w-full" disabled={isPending}>
+      <Button type="submit" className="w-full" disabled={isPending || isSubmitting}>
         {isPending ? "Submitting..." : "Register"}
       </Button>
     </form>

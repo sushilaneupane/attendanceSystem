@@ -25,6 +25,7 @@ export interface ApiResponse<T = any> {
 
 export const createUser = async (userData: UserData): Promise<ApiResponse> => {
   const response = await axios.post(`${apiUrl}/Authentication/Register-User`, userData);
+  
   return response.data;
 };
 

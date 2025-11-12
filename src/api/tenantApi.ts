@@ -1,7 +1,5 @@
-import axios from "axios";
-import { axiosInstance } from "./axiosInstance";
 
-const apiUrl = (import.meta as any).env?.VITE_BASE_URL as string;
+import { axiosInstance } from "./axiosInstance";
 
 export interface RegisterTenantData {
   name: string;
@@ -45,8 +43,8 @@ export const registerTenant = async (
   data: RegisterTenantData
 ): Promise<RegisterTenantResponse> => {
   try {
-    const response = await axios.post<RegisterTenantResponse>(
-      `${apiUrl}/Tenants`,
+    const response = await axiosInstance.post<RegisterTenantResponse>(
+      `/Tenants`,
       data
     );
     return response.data;
@@ -62,12 +60,12 @@ export const registerTenant = async (
 };
 
 export const getAllTenants = async (): Promise<Tenant[]> => {
-  const response = await axios.get<Tenant[]>(`${apiUrl}/Tenants`);
+  const response = await axiosInstance.get<Tenant[]>(`/Tenants`);
   return response.data;
 };
 
 export const getTenantByFrontendUrl = async (frontendUrl: string): Promise<Tenant> => {
-  const res = await axiosInstance.get(`${apiUrl}/Tenants/by-frontend-url`, {
+  const res = await axiosInstance.get(`/Tenants/by-frontend-url`, {
     params: { frontendUrl },
   });
   return res.data;

@@ -33,7 +33,6 @@ const loginSchema = z.object({
     .nonempty("Password is required"),
 });
 
-// Type for form data inferred from Zod schema
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
