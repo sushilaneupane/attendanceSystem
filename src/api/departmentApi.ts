@@ -1,6 +1,5 @@
-import axios from "axios";
 
-const apiUrl = (import.meta as any).env?.VITE_BASE_URL as string;
+import { axiosInstance } from "./axiosInstance";
 
 export interface Department {
   id: string;
@@ -22,8 +21,8 @@ export interface ApiResponse<T> {
 }
 
 export const getDepartments = async (): Promise<ApiResponse<Department[]>> => {
-  const response = await axios.get<ApiResponse<Department[]>>(
-    `${apiUrl}/department`
+  const response = await axiosInstance.get<ApiResponse<Department[]>>(
+    `/department`
   );
   return response.data;
 };
@@ -31,8 +30,8 @@ export const getDepartments = async (): Promise<ApiResponse<Department[]>> => {
 export const registerDepartment = async (
   department: CreateDepartment
 ): Promise<ApiResponse<Department>> => {
-  const response = await axios.post<ApiResponse<Department>>(
-    `${apiUrl}/department`,
+  const response = await axiosInstance.post<ApiResponse<Department>>(
+    `/department`,
     department
   );
   return response.data;
@@ -42,8 +41,8 @@ export const updateDepartment = async (
   id: string,
   department: CreateDepartment
 ): Promise<ApiResponse<Department>> => {
-  const response = await axios.put<ApiResponse<Department>>(
-    `${apiUrl}/department/${id}`,
+  const response = await axiosInstance.put<ApiResponse<Department>>(
+    `/department/${id}`,
     department
   );
   return response.data;
@@ -52,8 +51,8 @@ export const updateDepartment = async (
 export const deleteDepartment = async (
   id: string
 ): Promise<ApiResponse<null>> => {
-  const response = await axios.delete<ApiResponse<null>>(
-    `${apiUrl}/department/${id}`
+  const response = await axiosInstance.delete<ApiResponse<null>>(
+    `/department/${id}`
   );
   return response.data;
 };
