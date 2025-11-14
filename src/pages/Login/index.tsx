@@ -41,7 +41,7 @@ export default function LoginPage() {
   const { mutate: loginUser, isPending } = login;
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
-    const { tenant } = useTenant(); 
+  
   const {
     register,
     handleSubmit,
