@@ -27,6 +27,7 @@ const Sidebar: React.FC<SidebarProps> = ({ navLinks }) => {
     { name: "Change Password", path: "/change-password", icon: <KeyRound size={18} /> },
     { name: "Manage User", path: "/user", icon: <Users size={18} /> },
     { name: "Tenant", path: "/tenant", icon: <FileText size={18} /> },
+      { name: "Tenant-dashboard", path: "/tenant-dashboard", icon: <FileText size={18} /> },
     
   ];
 
