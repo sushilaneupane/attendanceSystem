@@ -9,12 +9,7 @@ axiosInstance.interceptors.request.use((config: any) => {
   const tenant = JSON.parse(localStorage.getItem("tenant") || "{}");
 
 
-   
-  if (token && config.requiresAuth !== false) {
-    config.headers["Authorization"] = `Bearer ${token}`;
-    
-
-  if (tenant?.id && config.requiresAuth !== false) {
+  if (config.requiresAuth !== false && tenant?.id) {
     config.headers["X-Tenant-ID"] = tenant.id;
   }
 
@@ -22,7 +17,7 @@ axiosInstance.interceptors.request.use((config: any) => {
 
   return config;
 }
-});
+);
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
