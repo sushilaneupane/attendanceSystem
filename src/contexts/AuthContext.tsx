@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
 
     if (token && parsedUser) {
-      if (parsedUser.role === "tenant-admin" && tenant) {
+      if (parsedUser.role === "Admin" && tenant) {
         if (parsedUser.tenantId === tenant.id) {
           setIsAuthenticated(true);
           setUser(parsedUser);
@@ -63,11 +63,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [tenant]);
 
   const login = (token: string, userData: User) => {
-  
-    if (userData.role === "tenant-admin" && tenant) {
+    if (userData.role === "Admin" && tenant) {
       userData.tenantId = tenant.id;
     }
-
     localStorage.setItem("authToken", token);
     localStorage.setItem("user", JSON.stringify(userData));
 
