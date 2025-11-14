@@ -27,16 +27,15 @@ export default function App() {
             <Route path="/home" element={<HomePage />} />
             <Route path="/tenant" element={<TenantsPage />} />
             <Route path="/tenant-register" element={<TenantSignUp />} />
-            <Route path="/department" element={<DepartmentPage />} />
-            <Route path="/department-register" element={<DepartmentRegister />} />
-            <Route path="/employees" element={<EmployeePage />} />
-               <Route path="/tenant-dashboard" element={<TenantAttendanceDashboard />} />
           </Route>
         </Route>
 
       
-        <Route element={<ProtectedRoute allowedRoles={["tenant"]} />}>
-          {/* <Route path="/tenant-dashboard" element={<TenantAttendanceDashboard />} /> */}
+        <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
+          <Route path="/tenant-dashboard" element={<TenantAttendanceDashboard />} />
+           <Route path="/department" element={<DepartmentPage />} />
+            <Route path="/department-register" element={<DepartmentRegister />} />
+              <Route path="/employees" element={<EmployeePage />} />
         </Route>
 
      

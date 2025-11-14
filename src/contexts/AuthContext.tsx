@@ -63,11 +63,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [tenant]);
 
   const login = (token: string, userData: User) => {
-  
     if (userData.role === "Admin" && tenant) {
       userData.tenantId = tenant.id;
     }
-
     localStorage.setItem("authToken", token);
     localStorage.setItem("user", JSON.stringify(userData));
 

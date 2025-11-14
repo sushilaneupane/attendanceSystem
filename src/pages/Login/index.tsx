@@ -1,13 +1,12 @@
-  import React, { useState } from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-
-import {Input} from "../../components/ui/input";
-import {Button} from "../../components/ui/button"; 
-import {Label} from "../../components/ui/label";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
+import { Label } from "../../components/ui/label";
 import { useAuth } from "../../contexts/AuthContext";
 import {
   Card,
@@ -18,11 +17,9 @@ import {
   CardFooter,
 } from "../../components/ui/card";
 
-import { useUser} from "../../hooks/useUser";
-import { Eye, EyeOff} from "lucide-react";
+import { useUser } from "../../hooks/useUser";
+import { Eye, EyeOff } from "lucide-react";
 import { useTenant } from "@/contexts/TenantContext";
-
-
 
 const loginSchema = z.object({
   username: z
@@ -63,16 +60,25 @@ export default function LoginPage() {
       onSuccess: (response: any) => {
         const token = response?.data?.token;
         const user = response?.data?.userDto;
+        const role = response?.data?.role?.[0]; 
+
         if (token && user) {
           localStorage.setItem("authToken", token);
           loginContext(token, user);
           toast.success("Logged in successfully!");
-          navigate("/home");
+
+          
+          if (role === "Admin") {
+            navigate("/tenant-dashboard");
+          } else if (role === "SuperAdmin") {
+            navigate("/home");
+          } else {
+            navigate("/login"); 
+          }
         }
       },
       onError: (error: any) => {
         const errorData = error?.response?.data?.errorMessage || "";
-        console.log("Login error data:", errorData);
         if (errorData) {
           toast.error(errorData);
         } else {
@@ -116,7 +122,7 @@ export default function LoginPage() {
                 className="mt-1 pr-10 border border-gray-500 focus:border-transparent focus:outline-none focus:ring-0 hover:border-gray-500"
                 {...register("password")}
               />
-                <span
+              <span
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
                 onClick={() => setShowPassword(!showPassword)}
               >
