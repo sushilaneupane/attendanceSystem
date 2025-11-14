@@ -23,7 +23,7 @@ export const TenantProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const fetchTenant = async () => {
       try {
-        const frontendUrl = window.location.origin;
+        const frontendUrl = "Ajay";
         const data = await getTenantByFrontendUrl(frontendUrl);
         setTenant(data);
          localStorage.setItem("tenant", JSON.stringify(data)); 

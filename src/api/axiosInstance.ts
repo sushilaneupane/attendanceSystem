@@ -17,7 +17,7 @@ axiosInstance.interceptors.request.use((config: any) => {
     config.headers["Authorization"] = `Bearer ${token}`;
   }
 
-  if (config.requiresAuth !== false && user.role === "admin" && tenant?.id) {
+  if (config.requiresAuth !== false && tenant?.id) {
     config.headers["X-Tenant-ID"] = tenant.id;
   }
 

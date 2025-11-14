@@ -1,4 +1,6 @@
+import { axiosInstance } from "./axiosInstance";
 import axios from "axios";
+
 
 const apiUrl = (import.meta as any).env?.VITE_BASE_URL as string;
 
@@ -30,11 +32,11 @@ export const createUser = async (userData: UserData): Promise<ApiResponse> => {
 };
 
 export const loginUser = async (credentials: LoginCredentials): Promise<ApiResponse> => {
-  const response = await axios.post(`${apiUrl}/Authentication/Login-User`, credentials);
+  const response = await axiosInstance.post(`${apiUrl}/Authentication/Login-User`, credentials);
   return response.data;
 };
 
 export const logoutUser = async (): Promise<ApiResponse> => {
-  const response = await axios.post(`${apiUrl}/Authentication/Logout`);
+  const response = await axiosInstance.post(`${apiUrl}/Authentication/Logout`);
   return response.data;
 };
