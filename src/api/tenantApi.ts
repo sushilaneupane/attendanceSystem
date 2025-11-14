@@ -27,6 +27,7 @@ export interface Tenant {
   frontendUrl: string;
   isActive: boolean;
   createdAt: string;
+
 }
 
 class RegistrationError extends Error {
@@ -67,6 +68,8 @@ export const getAllTenants = async (): Promise<Tenant[]> => {
 export const getTenantByFrontendUrl = async (frontendUrl: string): Promise<Tenant> => {
   const res = await axiosInstance.get(`/Tenants/by-frontend-url`, {
     params: { frontendUrl },
+    
+
   });
   return res.data;
 };

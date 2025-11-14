@@ -1,36 +1,46 @@
-// components/ProtectedRoute.tsx
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 interface ProtectedRouteProps {
-  allowedRoles?: string[];
+  allowedRoles: string[];
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
-  const { isAuthenticated, user, loading } = useAuth();
-  const token = localStorage.getItem("authToken");
-
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-      </div>
+// Decode JWT safely without extra packages
+const decodeToken = (token: string) => {
+  try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
     );
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+    console.error("Invalid token:", error);
+    return null;
   }
+};
 
- 
-  if (!isAuthenticated && !token) {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
+  const token = localStorage.getItem("authToken");
+  const user = localStorage.getItem("user");
+
+  if (!token || !user) {
     return <Navigate to="/login" replace />;
   }
 
-  //  Role-based protection
-  if (allowedRoles && user?.role && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/unauthorized" replace />;
+  const decoded = decodeToken(token);
+  const userRole = decoded?.["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+  // If no valid role found or not in allowedRoles
+  if (!userRole || !allowedRoles.includes(userRole)) {
+    return <Navigate to="/login" replace />;
   }
 
-
+  // Authorized — render the nested routes
   return <Outlet />;
 };
 

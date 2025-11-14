@@ -21,32 +21,27 @@ export default function App() {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
 
-        <Route element={<ProtectedRoute />}>
+      
+        <Route element={<ProtectedRoute allowedRoles={["SuperAdmin"]} />}>
           <Route element={<MainLayout />}>
             <Route path="/home" element={<HomePage />} />
-            <Route path="/employees" element={<EmployeePage />} />
+            <Route path="/tenant" element={<TenantsPage />} />
+            <Route path="/tenant-register" element={<TenantSignUp />} />
             <Route path="/department" element={<DepartmentPage />} />
             <Route path="/department-register" element={<DepartmentRegister />} />
+            <Route path="/employees" element={<EmployeePage />} />
+               <Route path="/tenant-dashboard" element={<TenantAttendanceDashboard />} />
           </Route>
         </Route>
 
       
-        <Route element={<ProtectedRoute allowedRoles={["tenant-admin"]} />}>
-          <Route element={<MainLayout />}>
-            <Route path="/tenant-dashboard" element={<TenantAttendanceDashboard />} />
-            <Route path="/tenant-register" element={<TenantSignUp />} />
-          </Route>
+        <Route element={<ProtectedRoute allowedRoles={["tenant"]} />}>
+          {/* <Route path="/tenant-dashboard" element={<TenantAttendanceDashboard />} /> */}
         </Route>
 
-       
-        <Route element={<ProtectedRoute allowedRoles={["super-admin"]} />}>
-          <Route element={<MainLayout />}>
-            <Route path="/tenant" element={<TenantsPage />} />
-          </Route>
-        </Route>
-
-      
-        <Route path="*" element={<Navigate to="/login" replace />} />
+     
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/register" element={<RegisterForm />} />
       </Routes>
     </BrowserRouter>
   );

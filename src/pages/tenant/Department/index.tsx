@@ -4,7 +4,6 @@ import { Input } from "../../../components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/card";
 import { Badge } from "../../../components/ui/badge";
 import { Search, Plus, MoreHorizontal, Edit, Trash2 } from "lucide-react";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,15 +14,13 @@ import { DataTable } from "../../../components/table/DataTable";
 import{DialogBox} from "../../../components/Dialogs/Dialogbox";
 import { useDepartments } from "../../../hooks/useDepartments";
 import { Department } from "@/api/departmentApi";
-import MainLayout from "@/layouts/MainLayout";
-import { tenantLinks } from "../TenantDashboard";
 import DepartmentRegister from "./departmentRegister";
 
 export function DepartmentPage() {
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-   const { data: departments, isLoading, isError, error, refetch } = useDepartments();
-   console.log(departments);
+   const { data: departments} = useDepartments();
+
   const filteredDepartments = departments?.filter(
     (d) => d.name.toLowerCase().includes(searchTerm.toLowerCase())
   ) || [];
@@ -34,8 +31,6 @@ export function DepartmentPage() {
 
   return (
     <>
-    <MainLayout navLinks={tenantLinks}/>
-  
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
       <div className="flex items-center justify-between">
         <div>

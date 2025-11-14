@@ -6,15 +6,20 @@ import { Button } from "@/components/ui/button";
 import { ControlledInput } from "@/components/Form/ControlledInput";
 import { toast } from "sonner";
 import { useCreateDepartment } from "@/hooks/useDepartments";
+import { useNavigate } from "react-router-dom";
+
 
 const departmentSchema = z.object({
   name: z.string().min(1, "Department name is required"),
-  description: z.string().optional(),
+
 });
 
 type DepartmentFormType = z.infer<typeof departmentSchema>;
 
 export default function DepartmentRegister() {
+
+    
+
   const { mutate: createDepartment, isPending } = useCreateDepartment();
 
   const {
@@ -30,7 +35,6 @@ export default function DepartmentRegister() {
     createDepartment(
       {
         name: data.name,
-        description: data.description || "",
         isActive: true,
       },
       {
@@ -52,14 +56,6 @@ export default function DepartmentRegister() {
         control={control}
         label="Department Name"
         placeholder="Enter department name"
-        errors={errors}
-      />
-
-      <ControlledInput
-        name="description"
-        control={control}
-        label="Description"
-        placeholder="Enter department description"
         errors={errors}
       />
 

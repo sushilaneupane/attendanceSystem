@@ -5,7 +5,7 @@ export interface User {
   id?: string;
   username?: string;
   email?: string;
-    role?: string;  
+    role?: string; 
 
   [key: string]: any;
 }
@@ -26,7 +26,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const { tenant } = useTenant(); // ✅ inside component
+  const { tenant } = useTenant();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -46,7 +46,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
 
     if (token && parsedUser) {
-      // ✅ Tenant Admin: check tenantId matches current tenant
       if (parsedUser.role === "tenant-admin" && tenant) {
         if (parsedUser.tenantId === tenant.id) {
           setIsAuthenticated(true);
@@ -55,7 +54,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           logout();
         }
       } else {
-        // Super Admin or roles without tenant restriction
         setIsAuthenticated(true);
         setUser(parsedUser);
       }
