@@ -20,6 +20,8 @@ import {
 
 import { useUser} from "../../hooks/useUser";
 import { Eye, EyeOff} from "lucide-react";
+import { useTenant } from "@/contexts/TenantContext";
+
 
 
 const loginSchema = z.object({
@@ -42,7 +44,7 @@ export default function LoginPage() {
   const { mutate: loginUser, isPending } = login;
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
+    const { tenant } = useTenant(); 
   const {
     register,
     handleSubmit,
@@ -84,6 +86,13 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <Card className="w-full max-w-md shadow-lg rounded-lg border-0 bg-white">
         <CardHeader className="text-center">
+           {tenant && (
+            <div className="mb-4">
+              <p className="text-sm text-gray-500">You are logging into</p>
+              <p className="text-lg font-bold text-blue-600">{tenant.name}</p>
+            </div>
+          )}
+
           <CardTitle className="text-2xl font-bold">Login</CardTitle>
           <CardDescription>Enter your credentials to sign in</CardDescription>
         </CardHeader>
