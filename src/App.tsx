@@ -1,11 +1,11 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
-import LoginForm from "./pages/Login/index";
-import RegisterForm from "./pages/Register/index";
+import LoginForm from "./pages/Login";
+import RegisterForm from "./pages/Register";
 import { TenantsPage } from "./pages/tenant/TenantPage";
-import TenantSignUp from "./pages/tenant/TenantRegister/index";
-import HomePage from "./pages/Home/index";
+import TenantSignUp from "./pages/tenant/TenantRegister";
+import HomePage from "./pages/Home";
 import { DepartmentPage } from "./pages/tenant/Department";
 import TenantAttendanceDashboard from "./pages/tenant/TenantDashboard";
 import DepartmentRegister from "./pages/tenant/Department/departmentRegister";
@@ -18,16 +18,22 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
 
-        <Route element={<ProtectedRoute />}>
+      
+        <Route element={<ProtectedRoute allowedRoles={["SuperAdmin"]} />}>
           <Route element={<MainLayout />}>
             <Route path="/home" element={<HomePage />} />
             <Route path="/tenant" element={<TenantsPage />} />
             <Route path="/tenant-register" element={<TenantSignUp />} />
-            <Route path="/tenant-dashboard" element={<TenantAttendanceDashboard />} />
             <Route path="/department" element={<DepartmentPage />} />
             <Route path="/department-register" element={<DepartmentRegister />} />
             <Route path="/employees" element={<EmployeePage />} />
+               <Route path="/tenant-dashboard" element={<TenantAttendanceDashboard />} />
           </Route>
+        </Route>
+
+      
+        <Route element={<ProtectedRoute allowedRoles={["tenant"]} />}>
+          {/* <Route path="/tenant-dashboard" element={<TenantAttendanceDashboard />} /> */}
         </Route>
 
      

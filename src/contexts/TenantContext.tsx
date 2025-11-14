@@ -1,4 +1,4 @@
-// src/context/TenantContext.tsx
+
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { getTenantByFrontendUrl, Tenant } from "../api/tenantApi";
 

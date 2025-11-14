@@ -1,4 +1,9 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
+
+export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
+  requiresAuth?: boolean;
+} 
+
 export const axiosInstance = axios.create({
   baseURL : (import.meta as any).env?.VITE_BASE_URL as string
 });
@@ -12,7 +17,7 @@ axiosInstance.interceptors.request.use((config: any) => {
     config.headers["Authorization"] = `Bearer ${token}`;
   }
 
-  if (config.requiresAuth !== false && user.role === "tenant-admin" && tenant?.id) {
+  if (config.requiresAuth !== false && user.role === "admin" && tenant?.id) {
     config.headers["X-Tenant-ID"] = tenant.id;
   }
 

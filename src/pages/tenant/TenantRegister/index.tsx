@@ -78,7 +78,6 @@ export default function TenantSignUp() {
       <ControlledInput name="server" control={control} label="Server" placeholder="Enter server" errors={errors} />
       <ControlledInput name="database" control={control} label="Database" placeholder="Enter database" errors={errors} />
 
-      {/* Windows Auth Checkbox */}
       <div className="flex items-center gap-1 md:col-span-2">
         <Controller
           name="useWindowsAuth"
@@ -100,7 +99,6 @@ export default function TenantSignUp() {
         </label>
       </div>
 
-      {/* Conditional User ID & Password */}
       {!useWindowsAuth && (
         <>
           <ControlledInput name="userId" control={control} label="User ID" placeholder="Enter user ID" errors={errors} />
