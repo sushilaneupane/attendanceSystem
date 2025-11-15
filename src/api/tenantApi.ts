@@ -61,7 +61,11 @@ export const registerTenant = async (
 };
 
 export const getAllTenants = async (): Promise<Tenant[]> => {
-  const response = await axiosInstance.get<Tenant[]>(`/Tenants`);
+  const response = await axiosInstance.get<Tenant[]>(`/Tenants`,{
+    headers: {
+      'X-Tenant-ID': null
+    }
+  });
   return response.data;
 };
 

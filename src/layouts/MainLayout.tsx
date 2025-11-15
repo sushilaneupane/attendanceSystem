@@ -8,7 +8,7 @@ export default function MainLayout({ navLinks }: { navLinks?: any[] }) {
   return (
     <>
       <Sidebar navLinks={navLinks} />
-      <main className=" md:ml-64">
+      <main className=" md:ml-64 ">
         <Outlet />
       </main>
       <Toaster richColors position="top-right" />

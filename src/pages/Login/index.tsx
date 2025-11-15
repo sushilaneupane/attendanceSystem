@@ -67,12 +67,11 @@ export default function LoginPage() {
           loginContext(token, user);
           toast.success("Logged in successfully!");
 
-          
-          if (role === "Admin") {
+          if (role === "SuperAdmin"){
+            navigate("/home")
+          }else if (role === "Admin") {
             navigate("/tenant-dashboard");
-          } else if (role === "SuperAdmin") {
-            navigate("/home");
-          } else {
+          }  else {
             navigate("/login"); 
           }
         }
