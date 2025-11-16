@@ -2,10 +2,10 @@ import axios, { AxiosRequestConfig } from "axios";
 
 export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   requiresAuth?: boolean;
-} 
+}
 
 export const axiosInstance = axios.create({
-  baseURL : (import.meta as any).env?.VITE_BASE_URL as string
+  baseURL: (import.meta as any).env?.VITE_BASE_URL as string
 });
 
 axiosInstance.interceptors.request.use((config: any) => {
@@ -16,13 +16,11 @@ axiosInstance.interceptors.request.use((config: any) => {
   if (config.requiresAuth !== false && token) {
     config.headers["Authorization"] = `Bearer ${token}`;
   }
-const isSuperAdmin = user?.role === "SuperAdmin";
+  const isSuperAdmin = user?.role === "SuperAdmin";
 
   if (config.requiresAuth !== false && tenant?.id && !isSuperAdmin) {
     config.headers["X-Tenant-ID"] = tenant.id;
   }
-
-
   return config;
 });
 
