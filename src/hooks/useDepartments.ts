@@ -6,6 +6,7 @@ import {
   deleteDepartment,
   CreateDepartment,
   Department,
+  getDepartmentById
 } from "../api/departmentApi";
 
 export const useDepartments = () => {
@@ -15,6 +16,14 @@ export const useDepartments = () => {
     select: (response) => response.data,
   });
 };
+
+export const useDepartmentById = (id?: string | number) => {
+  return useQuery({
+    queryKey: ["department", id],
+    queryFn: () => getDepartmentById(id as string | number),
+    enabled: !!id,
+  });
+}
 
 export const useCreateDepartment = () => {
   const queryClient = useQueryClient();

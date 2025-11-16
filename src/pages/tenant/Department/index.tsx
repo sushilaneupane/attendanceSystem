@@ -1,39 +1,61 @@
+
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../../components/ui/button";
 import { Input } from "../../../components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
 import { Badge } from "../../../components/ui/badge";
-import { Search, Plus, MoreHorizontal, Edit, Trash2 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../../../components/ui/dropdown-menu";
+import { Search, Plus, Edit, Trash2 } from "lucide-react";
 import { DataTable } from "../../../components/table/DataTable";
-import{DialogBox} from "../../../components/Dialogs/Dialogbox";
-import { useDepartments } from "../../../hooks/useDepartments";
+import { DialogBox } from "../../../components/Dialogs/Dialogbox";
+
+import { useDepartments, useDeleteDepartment } from "../../../hooks/useDepartments";
 import { Department } from "@/api/departmentApi";
 import DepartmentRegister from "./departmentRegister";
-import MainLayout from "@/layouts/MainLayout";
-import { tenantLinks } from "../TenantDashboard";
 
 export function DepartmentPage() {
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [openDialog, setOpenDialog] = useState(false);
+  const [editingDepartment, setEditingDepartment] = useState<Department | null>(null);
 
-   const { data: departments} = useDepartments();
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [departmentToDelete, setDepartmentToDelete] = useState<Department | null>(null);
 
-  const filteredDepartments = departments?.filter(
-    (d) => d.name.toLowerCase().includes(searchTerm.toLowerCase())
-  ) || [];
+  const { data: departments } = useDepartments();
+  const deleteDepartment = useDeleteDepartment();
 
-  const handleAddDepartment = () => console.log("Redirect to add department");
-  const handleEditDepartment = (id: string) => console.log("Edit department", id);
-  const handleDeleteDepartment = (id: string) => console.log("Delete department", id);
+
+  const navigate = useNavigate();
+
+  const filteredDepartments =
+    departments?.filter((d) =>
+      d.name.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
+
+  const handleEditDepartment = (department: Department) => {
+    setEditingDepartment(department);
+    setOpenDialog(true);
+  };
+
+  const handleAddDepartment = () => {
+    setEditingDepartment(null);
+    setOpenDialog(true);
+  };
+
+  const handleDeleteDepartment = (department: Department) => {
+    setDepartmentToDelete(department);
+    setOpenDeleteDialog(true);
+  };
+
+  const confirmDelete = () => {
+    if (departmentToDelete) {
+      deleteDepartment.mutate(departmentToDelete.id);
+      setOpenDeleteDialog(false);
+      setDepartmentToDelete(null);
+    }
+  };
 
   return (
-    <>
-      <MainLayout navLinks={tenantLinks} />
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
       <div className="flex items-center justify-between">
         <div>
@@ -42,6 +64,7 @@ export function DepartmentPage() {
             Manage your departments and their information
           </p>
         </div>
+
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
@@ -51,67 +74,81 @@ export function DepartmentPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-                 
-                   <DialogBox
-                triggerButtonText={
-                  <>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add department
-                  </>
-                }
-              >
-                <DepartmentRegister/>
-              </DialogBox>
+
+        <Button onClick={handleAddDepartment}>
+          <Plus className="mr-2 h-4 w-4" />
+          Add Department
+        </Button>
       </div>
 
-      <Card>
+      <Card className="mr-30">
         <CardHeader>
           <CardTitle>Departments List</CardTitle>
-          <CardDescription>
-           
-          </CardDescription>
         </CardHeader>
+
         <CardContent>
           <DataTable
-            headers={["Department Id", "Name", "Actions"]}
+            headers={["Department", "Status", "Actions"]}
             data={filteredDepartments}
-            emptyMessage="No departments found. Add your first department to get started."
+            emptyMessage="No departments found."
             renderRow={(department: Department) => (
               <>
-                <td>
-                  <div className="font-semibold">{department.name}</div>
-                  <div className="text-xs text-muted-foreground mt-1">
-                    ID: {department.id}
-                  </div>
+                <td
+                  className="font-semibold cursor-pointer hover:underline"
+                  onClick={() => navigate(`/department/${department.id}`)}
+                >
+                  {department.name}
                 </td>
 
                 <td>
                   <Badge variant={department.isActive ? "default" : "secondary"}>
-                    {department?.isActive ? "Active" : "Inactive"}
+                    {department.isActive ? "Active" : "Inactive"}
                   </Badge>
                 </td>
 
-                <td className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-8 w-8 p-0">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => handleEditDepartment(department.id)}>
-                        <Edit className="mr-2 h-4 w-4" />
-                        Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        className="text-destructive"
-                        onClick={() => handleDeleteDepartment(department.id)}
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+
+                <td>
+                  <DialogBox
+                    triggerButtonText={
+                      <>
+
+                          <Edit  onClick={() => handleEditDepartment(department)} className="mr-1 h-4 w-4" />
+                       
+                      </>
+                    }
+                  >
+                    <DepartmentRegister
+                      isEditing={!!editingDepartment}
+                      defaultValues={editingDepartment}
+                      onClose={() => setOpenDialog(false)}
+                    />
+                  </DialogBox>
+
+
+                  <DialogBox
+                    triggerButtonText={
+                      <>
+                          <Trash2  onClick={() => handleDeleteDepartment(department)} className="mr-1 h-4 w-4" />
+                        </>
+                      
+                    }
+                  >
+
+                    <div className="p-2">
+                      <h3 className="text-lg font-semibold">Confirm Delete</h3>
+                      <p className="mt-2 text-sm text-muted-foreground">
+                        Are you sure you want to delete "{departmentToDelete?.name}"?
+                      </p>
+                      <div className="mt-4 flex justify-end space-x-2">
+                        <Button variant="outline" onClick={() => setOpenDeleteDialog(false)}>
+                          Cancel
+                        </Button>
+                        <Button variant="destructive" onClick={confirmDelete}>
+                          Delete
+                        </Button>
+                      </div>
+                    </div>
+                  </DialogBox>
                 </td>
               </>
             )}
@@ -119,6 +156,5 @@ export function DepartmentPage() {
         </CardContent>
       </Card>
     </div>
-      </>
   );
 }

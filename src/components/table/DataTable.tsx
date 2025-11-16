@@ -10,11 +10,16 @@ import {
 interface DataTableProps<T> {
   headers: string[];
   data: T[];
-  renderRow: (item: T) => React.ReactNode
-  emptyMessage?: string
+  renderRow: (item: T) => React.ReactNode;
+  emptyMessage?: string;
 }
 
-export function DataTable<T>({ headers, data, renderRow }: DataTableProps<T>) {
+export function DataTable<T>({
+  headers,
+  data,
+  renderRow,
+  emptyMessage = "No data available",
+}: DataTableProps<T>) {
   return (
     <Table>
       <TableHeader>
@@ -27,11 +32,13 @@ export function DataTable<T>({ headers, data, renderRow }: DataTableProps<T>) {
 
       <TableBody>
         {data.length > 0 ? (
-          data.map((item, index) => <TableRow key={index}>{renderRow(item)}</TableRow>)
+          data.map((item, index) => (
+            <TableRow key={index}>{renderRow(item)}</TableRow>
+          ))
         ) : (
           <TableRow>
             <TableCell colSpan={headers.length} className="text-center py-4">
-              No data available
+              {emptyMessage}
             </TableCell>
           </TableRow>
         )}

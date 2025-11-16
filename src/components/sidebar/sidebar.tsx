@@ -16,10 +16,8 @@ export function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Get role from localStorage
-  const role = localStorage.getItem("role"); // "SuperAdmin" or "Admin"
+  const role = localStorage.getItem("role"); 
 
-  // SuperAdmin menu
   const superAdminLinks: NavLinkItem[] = [
     { name: "Dashboard", path: "/admin/dashboard", icon: <LayoutDashboard size={18} /> },
     { name: "Manage Tenants", path: "/admin/tenant", icon: <Users size={18} /> },
@@ -27,15 +25,14 @@ export function Sidebar() {
     { name: "Settings", path: "/admin/settings", icon: <Settings size={18} /> },
   ];
 
-  // Tenant / Admin menu
   const tenantLinks: NavLinkItem[] = [
     { name: "Dashboard", path: "/tenant-dashboard", icon: <LayoutDashboard size={18} /> },
     { name: "Employees", path: "/employees", icon: <Users size={18} /> },
     { name: "Department", path: "/department", icon: <Layers size={18} /> },
     { name: "Change Password", path: "/change-password", icon: <KeyRound size={18} /> },
+    
   ];
 
-  // Select menu based on role
   const finalLinks = role === "SuperAdmin" ? superAdminLinks : tenantLinks;
 
   const handleLogout = () => {
