@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { Label } from "../../components/ui/label";
@@ -20,6 +19,7 @@ import {
 
 import { useUser } from "../../hooks/useUser";
 import { Eye, EyeOff } from "lucide-react";
+import { useTenant } from "@/contexts/TenantContext";
 
 const loginSchema = z.object({
   username: z
@@ -39,9 +39,7 @@ export default function LoginPage() {
   const { login: loginContext } = useAuth();
   const { login } = useUser();
   const { mutate: loginUser, isPending } = login;
-
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
   const {
     register,
     handleSubmit,
@@ -61,7 +59,6 @@ export default function LoginPage() {
         const token = response?.data?.token;
         const user = response?.data?.userDto;
         const role = response?.data?.role?.[0]; 
-
         if (token && user) {
           localStorage.setItem("authToken", token);
           loginContext(token, user);
@@ -69,20 +66,21 @@ export default function LoginPage() {
 
           if (role === "Admin") {
             navigate("/tenant-dashboard");
-          } else if (role === "SuperAdmin") {
-            navigate("/home");
-          } else {
+          }  else {
             navigate("/login"); 
           }
         }
       },
       onError: (error: any) => {
-        const errorData = error?.response?.data?.errorMessage || "";
-        if (errorData) {
-          toast.error(errorData);
-        } else {
-          toast.error("Invalid username or password.");
-        }
+        const status = error?.response?.status;
+       
+          if (status === 401) {
+  
+    toast.error("Invalid username or password.");
+    return;
+  }
+
+       
       },
     });
   };
@@ -94,7 +92,6 @@ export default function LoginPage() {
           <CardTitle className="text-2xl font-bold">Login</CardTitle>
           <CardDescription>Enter your credentials to sign in</CardDescription>
         </CardHeader>
-
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="flex flex-col">
@@ -110,7 +107,6 @@ export default function LoginPage() {
                 </p>
               )}
             </div>
-
             <div className="flex flex-col relative">
               <Label>Password</Label>
               <Input
@@ -131,7 +127,6 @@ export default function LoginPage() {
                 </p>
               )}
             </div>
-
             <div className="flex items-center">
               <a href="#" className="text-sm text-blue-600 hover:underline ml-auto">
                 Forgot Password?
@@ -147,7 +142,6 @@ export default function LoginPage() {
             </Button>
           </form>
         </CardContent>
-
         <CardFooter className="text-center">
           <p className="text-sm text-gray-600">
             Don’t have an account?{" "}

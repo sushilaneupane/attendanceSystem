@@ -1,6 +1,6 @@
-
-import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { getTenantByFrontendUrl, Tenant } from "../api/tenantApi";
+import React, { createContext, useContext, ReactNode, useEffect } from "react";
+import { useTenantByFrontendUrl } from "../hooks/useTenants"; // the hook we created
+import { Tenant } from "../api/tenantApi";
 
 interface TenantContextType {
   tenant: Tenant | null;
@@ -15,31 +15,25 @@ const TenantContext = createContext<TenantContextType>({
 });
 
 export const useTenant = () => useContext(TenantContext);
-export const TenantProvider = ({ children }: { children: ReactNode }) => {
-  const [tenant, setTenant] = useState<Tenant | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchTenant = async () => {
-      try {
-        const frontendUrl = "Ajay";
-        const data = await getTenantByFrontendUrl(frontendUrl);
-        setTenant(data);
-         localStorage.setItem("tenant", JSON.stringify(data)); 
-     
-      } catch (err) {
-        setError("Failed to load tenant");
-      } finally {
-        setLoading(false);
-      }
-    };
-      
-    fetchTenant();
-  }, []);
- 
+export const TenantProvider = ({ children }: { children: ReactNode }) => {
+  const frontendUrl = "Ajay"; 
+  const { data, isLoading, isError, error } = useTenantByFrontendUrl(frontendUrl);
+const tenantData: Tenant | null = data ?? null;
+
+useEffect(() => {
+  if(tenantData){
+    localStorage.setItem("tenant",JSON.stringify(tenantData))
+  }
+})
   return (
-    <TenantContext.Provider value={{ tenant, loading, error }}>
+    <TenantContext.Provider
+      value={{
+        tenant: tenantData,
+        loading: isLoading,
+        error: isError ? (error?.message || "Failed to load tenant") : null,
+      }}
+    >
       {children}
     </TenantContext.Provider>
   );

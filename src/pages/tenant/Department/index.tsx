@@ -15,6 +15,8 @@ import{DialogBox} from "../../../components/Dialogs/Dialogbox";
 import { useDepartments } from "../../../hooks/useDepartments";
 import { Department } from "@/api/departmentApi";
 import DepartmentRegister from "./departmentRegister";
+import MainLayout from "@/layouts/MainLayout";
+import { tenantLinks } from "../TenantDashboard";
 
 export function DepartmentPage() {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -31,6 +33,7 @@ export function DepartmentPage() {
 
   return (
     <>
+      <MainLayout navLinks={tenantLinks} />
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
       <div className="flex items-center justify-between">
         <div>

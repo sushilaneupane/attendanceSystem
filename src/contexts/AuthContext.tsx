@@ -6,7 +6,7 @@ export interface User {
   username?: string;
   email?: string;
     role?: string; 
-
+ tenantId?: string;
   [key: string]: any;
 }
 
@@ -45,12 +45,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     }
 
-    if (token && parsedUser) {
-      if (parsedUser.role === "Admin" && tenant) {
+      if (token && parsedUser) {
+     
+      if (parsedUser.role === "SuperAdmin") {
+        setIsAuthenticated(true);
+        setUser(parsedUser);
+      }
+       else if (parsedUser.role === "Admin" && tenant) {
         if (parsedUser.tenantId === tenant.id) {
           setIsAuthenticated(true);
           setUser(parsedUser);
-        } else {
+        } 
+        else {
           logout();
         }
       } else {
@@ -63,9 +69,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [tenant]);
 
   const login = (token: string, userData: User) => {
-    if (userData.role === "Admin" && tenant) {
-      userData.tenantId = tenant.id;
-    }
+  
     localStorage.setItem("authToken", token);
     localStorage.setItem("user", JSON.stringify(userData));
 
