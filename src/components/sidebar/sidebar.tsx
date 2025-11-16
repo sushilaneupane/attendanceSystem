@@ -1,8 +1,7 @@
-// src/components/sidebar/sidebar.tsx
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
-  Menu, X, LayoutDashboard, Users, FileText, Settings, User, KeyRound,
+  Menu, X, LayoutDashboard, Users, FileText, Settings, User, KeyRound, Layers
 } from "lucide-react";
 import { Button } from "../ui/button";
 
@@ -12,30 +11,37 @@ interface NavLinkItem {
   icon: React.ReactNode;
 }
 
-interface SidebarProps {
-  navLinks?: NavLinkItem[];
-}
-
-const Sidebar: React.FC<SidebarProps> = ({ navLinks }) => {
+export function Sidebar() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
-  const defaultLinks: NavLinkItem[] = [
-    { name: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={18} /> },
-    { name: "Settings", path: "/settings", icon: <Settings size={18} /> },
-    { name: "Change Password", path: "/change-password", icon: <KeyRound size={18} /> },
-    { name: "Manage User", path: "/user", icon: <Users size={18} /> },
-    { name: "Tenant", path: "/tenant", icon: <FileText size={18} /> },
-      { name: "Tenant-dashboard", path: "/tenant-dashboard", icon: <FileText size={18} /> },
-    
+  // Get role from localStorage
+  const role = localStorage.getItem("role"); // "SuperAdmin" or "Admin"
+
+  // SuperAdmin menu
+  const superAdminLinks: NavLinkItem[] = [
+    { name: "Dashboard", path: "/admin/dashboard", icon: <LayoutDashboard size={18} /> },
+    { name: "Manage Tenants", path: "/admin/tenant", icon: <Users size={18} /> },
+    { name: "Manage Users", path: "/admin/users", icon: <Users size={18} /> },
+    { name: "Settings", path: "/admin/settings", icon: <Settings size={18} /> },
   ];
 
-  const finalLinks = navLinks || defaultLinks;
+  // Tenant / Admin menu
+  const tenantLinks: NavLinkItem[] = [
+    { name: "Dashboard", path: "/tenant-dashboard", icon: <LayoutDashboard size={18} /> },
+    { name: "Employees", path: "/employees", icon: <Users size={18} /> },
+    { name: "Department", path: "/department", icon: <Layers size={18} /> },
+    { name: "Change Password", path: "/change-password", icon: <KeyRound size={18} /> },
+  ];
+
+  // Select menu based on role
+  const finalLinks = role === "SuperAdmin" ? superAdminLinks : tenantLinks;
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");
+    localStorage.removeItem("role");
     navigate("/login");
   };
 
@@ -55,7 +61,7 @@ const Sidebar: React.FC<SidebarProps> = ({ navLinks }) => {
       >
         <div>
           <h2 className="text-2xl font-bold text-blue-700 mb-8">
-            <Link to="/" onClick={() => setOpen(false)}>Attendance</Link>
+            Attendance System
           </h2>
 
           <ul className="space-y-3">
@@ -80,18 +86,15 @@ const Sidebar: React.FC<SidebarProps> = ({ navLinks }) => {
         </div>
 
         <div className="space-y-2">
-          
-               <Button
-  variant="outline"
-  className="w-fit px-2 py-2 flex justify-end items-center"
-  onClick={handleLogout}
->
-  <User className="w-4 h-4 ml-2" />
-</Button>
+          <Button
+            variant="outline"
+            className="w-fit px-2 py-2 flex justify-end items-center"
+            onClick={handleLogout}
+          >
+            <User className="w-4 h-4 ml-2" />
+          </Button>
         </div>
       </div>
     </>
   );
-};
-
-export default Sidebar;
+}

@@ -18,10 +18,6 @@ export default function App() {
       <Routes>
      
         <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/register" element={<RegisterForm />} />
-
-      
         <Route element={<ProtectedRoute allowedRoles={["SuperAdmin"]} />}>
           <Route element={<MainLayout />}>
             <Route path="/home" element={<HomePage />} />
