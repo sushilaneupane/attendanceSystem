@@ -14,9 +14,13 @@ axiosInstance.interceptors.request.use((config: any) => {
     delete config.headers["X-Tenant-ID"];
     return config;
   }
-  if (config.requiresAuth !== false && tenant?.id) {
+const isSuperAdmin = user?.role === "SuperAdmin";
+
+  if (config.requiresAuth !== false && tenant?.id && !isSuperAdmin) {
     config.headers["X-Tenant-ID"] = tenant.id;
   }
+
+
   return config;
 }
 );

@@ -50,7 +50,7 @@ export default function LoginPage() {
 
   const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
     const payload = {
-      username: data.username,
+      userName: data.username,
       password: data.password,
     };
 
@@ -63,9 +63,8 @@ export default function LoginPage() {
           localStorage.setItem("authToken", token);
           loginContext(token, user);
           toast.success("Logged in successfully!");
-          if (role === "SuperAdmin"){
-            navigate("/home")
-          }else if (role === "Admin") {
+
+          if (role === "Admin") {
             navigate("/tenant-dashboard");
           }  else {
             navigate("/login"); 
