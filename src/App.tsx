@@ -9,7 +9,7 @@ import HomePage from "./pages/Home";
 import { DepartmentPage } from "./pages/tenant/Department";
 import TenantAttendanceDashboard from "./pages/tenant/TenantDashboard";
 import DepartmentRegister from "./pages/tenant/Department/departmentRegister";
-import EmployeePage from "./pages/Employee";
+// import EmployeePage from "./pages/Employee";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 export default function App() {
@@ -35,7 +35,7 @@ export default function App() {
           <Route path="/tenant-dashboard" element={<TenantAttendanceDashboard />} />
            <Route path="/department" element={<DepartmentPage />} />
             <Route path="/department-register" element={<DepartmentRegister />} />
-              <Route path="/employees" element={<EmployeePage />} />
+              {/* <Route path="/employees" element={<EmployeePage />} /> */}
         </Route>
 
      

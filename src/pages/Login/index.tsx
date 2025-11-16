@@ -39,9 +39,7 @@ export default function LoginPage() {
   const { login: loginContext } = useAuth();
   const { login } = useUser();
   const { mutate: loginUser, isPending } = login;
-
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  
   const {
     register,
     handleSubmit,
@@ -61,12 +59,10 @@ export default function LoginPage() {
         const token = response?.data?.token;
         const user = response?.data?.userDto;
         const role = response?.data?.role?.[0]; 
-
         if (token && user) {
           localStorage.setItem("authToken", token);
           loginContext(token, user);
           toast.success("Logged in successfully!");
-
           if (role === "SuperAdmin"){
             navigate("/home")
           }else if (role === "Admin") {
@@ -77,12 +73,15 @@ export default function LoginPage() {
         }
       },
       onError: (error: any) => {
-        const errorData = error?.response?.data?.errorMessage || "";
-        if (errorData) {
-          toast.error(errorData);
-        } else {
-          toast.error("Invalid username or password.");
-        }
+        const status = error?.response?.status;
+       
+          if (status === 401) {
+  
+    toast.error("Invalid username or password.");
+    return;
+  }
+
+       
       },
     });
   };
@@ -91,12 +90,9 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <Card className="w-full max-w-md shadow-lg rounded-lg border-0 bg-white">
         <CardHeader className="text-center">
-          
-
           <CardTitle className="text-2xl font-bold">Login</CardTitle>
           <CardDescription>Enter your credentials to sign in</CardDescription>
         </CardHeader>
-
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="flex flex-col">
@@ -112,7 +108,6 @@ export default function LoginPage() {
                 </p>
               )}
             </div>
-
             <div className="flex flex-col relative">
               <Label>Password</Label>
               <Input
@@ -133,7 +128,6 @@ export default function LoginPage() {
                 </p>
               )}
             </div>
-
             <div className="flex items-center">
               <a href="#" className="text-sm text-blue-600 hover:underline ml-auto">
                 Forgot Password?
@@ -149,7 +143,6 @@ export default function LoginPage() {
             </Button>
           </form>
         </CardContent>
-
         <CardFooter className="text-center">
           <p className="text-sm text-gray-600">
             Don’t have an account?{" "}
