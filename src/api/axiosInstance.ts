@@ -5,12 +5,14 @@ export const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use((config: any) => {
   const token = localStorage.getItem("authToken");
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-
   const tenant = JSON.parse(localStorage.getItem("tenant") || "{}");
-
-  if (config.requiresAuth !== false && token) {
-    config.headers["Authorization"] = `Bearer ${token}`;
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  if (token && config.requiresAuth !== false) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+    if (user?.role === "SuperAdmin") {
+    delete config.headers["X-Tenant-ID"];
+    return config;
   }
 const isSuperAdmin = user?.role === "SuperAdmin";
 
@@ -20,5 +22,7 @@ const isSuperAdmin = user?.role === "SuperAdmin";
 
 
   return config;
-});
+}
+);
+
 
