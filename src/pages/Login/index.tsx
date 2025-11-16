@@ -52,7 +52,7 @@ export default function LoginPage() {
 
   const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
     const payload = {
-      username: data.username,
+      userName: data.username,
       password: data.password,
     };
 
@@ -60,14 +60,13 @@ export default function LoginPage() {
       onSuccess: (response: any) => {
         const token = response?.data?.token;
         const user = response?.data?.userDto;
-        const role = response?.data?.role?.[0]; // "Admin" or "SuperAdmin"
+        const role = response?.data?.role?.[0]; 
 
         if (token && user) {
           localStorage.setItem("authToken", token);
           loginContext(token, user);
           toast.success("Logged in successfully!");
 
-          // 🚀 ROLE-BASED NAVIGATION
           if (role === "Admin") {
             navigate("/tenant-dashboard");
           } else if (role === "SuperAdmin") {

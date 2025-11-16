@@ -17,8 +17,6 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
-
-      
         <Route element={<ProtectedRoute allowedRoles={["SuperAdmin"]} />}>
           <Route element={<MainLayout />}>
             <Route path="/home" element={<HomePage />} />

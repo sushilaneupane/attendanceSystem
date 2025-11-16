@@ -16,10 +16,12 @@ axiosInstance.interceptors.request.use((config: any) => {
   if (config.requiresAuth !== false && token) {
     config.headers["Authorization"] = `Bearer ${token}`;
   }
+const isSuperAdmin = user?.role === "SuperAdmin";
 
-  if (config.requiresAuth !== false && tenant?.id) {
+  if (config.requiresAuth !== false && tenant?.id && !isSuperAdmin) {
     config.headers["X-Tenant-ID"] = tenant.id;
   }
+
 
   return config;
 });
