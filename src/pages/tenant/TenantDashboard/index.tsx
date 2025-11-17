@@ -10,7 +10,6 @@ import {
   CardContent,
 } from "../../../components/ui/card";
 import { Search, LayoutDashboard, Users, Layers } from "lucide-react";
-import MainLayout from "@/layouts/MainLayout";
 
 interface EmployeeAttendance {
   id: string;
@@ -20,12 +19,6 @@ interface EmployeeAttendance {
   checkOut: string | null;
   status: "Present" | "Absent" | "Late";
 }
-
-export const tenantLinks = [
-  { name: "Dashboard", path: "/tenant-dashboard", icon: <LayoutDashboard size={18} /> },
-  { name: "Employees", path: "/employees", icon: <Users size={18} /> },
-  { name: "Department", path: "/department", icon: <Layers size={18} /> },
-];
 
 const attendanceData: EmployeeAttendance[] = [
   { id: "1", name: "John Doe", date: "2025-11-09", checkIn: "09:00 AM", checkOut: "05:00 PM", status: "Present" },
@@ -50,7 +43,6 @@ export default function TenantAttendanceDashboard() {
 
   return (
     <>
-      <MainLayout navLinks={tenantLinks} />
       <div className="p-6 md:ml-5">
 
       

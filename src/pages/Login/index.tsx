@@ -66,7 +66,10 @@ export default function LoginPage() {
 
           if (role === "Admin") {
             navigate("/tenant-dashboard");
-          }  else {
+          }  else if(role === "SuperAdmin") {
+              navigate('/home')
+          }
+          else {
             navigate("/login"); 
           }
         }

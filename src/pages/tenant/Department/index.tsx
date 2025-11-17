@@ -1,124 +1,160 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../../components/ui/button";
 import { Input } from "../../../components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
 import { Badge } from "../../../components/ui/badge";
-import { Search, Plus, MoreHorizontal, Edit, Trash2 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../../../components/ui/dropdown-menu";
+import { Search, Plus, Edit, Trash2 } from "lucide-react";
 import { DataTable } from "../../../components/table/DataTable";
-import{DialogBox} from "../../../components/Dialogs/Dialogbox";
-import { useDepartments } from "../../../hooks/useDepartments";
+
+import { useDepartments, useDeleteDepartment } from "../../../hooks/useDepartments";
 import { Department } from "@/api/departmentApi";
 import DepartmentRegister from "./departmentRegister";
-import MainLayout from "@/layouts/MainLayout";
-import { tenantLinks } from "../TenantDashboard";
+import { SlideSheet, SlideSheetRef } from "../../../components/App-sheet/AppSheet";
+import { TableCell } from "@/components/ui/table";
 
 export function DepartmentPage() {
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [editingDepartment, setEditingDepartment] = useState<Department | null>(null);
+  const [departmentToDelete, setDepartmentToDelete] = useState<Department | null>(null);
 
-   const { data: departments} = useDepartments();
+  const { data: departments } = useDepartments();
+  const deleteDepartment = useDeleteDepartment();
 
-  const filteredDepartments = departments?.filter(
-    (d) => d.name.toLowerCase().includes(searchTerm.toLowerCase())
-  ) || [];
+  const navigate = useNavigate();
 
-  const handleAddDepartment = () => console.log("Redirect to add department");
-  const handleEditDepartment = (id: string) => console.log("Edit department", id);
-  const handleDeleteDepartment = (id: string) => console.log("Delete department", id);
+  const sheetRef = useRef<SlideSheetRef>(null);
+  const deleteSheetRef = useRef<SlideSheetRef>(null);
+  const sheetSubmitFn = useRef<() => void | undefined>(undefined);
+
+  const filteredDepartments =
+    departments?.filter((d) =>
+      d.name.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
+
+  const handleEditDepartment = (department: Department) => {
+    setEditingDepartment(department);
+    sheetRef.current?.openSheet();
+  };
+
+  const handleAddDepartment = () => {
+    setEditingDepartment(null);
+    sheetRef.current?.openSheet();
+  };
+
+  const handleDeleteDepartment = (department: Department) => {
+    setDepartmentToDelete(department);
+    deleteSheetRef.current?.openSheet();
+  };
+
+  const confirmDelete = () => {
+    if (departmentToDelete) {
+      deleteDepartment.mutate(departmentToDelete.id);
+      deleteSheetRef.current?.closeSheet();
+      setDepartmentToDelete(null);
+    }
+  };
 
   return (
-    <>
-      <MainLayout navLinks={tenantLinks} />
-    <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
-      <div className="flex items-center justify-between">
+    <div className="flex-1 space-y-6">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Departments</h2>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground mt-1">
             Manage your departments and their information
           </p>
         </div>
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search departments by name..."
-            className="pl-8"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+
+        <div className="flex flex-col md:flex-row items-center gap-3 md:gap-2 flex-1 max-w-md">
+          <div className="relative w-full md:w-auto flex-1">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search departments by name..."
+              className="pl-10"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+
+          <Button onClick={handleAddDepartment}>
+            <Plus className="mr-2 h-4 w-4" />
+            Add Department
+          </Button>
         </div>
-                 
-                   <DialogBox
-                triggerButtonText={
-                  <>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add department
-                  </>
-                }
-              >
-                <DepartmentRegister/>
-              </DialogBox>
       </div>
+      <DataTable
+        headers={["Department", "Status", "Actions"]}
+        data={filteredDepartments}
+        emptyMessage="No departments found."
+        renderRow={(department: Department) => (
+          <>
+            <TableCell
+              className="font-semibold cursor-pointer hover:underline px-6 py-4"
+              onClick={() => navigate(`/department/${department.id}`)}
+            >
+              {department.name}
+            </TableCell>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Departments List</CardTitle>
-          <CardDescription>
-           
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <DataTable
-            headers={["Department Id", "Name", "Actions"]}
-            data={filteredDepartments}
-            emptyMessage="No departments found. Add your first department to get started."
-            renderRow={(department: Department) => (
-              <>
-                <td>
-                  <div className="font-semibold">{department.name}</div>
-                  <div className="text-xs text-muted-foreground mt-1">
-                    ID: {department.id}
-                  </div>
-                </td>
+            <TableCell className="px-6 py-4">
+              <Badge variant={department.isActive ? "default" : "secondary"}>
+                {department.isActive ? "Active" : "Inactive"}
+              </Badge>
+            </TableCell>
 
-                <td>
-                  <Badge variant={department.isActive ? "default" : "secondary"}>
-                    {department?.isActive ? "Active" : "Inactive"}
-                  </Badge>
-                </td>
+            <TableCell className="px-6 py-4">
+              <div className="flex justify-end items-center space-x-3">
+                <Edit
+                  className="h-4 w-4 cursor-pointer text-blue-600"
+                  onClick={() => handleEditDepartment(department)}
+                />
+                <Trash2
+                  className="h-4 w-4 cursor-pointer text-red-600"
+                  onClick={() => handleDeleteDepartment(department)}
+                />
+              </div>
+            </TableCell>
+          </>
+        )}
+      />
+      <SlideSheet
+        ref={sheetRef}
+        title={editingDepartment ? "Edit Department" : "Add Department"}
+        width="w-96"
+        submitText={editingDepartment ? "Update" : "Save"}
+        onSubmit={() => sheetSubmitFn.current?.()}
+      >
+        <DepartmentRegister
+          isEditing={!!editingDepartment}
+          defaultValues={editingDepartment}
+          onSubmitSuccess={() => sheetRef.current?.closeSheet()}
+          submitHandler={(submitFn) => {
+            sheetSubmitFn.current = submitFn;
+          }}
+        />
+      </SlideSheet>
 
-                <td className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-8 w-8 p-0">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => handleEditDepartment(department.id)}>
-                        <Edit className="mr-2 h-4 w-4" />
-                        Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        className="text-destructive"
-                        onClick={() => handleDeleteDepartment(department.id)}
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </td>
-              </>
-            )}
-          />
-        </CardContent>
-      </Card>
+      <SlideSheet
+        ref={deleteSheetRef}
+        title="Confirm Delete"
+        width="w-80"
+        showSubmit={false}
+      >
+        <p className="mt-2 text-sm text-muted-foreground">
+          Are you sure you want to delete “{departmentToDelete?.name}”?
+        </p>
+
+        <div className="mt-4 flex justify-end gap-2">
+          <Button
+            variant="outline"
+            onClick={() => deleteSheetRef.current?.closeSheet()}
+          >
+            Cancel
+          </Button>
+          <Button variant="destructive" onClick={confirmDelete}>
+            Delete
+          </Button>
+        </div>
+      </SlideSheet>
     </div>
-      </>
   );
 }
