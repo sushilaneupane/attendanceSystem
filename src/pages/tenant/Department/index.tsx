@@ -90,7 +90,9 @@ export function DepartmentPage() {
           <>
             <TableCell
               className="font-semibold cursor-pointer hover:underline px-6 py-4"
+              // onClick={() => navigate(`/department/${department.id}`)}
               onClick={() => navigate(`/department/${department.id}`)}
+
             >
               {department.name}
             </TableCell>
