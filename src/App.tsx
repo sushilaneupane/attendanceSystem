@@ -18,13 +18,12 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-     
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route element={<Navigate to="/login" replace />} />
         <Route element={<ProtectedRoute allowedRoles={["SuperAdmin"]} />}>
           <Route element={<MainLayout />}>
             <Route path="/home" element={<HomePage />} />
-            {/* <Route path="/tenant" element={<TenantsPage />} /> */}
-            {/* <Route path="/tenant-register" element={<TenantSignUp />} /> */}
+            <Route path="/tenant" element={<TenantsPage />} />
+            <Route path="/tenant-register" element={<TenantSignUp />} />
           </Route>
         </Route>
 
@@ -32,12 +31,10 @@ export default function App() {
         <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
           <Route element={<AdminLayout />}>
           <Route path="/tenant-dashboard" element={<TenantAttendanceDashboard />} />
-           <Route path="/department" element={<DepartmentPage/>} />
-            <Route path="/department-register" element={<DepartmentRegister/>} />
-             <Route path="/department/:id" element={<DepartmentOverviewPage />} />
-              <Route path="/tenant-register" element={<TenantSignUp />} />
-                  <Route path="/tenant" element={<TenantsPage />} />
-              </Route>
+          <Route path="/department" element={<DepartmentPage/>} />
+          <Route path="/department-register" element={<DepartmentRegister/>} />
+          <Route path="/department/:id" element={<DepartmentOverviewPage />} />
+          </Route>
         </Route>
 
      
