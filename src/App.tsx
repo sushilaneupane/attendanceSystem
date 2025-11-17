@@ -7,11 +7,11 @@ import { TenantsPage } from "./pages/tenant/TenantPage";
 import TenantSignUp from "./pages/tenant/TenantRegister";
 import HomePage from "./pages/Home";
 import TenantAttendanceDashboard from "./pages/tenant/TenantDashboard";
-import DepartmentRegister from "./pages/tenant/Department/departmentRegister";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminLayout from "./layouts/AdminLayout";
 import DepartmentOverviewPage from "./pages/tenant/Department/departmentOverview";
 import { DepartmentPage } from "./pages/tenant/Department";
+import DepartmentRegister from "./pages/tenant/Department/departmentRegister";
 
 
 export default function App() {
@@ -27,7 +27,6 @@ export default function App() {
           </Route>
         </Route>
 
-      
         <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
           <Route element={<AdminLayout />}>
           <Route path="/tenant-dashboard" element={<TenantAttendanceDashboard />} />
@@ -37,7 +36,6 @@ export default function App() {
           </Route>
         </Route>
 
-     
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
        

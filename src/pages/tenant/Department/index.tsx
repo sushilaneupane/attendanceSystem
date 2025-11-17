@@ -2,11 +2,9 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../../components/ui/button";
 import { Input } from "../../../components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
 import { Badge } from "../../../components/ui/badge";
 import { Search, Plus, Edit, Trash2 } from "lucide-react";
 import { DataTable } from "../../../components/table/DataTable";
-
 import { useDepartments, useDeleteDepartment } from "../../../hooks/useDepartments";
 import { Department } from "@/api/departmentApi";
 import DepartmentRegister from "./departmentRegister";

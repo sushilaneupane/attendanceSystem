@@ -1,79 +1,74 @@
-// import React from "react";
+import React from "react";
+import { useEmployee } from "../../hooks/useEmployee";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { DataTable } from "@/components/table/DataTable"; // optional if you want a table component
+import { Skeleton } from "@/components/ui/skeleton";
 
-// import { Table } from "@/components/ui/table";
-// import { DataTable } from "@/components/table/DataTable";
-// import { useState } from "react";
+interface Employee {
+  id: string;
+  firstName: string;
+  lastName: string;
+  dateOfJoining: string;
+  email?: string;
+  contactNumber1: string;
+  contactNumber2?: string;
+  address?: string;
+  dateOfBirth: string;
+  description?: string;
+  deviceUserId?: number;
+  isActive: boolean;
+  marriedStatus?: number;
+  gender?: number;
+  designationId?: string;
+  designationName: string;
+  departmentId?: string;
+  departmentName: string;
+}
 
+const EmployeePage: React.FC = () => {
+  const { data: employees, isLoading, error } = useEmployee();
 
-// import { Plus, Search } from "lucide-react";
-// import { Input } from "@/components/ui/input";
-// import { DialogBox } from "@/components/Dialogs/Dialogbox";
-// import MainLayout from "@/layouts/MainLayout";
-// import { tenantLinks } from "../tenant/TenantDashboard";
-// const EmployeePage: React.FC = () => {
-//   const { employees, loading, error, refetch } = useEmployeeApi();
-//   const [searchTerm, setSearchTerm] = useState("");
+  if (isLoading) {
+    return (
+      <div className="p-4 space-y-2">
+        <Skeleton className="h-6 w-1/3" />
+        <Skeleton className="h-6 w-full" />
+        <Skeleton className="h-6 w-full" />
+      </div>
+    );
+  }
 
-//    const filteredemployee = employees.filter(
-//     (t) =>
-//       t.firstName.toLowerCase().includes(searchTerm.toLowerCase())
-     
-//   );
+  if (error) {
+    return <p className="text-red-500">Failed to load employees.</p>;
+  }
 
-//   return (
-//     <>
-//      <MainLayout navLinks={tenantLinks} />
-  
-//     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
-//          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-//         <div className="flex-1 mt-10">
-//           <h2 className="text-3xl font-bold tracking-tight">Employees</h2>
-//           <p className="text-muted-foreground">
-//             Manage your employees and their information
-//           </p>
-//         </div>
+  return (
+    <div className="p-6">
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>Employees</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <table className="w-full table-auto border-collapse border border-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="border px-4 py-2 text-left">Name</th>
+                <th className="border px-4 py-2 text-left">Department</th>
+                <th className="border px-4 py-2 text-left">Designation</th>
+                <th className="border px-4 py-2 text-left">Joining Date</th>
+                <th className="border px-4 py-2 text-left">Status</th>
+                <th className="border px-4 py-2 text-left">Contact</th>
+              </tr>
+            </thead>
+            <tbody>
+             
+            </tbody>
+          </table>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
 
-//         <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
-//           <div className="relative flex-1 max-w-sm">
-//             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-//             <Input
-//               placeholder="Search employee by name"
-//               className="pl-8"
-//               value={searchTerm}
-//               onChange={(e) => setSearchTerm(e.target.value)}
-//             />
-//           </div>
-
-//         </div>
-//       </div>
-    
-//          <DataTable
-//                headers={["Name", "Designation", "Department", "Status", "Date of Joining"]}
-//               data={filteredemployee}
-//               emptyMessage="No attendance records found."
-//               renderRow={(record: Employee) => (
-//                 <>
-//                   <td>{record.firstName}{record.lastName}</td>
-//                   <td>{(record.designationName)}</td>
-//                   <td>{record.departmentName}</td>
-//                   <td>{record.marriedStatus}</td>
-//                    <td>
-//                   <div className="text-sm">
-//                   {new Date(record.dateOfJoining).toLocaleDateString()}
-//                   </div>
-//                   </td>
-                  
-//                 </>
-//               )}
-//             />
-
-       
-    
-
-     
-//     </div>
-//       </>
-//   );
-// };
-
-// export default EmployeePage;
+export default EmployeePage;

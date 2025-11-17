@@ -15,7 +15,7 @@ type DepartmentFormType = z.infer<typeof departmentSchema>;
 interface DepartmentRegisterProps {
   isEditing?: boolean;
   defaultValues?: Department | null;
-  onSubmitSuccess?: () => void;
+  onSubmitSuccess?: () => void; 
   submitHandler?: (handleSubmit: () => void) => void; 
 }
 
@@ -44,7 +44,6 @@ export default function DepartmentRegister({
     }
   }, [defaultValues, reset]);
 
-  
   const onSubmit = (data: DepartmentFormType) => {
     if (isEditing && defaultValues) {
       updateDepartment(
