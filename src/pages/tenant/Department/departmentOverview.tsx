@@ -61,9 +61,9 @@ export default function DepartmentOverviewPage() {
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
    
       <div>
-        <h1 className="text-2xl font-bold">{department.name}</h1>
+        <h1 className="text-2xl font-bold">Welcome to the {department.data.name}</h1>
        
-        <p>Status: {department.isActive ? "Active" : "Inactive"}</p>
+        <p>Status: {department.data.isActive ? "Active" : "Inactive"}</p>
       
       </div>
 

@@ -3,7 +3,7 @@ import { CreateEmployee, getEmployee, registerEmployee } from "@/api/employeeApi
 
 export const useEmployee= () => {
   return useQuery({
-    queryKey: ["Employee"],
+    queryKey: ["employee"],
     queryFn: getEmployee,
     select: (response) => response.data,
   });

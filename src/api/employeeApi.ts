@@ -4,6 +4,8 @@ import { axiosInstance } from "./axiosInstance";
 
 
 export interface Employee {
+  firstName: any;
+  lastName: any;
   id: string;
   name: string;
   description?: string;

@@ -12,6 +12,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import DepartmentOverviewPage from "./pages/tenant/Department/departmentOverview";
 import { DepartmentPage } from "./pages/tenant/Department";
 import DepartmentRegister from "./pages/tenant/Department/departmentRegister";
+import { EmployeePage } from "./pages/tenant/Employee";
 
 
 
@@ -34,7 +35,7 @@ export default function App() {
           <Route path="/tenant-dashboard" element={<TenantAttendanceDashboard />} />
           <Route path="/department" element={<DepartmentPage/>} />
           <Route path="/department-register" element={<DepartmentRegister/>} />
-     
+      <Route path="/employee" element={<EmployeePage/>} />
           <Route path="/department/:id" element={<DepartmentOverviewPage />} />
           </Route>
         </Route>
