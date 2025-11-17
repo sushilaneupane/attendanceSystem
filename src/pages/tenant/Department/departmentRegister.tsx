@@ -44,6 +44,7 @@ export default function DepartmentRegister({
     }
   }, [defaultValues, reset]);
 
+  // This function will be called when the Sheet button is clicked
   const onSubmit = (data: DepartmentFormType) => {
     if (isEditing && defaultValues) {
       updateDepartment(

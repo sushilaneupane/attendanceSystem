@@ -58,7 +58,7 @@ export default function LoginPage() {
       onSuccess: (response: any) => {
         const token = response?.data?.token;
         const user = response?.data?.userDto;
-        const role = response?.data?.role?.[0]; 
+        const role = response?.data?.role?.[0];
         if (token && user) {
           localStorage.setItem("authToken", token);
           loginContext(token, user);
@@ -66,24 +66,24 @@ export default function LoginPage() {
 
           if (role === "Admin") {
             navigate("/tenant-dashboard");
-          }  else if(role === "SuperAdmin") {
-              navigate('/home')
+          } else if (role === "SuperAdmin") {
+            navigate('/home')
           }
           else {
-            navigate("/login"); 
+            navigate("/login");
           }
         }
       },
       onError: (error: any) => {
         const status = error?.response?.status;
-       
-          if (status === 401) {
-  
-    toast.error("Invalid username or password.");
-    return;
-  }
 
-       
+        if (status === 401) {
+
+          toast.error("Invalid username or password.");
+          return;
+        }
+
+
       },
     });
   };
@@ -110,25 +110,21 @@ export default function LoginPage() {
                 </p>
               )}
             </div>
-            <div className="flex flex-col relative">
-              <Label>Password</Label>
+            <div className="relative">
               <Input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
-                className="mt-1 pr-10 border border-gray-500 focus:border-transparent focus:outline-none focus:ring-0 hover:border-gray-500"
+                className="mt-1 pr-10 border border-gray-500 focus:border-transparent 
+                 focus:outline-none focus:ring-0 hover:border-gray-500"
                 {...register("password")}
               />
+
               <span
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                className="absolute right-3 inset-y-0 flex items-center cursor-pointer"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </span>
-              {errors.password && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.password.message}
-                </p>
-              )}
             </div>
             <div className="flex items-center">
               <a href="#" className="text-sm text-blue-600 hover:underline ml-auto">
