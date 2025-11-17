@@ -27,3 +27,6 @@ export const useAddDesignation = () => {
 export const useDeleteDesignation = ()=>{
   
 }
+export const useUpdateDesignation = ()=>{
+  
+}

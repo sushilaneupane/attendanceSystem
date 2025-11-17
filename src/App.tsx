@@ -12,7 +12,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminLayout from "./layouts/AdminLayout";
 import DepartmentOverviewPage from "./pages/tenant/Department/departmentOverview";
 import { DepartmentPage } from "./pages/tenant/Department";
-import DesignationPage from "./pages/tenant/Department/Designation";
+
 
 
 export default function App() {
@@ -35,7 +35,7 @@ export default function App() {
           <Route path="/tenant-dashboard" element={<TenantAttendanceDashboard />} />
           <Route path="/department" element={<DepartmentPage/>} />
           <Route path="/department-register" element={<DepartmentRegister/>} />
-           <Route path="/departments/:departmentId/designations" element={<DesignationPage/>}></Route>
+     
           <Route path="/department/:id" element={<DepartmentOverviewPage />} />
           </Route>
         </Route>
