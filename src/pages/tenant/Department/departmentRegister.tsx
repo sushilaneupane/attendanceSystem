@@ -13,7 +13,7 @@ const departmentSchema = z.object({
 type DepartmentFormType = z.infer<typeof departmentSchema>;
 
 interface DepartmentRegisterProps {
-  isEditing: boolean;
+  isEditing?: boolean;
   defaultValues?: Department | null;
   onSubmitSuccess?: () => void; // called when form submission succeeds
   submitHandler?: (handleSubmit: () => void) => void; // optional, for Sheet button click
