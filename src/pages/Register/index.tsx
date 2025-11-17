@@ -133,7 +133,6 @@ export default function RegisterPage() {
               {backendErrors.Password && <p className="text-red-500 text-sm">{backendErrors.Password[0]}</p>}
             </div>
 
-            {/* Confirm Password */}
             <div className="flex flex-col relative">
               <Label className="mb-1">Confirm Password</Label>
               <Input

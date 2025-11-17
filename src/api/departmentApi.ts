@@ -17,7 +17,6 @@ export interface CreateDepartment {
 }
 
 export interface ApiResponse<T> {
-    description: any;
     id: ReactNode;
     isActive: any;
     name: ReactNode;

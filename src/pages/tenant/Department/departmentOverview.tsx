@@ -4,7 +4,6 @@ import { useDepartmentById } from "../../../hooks/useDepartments";
 import { useDesignationsByDepartment, useAddDesignation } from "../../../hooks/useDesignations";
 import { DataTable } from "../../../components/table/DataTable";
 import { Badge } from "../../../components/ui/badge";
-import { Button } from "../../../components/ui/button";
 import { DialogBox } from "../../../components/Dialogs/Dialogbox";
 import { ControlledInput } from "../../../components/Form/ControlledInput";
 import { Plus } from "lucide-react";
@@ -12,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 
 const designationSchema = z.object({
@@ -64,32 +64,12 @@ export default function DepartmentOverviewPage() {
         <h1 className="text-2xl font-bold">{department.name}</h1>
        
         <p>Status: {department.isActive ? "Active" : "Inactive"}</p>
-        {department.description && <p>Description: {department.description}</p>}
+      
       </div>
 
        <Button >
             <Plus className="mr-1" /> Add Designation
        </Button>
-      <DialogBox
-        triggerButtonText={
-          <>
-            
-          </>
-        }
-        header="Add Designation"
-        children={
-          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-            <ControlledInput
-              name="designationName"
-              label="Designation Name"
-              control={control}
-              placeholder="Enter designation name"
-              errors={errors}
-            />
-            <Button type="submit">Add</Button>
-          </form>
-        }
-      />
       </div>
 
       
