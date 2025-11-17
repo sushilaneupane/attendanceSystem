@@ -1,27 +1,63 @@
-// src/hooks/useDepartments.ts
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  getDepartments,
+  registerDepartment,
+  updateDepartment,
+  deleteDepartment,
+  CreateDepartment,
+  Department,
+  getDepartmentById
+} from "../api/departmentApi";
 
-const apiUrl = (import.meta as any).env?.VITE_BASE_URL as string;
-
-// Type for a single department (update based on your API)
-export interface Department {
-  id: number;
-  name: string;
-  description?: string;
-}
-
-// Fetch function
-const fetchDepartments = async (): Promise<Department[]> => {
-  const response = await axios.get(`${apiUrl}/Departments`);
-  return response.data;
-};
-
-// Hook using React Query
 export const useDepartments = () => {
   return useQuery({
     queryKey: ["departments"],
-    queryFn: fetchDepartments,
-    staleTime: 5 * 60 * 1000, // optional: cache for 5 minutes
+    queryFn: getDepartments,
+    select: (response) => response.data,
+  });
+};
+
+export const useDepartmentById = (id?: string | number) => {
+  return useQuery({
+    queryKey: ["department", id],
+    queryFn: () => getDepartmentById(id as string | number),
+    enabled: !!id,
+  });
+}
+
+export const useCreateDepartment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (department: CreateDepartment) =>
+      registerDepartment(department),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["departments"] });
+    },
+  });
+};
+
+export const useUpdateDepartment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      id,
+      department,
+    }: {
+      id: string;
+      department: CreateDepartment;
+    }) => updateDepartment(id, department),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["departments"] });
+    },
+  });
+};
+
+export const useDeleteDepartment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteDepartment(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["departments"] });
+    },
   });
 };

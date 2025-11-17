@@ -1,75 +1,160 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
 import { Badge } from "../../../components/ui/badge";
-import { Loader2 } from "lucide-react";
+import { Search, Plus, Edit, Trash2 } from "lucide-react";
+import { DataTable } from "../../../components/table/DataTable";
+import { useDepartments, useDeleteDepartment } from "../../../hooks/useDepartments";
+import { Department } from "@/api/departmentApi";
+import DepartmentRegister from "./departmentRegister";
+import { SlideSheet, SlideSheetRef } from "../../../components/App-sheet/AppSheet";
+import { TableCell } from "@/components/ui/table";
 
-interface Department {
-  id: string;
-  name: string;
-  isActive: boolean;
-}
+export function DepartmentPage() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [editingDepartment, setEditingDepartment] = useState<Department | null>(null);
+  const [departmentToDelete, setDepartmentToDelete] = useState<Department | null>(null);
 
-interface ApiResponse {
-  success: boolean;
-  errorMessage: string;
-  detailErrorMessage: string;
-  data: Department[];
-  statusCode: number;
-}
+  const { data: departments } = useDepartments();
+  const deleteDepartment = useDeleteDepartment();
 
-function DepartmentPage() {
-  const [departments, setDepartments] = useState<Department[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    axios
-      .get<ApiResponse>("YOUR_API_URL_HERE")
-      .then((response) => {
-        if (response.data.success) {
-          setDepartments(response.data.data);
-        } else {
-          setError(response.data.errorMessage);
-        }
-      })
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
-  }, []);
+  const sheetRef = useRef<SlideSheetRef>(null);
+  const deleteSheetRef = useRef<SlideSheetRef>(null);
+  const sheetSubmitFn = useRef<() => void | undefined>(undefined);
 
-  if (loading)
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader2 className="animate-spin w-10 h-10" />
-      </div>
-    );
+  const filteredDepartments =
+    departments?.filter((d) =>
+      d.name.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
 
-  if (error)
-    return (
-      <div className="text-red-500 text-center mt-10">
-        <p>Error: {error}</p>
-      </div>
-    );
+  const handleEditDepartment = (department: Department) => {
+    setEditingDepartment(department);
+    sheetRef.current?.openSheet();
+  };
+
+  const handleAddDepartment = () => {
+    setEditingDepartment(null);
+    sheetRef.current?.openSheet();
+  };
+
+  const handleDeleteDepartment = (department: Department) => {
+    setDepartmentToDelete(department);
+    deleteSheetRef.current?.openSheet();
+  };
+
+  const confirmDelete = () => {
+    if (departmentToDelete) {
+      deleteDepartment.mutate(departmentToDelete.id);
+      deleteSheetRef.current?.closeSheet();
+      setDepartmentToDelete(null);
+    }
+  };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Departments</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {departments.map((dept) => (
-          <Card key={dept.id}>
-            <CardHeader>
-              <CardTitle>{dept.name}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Badge variant={dept.isActive ? "default" : "destructive"}>
-                {dept.isActive ? "Active" : "Inactive"}
-              </Badge>
-            </CardContent>
-          </Card>
-        ))}
+    <div className="flex-1 space-y-6">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight">Departments</h2>
+          <p className="text-muted-foreground mt-1">
+            Manage your departments and their information
+          </p>
+        </div>
+
+        <div className="flex flex-col md:flex-row items-center gap-3 md:gap-2 flex-1 max-w-md">
+          <div className="relative w-full md:w-auto flex-1">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search departments by name..."
+              className="pl-10"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+
+          <Button onClick={handleAddDepartment}>
+            <Plus className="mr-2 h-4 w-4" />
+            Add Department
+          </Button>
+        </div>
       </div>
+      <DataTable
+        headers={["Department", "Status", "Actions"]}
+        data={filteredDepartments}
+        emptyMessage="No departments found."
+        renderRow={(department: Department) => (
+          <>
+            <TableCell
+              className="font-semibold cursor-pointer hover:underline px-6 py-4"
+              onClick={() => navigate(`/department/${department.id}`)}
+           
+
+            >
+              {department.name}
+            </TableCell>
+
+            <TableCell className="px-6 py-4">
+              <Badge variant={department.isActive ? "default" : "secondary"}>
+                {department.isActive ? "Active" : "Inactive"}
+              </Badge>
+            </TableCell>
+
+            <TableCell className="px-6 py-4">
+              <div className="flex justify-end items-center space-x-3">
+                <Edit
+                  className="h-4 w-4 cursor-pointer text-blue-600"
+                  onClick={() => handleEditDepartment(department)}
+                />
+                <Trash2
+                  className="h-4 w-4 cursor-pointer text-red-600"
+                  onClick={() => handleDeleteDepartment(department)}
+                />
+              </div>
+            </TableCell>
+          </>
+        )}
+      />
+      <SlideSheet
+        ref={sheetRef}
+        title={editingDepartment ? "Edit Department" : "Add Department"}
+        width="w-96"
+        submitText={editingDepartment ? "Update" : "Save"}
+        onSubmit={() => sheetSubmitFn.current?.()}
+      >
+        <DepartmentRegister
+          isEditing={!!editingDepartment}
+          defaultValues={editingDepartment}
+          onSubmitSuccess={() => sheetRef.current?.closeSheet()}
+          submitHandler={(submitFn) => {
+            sheetSubmitFn.current = submitFn;
+          }}
+        />
+      </SlideSheet>
+
+      <SlideSheet
+        ref={deleteSheetRef}
+        title="Confirm Delete"
+        width="w-80"
+        showSubmit={false}
+      >
+        <p className="mt-2 text-sm text-muted-foreground">
+          Are you sure you want to delete “{departmentToDelete?.name}”?
+        </p>
+
+        <div className="mt-4 flex justify-end gap-2">
+          <Button
+            variant="outline"
+            onClick={() => deleteSheetRef.current?.closeSheet()}
+          >
+            Cancel
+          </Button>
+          <Button variant="destructive" onClick={confirmDelete}>
+            Delete
+          </Button>
+        </div>
+      </SlideSheet>
     </div>
   );
 }
-
-export default DepartmentPage;

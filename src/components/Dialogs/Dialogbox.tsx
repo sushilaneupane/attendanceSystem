@@ -1,4 +1,4 @@
-// components/DialogBox.tsx
+
 import {
   Dialog,
   DialogTrigger,
@@ -12,26 +12,32 @@ import { ReactNode } from "react";
 
 interface DialogBoxProps {
   triggerButtonText: ReactNode;
-
   children: ReactNode;
+  header? : ReactNode;
+  open?: boolean; 
+  onOpenChange?: (open: boolean) => void; 
 }
 
-export function DialogBox({ triggerButtonText,  children }: DialogBoxProps) {
+export function DialogBox({
+  triggerButtonText,
+  children,
+  open,
+  header,
+  onOpenChange,
+}: DialogBoxProps) {
   return (
-    <Dialog>
-      {/* Trigger button */}
+    <Dialog open={open} onOpenChange={onOpenChange}>
+     
       <DialogTrigger asChild>
         <Button>{triggerButtonText}</Button>
       </DialogTrigger>
 
-      {/* Dialog content */}
-      <DialogContent >
-        <DialogHeader>
+    
+      <DialogContent>
+        <DialogHeader> {header}
           <DialogTitle></DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-
-        {/* Pass any content like form here */}
         <div className="mt-5">{children}</div>
       </DialogContent>
     </Dialog>

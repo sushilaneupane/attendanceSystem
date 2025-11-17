@@ -4,10 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-
-import {Input} from "../../components/ui/input";
-import {Button} from "../../components/ui/button"; 
-import {Label} from "../../components/ui/label";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
+import { Label } from "../../components/ui/label";
 import { useAuth } from "../../contexts/AuthContext";
 import {
   Card,
@@ -18,10 +17,10 @@ import {
   CardFooter,
 } from "../../components/ui/card";
 
-import { useUser} from "../../hooks/useUser";
-import { Eye } from "lucide-react";
+import { useUser } from "../../hooks/useUser";
+import { Eye, EyeOff } from "lucide-react";
+import { useTenant } from "@/contexts/TenantContext";
 
-// Schema definition using Zod
 const loginSchema = z.object({
   username: z
     .string()
@@ -33,7 +32,6 @@ const loginSchema = z.object({
     .nonempty("Password is required"),
 });
 
-// Type for form data inferred from Zod schema
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
@@ -41,9 +39,7 @@ export default function LoginPage() {
   const { login: loginContext } = useAuth();
   const { login } = useUser();
   const { mutate: loginUser, isPending } = login;
-
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
   const {
     register,
     handleSubmit,
@@ -54,7 +50,7 @@ export default function LoginPage() {
 
   const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
     const payload = {
-      username: data.username,
+      userName: data.username,
       password: data.password,
     };
 
@@ -62,21 +58,32 @@ export default function LoginPage() {
       onSuccess: (response: any) => {
         const token = response?.data?.token;
         const user = response?.data?.userDto;
+        const role = response?.data?.role?.[0];
         if (token && user) {
           localStorage.setItem("authToken", token);
           loginContext(token, user);
           toast.success("Logged in successfully!");
-          navigate("/dashboard");
+
+          if (role === "Admin") {
+            navigate("/tenant-dashboard");
+          } else if (role === "SuperAdmin") {
+            navigate('/home')
+          }
+          else {
+            navigate("/login");
+          }
         }
       },
       onError: (error: any) => {
-        const errorData = error?.response?.data?.errorMessage || "";
-        console.log("Login error data:", errorData);
-        if (errorData) {
-          toast.error(errorData);
-        } else {
+        const status = error?.response?.status;
+
+        if (status === 401) {
+
           toast.error("Invalid username or password.");
+          return;
         }
+
+
       },
     });
   };
@@ -88,7 +95,6 @@ export default function LoginPage() {
           <CardTitle className="text-2xl font-bold">Login</CardTitle>
           <CardDescription>Enter your credentials to sign in</CardDescription>
         </CardHeader>
-
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="flex flex-col">
@@ -104,28 +110,22 @@ export default function LoginPage() {
                 </p>
               )}
             </div>
-
-            <div className="flex flex-col relative">
-              <Label>Password</Label>
+            <div className="relative">
               <Input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
-                className="mt-1 pr-10 border border-gray-500 focus:border-transparent focus:outline-none focus:ring-0 hover:border-gray-500"
+                className="mt-1 pr-10 border border-gray-500 focus:border-transparent 
+                 focus:outline-none focus:ring-0 hover:border-gray-500"
                 {...register("password")}
               />
+
               <span
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                className="absolute right-3 inset-y-0 flex items-center cursor-pointer"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                <Eye size={20} />
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </span>
-              {errors.password && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.password.message}
-                </p>
-              )}
             </div>
-
             <div className="flex items-center">
               <a href="#" className="text-sm text-blue-600 hover:underline ml-auto">
                 Forgot Password?
@@ -141,7 +141,6 @@ export default function LoginPage() {
             </Button>
           </form>
         </CardContent>
-
         <CardFooter className="text-center">
           <p className="text-sm text-gray-600">
             Don’t have an account?{" "}
