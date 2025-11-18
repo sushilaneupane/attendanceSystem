@@ -48,3 +48,23 @@ export const registerEmployee = async (
   );
   return response.data;
 };
+
+
+export const updateEmployee = async (
+  id: string,
+  employee: CreateEmployee
+): Promise<ApiResponse<Employee>> => {
+  const response = await axiosInstance.patch<ApiResponse<Employee>>(
+    `/Employee/${id}`,
+    employee
+  );
+  return response.data;
+};
+export const deleteEmployee = async (
+  id: string
+): Promise<ApiResponse<null>> => {
+  const response = await axiosInstance.delete<ApiResponse<null>>(
+    `/Employee/${id}`
+  );
+  return response.data;
+};

@@ -13,7 +13,7 @@ import { ControlledSelect } from "@/components/Form/ControlledSelect";
 import { useDepartments } from "@/hooks/useDepartments";
 import { useDesignationsByDepartment } from "@/hooks/useDesignations";
 
-// ZOD SCHEMA
+
 const employeeSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
@@ -64,10 +64,10 @@ export default function EmployeeForm() {
 
   const selectedDepartmentId = watch("departmentId");
 
-  // Fetch Departments
+
   const { data: departments } = useDepartments();
 
-  // Fetch designations based on selected department
+
   const {
     data: designations,
     isLoading: isDesignationLoading,
@@ -78,14 +78,14 @@ export default function EmployeeForm() {
     if (selectedDepartmentId) refetch();
   }, [selectedDepartmentId]);
 
-  // Department dropdown options
+
   const departmentOptions =
     departments?.map((d) => ({
       label: d.name,
       value: d.id,
     })) ?? [];
 
-  // Designation dropdown options
+
   const designationOptions =
     designations?.map((d) => ({
       label: d.designationName,
@@ -107,142 +107,143 @@ export default function EmployeeForm() {
   };
 
   return (
-   
-    <>
-      <ControlledInput
-        name="firstName"
-        control={control}
-        label="First Name"
-        placeholder="Enter first name"
-        errors={errors}
-      />
 
-      <ControlledInput
-        name="lastName"
-        control={control}
-        label="Last Name"
-        placeholder="Enter last name"
-        errors={errors}
-      />
+    <div className="grid grid-cols-2 gap-5 ">
+      <div>
+        <ControlledInput
+          name="firstName"
+          control={control}
+          label="First Name"
+          placeholder="Enter first name"
+          errors={errors}
+        />
 
-      <ControlledInput
-        name="email"
-        control={control}
-        label="Email"
-        type="email"
-        placeholder="example@gmail.com"
-        errors={errors}
-      />
+        <ControlledInput
+          name="lastName"
+          control={control}
+          label="Last Name"
+          placeholder="Enter last name"
+          errors={errors}
+        />
 
-      <ControlledInput
-        name="contactNumber1"
-        control={control}
-        label="Primary Contact"
-        placeholder="9863xxxxxx"
-        errors={errors}
-      />
+        <ControlledInput
+          name="email"
+          control={control}
+          label="Email"
+          type="email"
+          placeholder="example@gmail.com"
+          errors={errors}
+        />
 
-      <ControlledInput
-        name="contactNumber2"
-        control={control}
-        label="Secondary Contact"
-        placeholder="Optional"
-        errors={errors}
-      />
+        <ControlledInput
+          name="contactNumber1"
+          control={control}
+          label="Primary Contact"
+          placeholder="9863xxxxxx"
+          errors={errors}
+        />
 
-      <ControlledInput
-        name="address"
-        control={control}
-        label="Address"
-        placeholder="Enter address"
-        errors={errors}
-      />
+        <ControlledInput
+          name="contactNumber2"
+          control={control}
+          label="Secondary Contact"
+          placeholder="Optional"
+          errors={errors}
+        />
 
-      <ControlledInput
-        name="dateOfJoining"
-        control={control}
-        label="Date Of Joining"
-        type="date"
-        errors={errors}
-      />
+        <ControlledInput
+          name="address"
+          control={control}
+          label="Address"
+          placeholder="Enter address"
+          errors={errors}
+        />
 
-      <ControlledInput
-        name="dateOfBirth"
-        control={control}
-        label="Date Of Birth"
-        type="date"
-        errors={errors}
-      />
-
-      <ControlledInput
-        name="description"
-        control={control}
-        label="Description"
-        placeholder="Short description"
-        errors={errors}
-      />
-
-      <ControlledInput
-        name="deviceUserId"
-        control={control}
-        label="Device User ID"
-        type="number"
-        placeholder="1887"
-        errors={errors}
-      />
-
-      {/* ACTIVE SWITCH */}
-      <div className="flex items-center gap-3">
-        <Switch {...register("isActive")} />
-        <Label>Is Active</Label>
+        <ControlledInput
+          name="dateOfJoining"
+          control={control}
+          label="Date Of Joining"
+          type="date"
+          errors={errors}
+        />
       </div>
+      <div>
+        <ControlledInput
+          name="dateOfBirth"
+          control={control}
+          label="Date Of Birth"
+          type="date"
+          errors={errors}
+        />
 
-      {/* Married Status */}
-      <ControlledSelect
-        name="marriedStatus"
-        control={control}
-        label="Marital Status"
-        placeholder="Select marital status"
-        options={marriedStatusOptions}
-        errors={errors}
-      />
+        <ControlledInput
+          name="description"
+          control={control}
+          label="Description"
+          placeholder="Short description"
+          errors={errors}
+        />
 
-      {/* Gender */}
-      <ControlledSelect
-        name="gender"
-        control={control}
-        label="Gender"
-        placeholder="Select gender"
-        options={genderOptions}
-        errors={errors}
-      />
+        <ControlledInput
+          name="deviceUserId"
+          control={control}
+          label="Device User ID"
+          type="number"
+          placeholder="1887"
+          errors={errors}
+        />
 
-      {/* Department */}
-      <ControlledSelect
-        name="departmentId"
-        control={control}
-        label="Department"
-        placeholder="Select Department"
-        options={departmentOptions}
-        errors={errors}
-      />
+        <div className="flex items-center gap-3">
+          <Switch {...register("isActive")} />
+          <Label>Is Active</Label>
+        </div>
 
-      {/* Designation */}
-      <ControlledSelect
-        name="designationId"
-        control={control}
-        label="Designation"
-        placeholder={
-          isDesignationLoading
-            ? "Loading designations..."
-            : "Select Designation"
-        }
-        options={designationOptions}
-        errors={errors}
-      />
-      </>
+        <ControlledSelect
+          name="marriedStatus"
+          control={control}
+          label="Marital Status"
+          placeholder="Select marital status"
+          options={marriedStatusOptions}
+          errors={errors}
+        />
 
-      
-   
+        {/* Gender */}
+        <ControlledSelect
+          name="gender"
+          control={control}
+          label="Gender"
+          placeholder="Select gender"
+          options={genderOptions}
+          errors={errors}
+        />
+
+
+        <ControlledSelect
+          name="departmentId"
+          control={control}
+          label="Department"
+          placeholder="Select Department"
+          options={departmentOptions}
+          errors={errors}
+        />
+
+        {/* Designation */}
+        <ControlledSelect
+          name="designationId"
+          control={control}
+          label="Designation"
+          placeholder={
+            isDesignationLoading
+              ? "Loading designations..."
+              : "Select Designation"
+          }
+          options={designationOptions}
+          errors={errors}
+        />
+      </div>
+    </div>
+
+
+
   );
 }

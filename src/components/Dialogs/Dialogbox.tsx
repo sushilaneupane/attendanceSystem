@@ -11,11 +11,13 @@ import { Button } from "@/components/ui/button";
 import { ReactNode } from "react";
 
 interface DialogBoxProps {
+  variant: string;
   triggerButtonText: ReactNode;
   children: ReactNode;
   header? : ReactNode;
   open?: boolean; 
   onOpenChange?: (open: boolean) => void; 
+  
 }
 
 export function DialogBox({
@@ -29,15 +31,19 @@ export function DialogBox({
     <Dialog open={open} onOpenChange={onOpenChange}>
      
       <DialogTrigger asChild>
-        <Button>{triggerButtonText}</Button>
+        <Button variant="ghost">{triggerButtonText}</Button>
       </DialogTrigger>
 
     
-      <DialogContent>
-        <DialogHeader> {header}
-          <DialogTitle></DialogTitle>
+      <DialogContent >
+     {header && (
+      <DialogHeader> 
+          <DialogTitle>{header}</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
+
+     )}
+        
         <div className="mt-5">{children}</div>
       </DialogContent>
     </Dialog>

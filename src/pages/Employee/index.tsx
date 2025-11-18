@@ -20,9 +20,9 @@ interface Employee {
   isActive: boolean;
   marriedStatus?: number;
   gender?: number;
-  designationId?: string;
+  designationId?: number;
   designationName: string;
-  departmentId?: string;
+  departmentId?: number;
   departmentName: string;
 }
 
