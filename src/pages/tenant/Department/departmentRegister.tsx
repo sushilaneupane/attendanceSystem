@@ -4,12 +4,11 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useCreateDepartment, useUpdateDepartment } from "@/hooks/useDepartments";
-import { Department } from "@/api/departmentApi";
+import { Department } from "@/types/department";
 import { ControlledInput } from "@/components/Form/ControlledInput";
+import { departmentSchema } from "@/Validator/department";
 
-const departmentSchema = z.object({
-  name: z.string().min(1, "Department name is required"),
-});
+
 type DepartmentFormType = z.infer<typeof departmentSchema>;
 
 interface DepartmentRegisterProps {

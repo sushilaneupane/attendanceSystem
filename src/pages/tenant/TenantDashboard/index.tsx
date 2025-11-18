@@ -9,7 +9,7 @@ import {
   CardDescription,
   CardContent,
 } from "../../../components/ui/card";
-import { Search, LayoutDashboard, Users, Layers } from "lucide-react";
+import { Search} from "lucide-react";
 
 interface EmployeeAttendance {
   id: string;

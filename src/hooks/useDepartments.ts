@@ -4,10 +4,11 @@ import {
   registerDepartment,
   updateDepartment,
   deleteDepartment,
-  CreateDepartment,
-  Department,
+ 
+  
   getDepartmentById
 } from "../api/departmentApi";
+import { CreateDepartment} from "@/types/department";
 
 export const useDepartments = () => {
   return useQuery({

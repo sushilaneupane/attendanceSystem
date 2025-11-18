@@ -50,7 +50,7 @@ export default function LoginPage() {
 
   const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
     const payload = {
-      userName: data.username,
+      Email: data.username,
       password: data.password,
     };
 
