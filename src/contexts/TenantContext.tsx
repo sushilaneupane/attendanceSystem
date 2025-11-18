@@ -1,6 +1,6 @@
 import React, { createContext, useContext, ReactNode, useEffect } from "react";
 import { useTenantByFrontendUrl } from "../hooks/useTenants"; // the hook we created
-import { Tenant } from "../api/tenantApi";
+import { Tenant } from "@/types/tenant";
 
 interface TenantContextType {
   tenant: Tenant | null;

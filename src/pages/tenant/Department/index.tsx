@@ -6,7 +6,7 @@ import { Badge } from "../../../components/ui/badge";
 import { Search, Plus, Edit, Trash2 } from "lucide-react";
 import { DataTable } from "../../../components/table/DataTable";
 import { useDepartments, useDeleteDepartment } from "../../../hooks/useDepartments";
-import { Department } from "@/api/departmentApi";
+import { Department } from "@/types/department";
 import DepartmentRegister from "./departmentRegister";
 import { SlideSheet, SlideSheetRef } from "../../../components/App-sheet/AppSheet";
 import { TableCell } from "@/components/ui/table";

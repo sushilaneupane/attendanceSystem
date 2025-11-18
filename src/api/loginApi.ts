@@ -1,28 +1,8 @@
+import { ApiResponse, LoginCredentials, UserData } from "@/types/login";
 import { axiosInstance } from "./axiosInstance";
 import axios from "axios";
 
 const apiUrl = (import.meta as any).env?.VITE_BASE_URL as string;
-
-export interface UserData {
-  firstName?: string | null;
-  lastName?: string | null;
-  email?: string | null;
-  username?: string | null;
-  password?: string | null;
-  confirmPassword?: string | null;
-  role?: string;
-}
-
-export interface LoginCredentials {
-  userName: string;
-  password: string;
-}
-
-export interface ApiResponse<T = any> {
-  data: T;
-  message?: string;
-  status?: string;
-}
 
 export const createUser = async (userData: UserData): Promise<ApiResponse> => {
   const response = await axios.post(`${apiUrl}/Authentication/Register-User`, userData);

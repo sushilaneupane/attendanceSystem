@@ -13,12 +13,14 @@ interface DataTableProps<T> {
   data: T[];
   renderRow: (item: T) => React.ReactNode;
   emptyMessage?: string;
+  isLoading?: boolean; 
 }
 
 export function DataTable<T>({
   headers,
   data,
   renderRow,
+  isLoading = false,
   emptyMessage = "No data available",
 }: DataTableProps<T>) {
   return (
@@ -40,7 +42,22 @@ export function DataTable<T>({
         </TableHeader>
 
         <TableBody className="divide-y divide-gray-200">
-          {data.length > 0 ? (
+        
+          {isLoading && (
+            <TableRow>
+              <TableCell
+                colSpan={headers.length}
+                className="py-6 text-center"
+              >
+                <div className="flex justify-center">
+                  <div className="animate-spin h-6 w-6 rounded-full border-2 border-gray-300 border-t-blue-500" />
+                </div>
+              </TableCell>
+            </TableRow>
+          )}
+
+       
+          {!isLoading && data.length > 0 &&
             data.map((item, index) => (
               <TableRow
                 key={index}
@@ -49,7 +66,10 @@ export function DataTable<T>({
                 {renderRow(item)}
               </TableRow>
             ))
-          ) : (
+          }
+
+        
+          {!isLoading && data.length === 0 && (
             <TableRow>
               <TableCell
                 colSpan={headers.length}

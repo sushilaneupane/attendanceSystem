@@ -29,15 +29,16 @@ export function DialogBox({
     <Dialog open={open} onOpenChange={onOpenChange}>
      
       <DialogTrigger asChild>
-        <Button>{triggerButtonText}</Button>
+        <Button variant="ghost" >{triggerButtonText}</Button>
       </DialogTrigger>
 
     
-      <DialogContent>
-        <DialogHeader> {header}
-          <DialogTitle></DialogTitle>
-          <DialogDescription></DialogDescription>
-        </DialogHeader>
+       <DialogContent>
+        {header && (
+          <DialogHeader>
+            <DialogTitle>{header}</DialogTitle>
+          </DialogHeader>
+        )}
         <div className="mt-5">{children}</div>
       </DialogContent>
     </Dialog>

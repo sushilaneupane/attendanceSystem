@@ -1,38 +1,9 @@
 
+import { RegisterTenantData, RegisterTenantResponse, Tenant } from "@/types/tenant";
 import { axiosInstance } from "./axiosInstance";
-
-export interface RegisterTenantData {
-  name: string;
-  server: string;
-  database: string;
-  useWindowsAuth: boolean;
-  userId: string | null;
-  password: string | null;
-  frontendUrl: string;
-}
-
-export interface RegisterTenantResponse {
-  name: string;
-  server: string;
-  database: string;
-  useWindowsAuth: boolean;
-  userId: string | null;
-  password: string | null;
-  frontendUrl: string;
-}
-
-export interface Tenant {
-  id: string;
-  name: string;
-  frontendUrl: string;
-  isActive: boolean;
-  createdAt: string;
-
-}
 
 class RegistrationError extends Error {
   public backendError?: any;
-  
   constructor(message: string, backendError?: any) {
     super(message);
     this.name = "RegistrationError";
