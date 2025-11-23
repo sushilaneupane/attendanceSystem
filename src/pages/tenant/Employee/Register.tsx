@@ -1,249 +1,170 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-
 import { ControlledInput } from "@/components/Form/ControlledInput";
 import { ControlledSelect } from "@/components/Form/ControlledSelect";
-
 import { useDepartments } from "@/hooks/useDepartments";
 import { useDesignationsByDepartment } from "@/hooks/useDesignations";
+import { useCreateEmployee, useUpdateEmployee } from "@/hooks/useEmployee";
+import { Employee } from "@/types/employee";
+import { employeeSchema } from "@/Validator/employee";
 
+type FormValues = z.infer<typeof employeeSchema>;
 
-const employeeSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z.string().email("Invalid email").nullable().optional(),
-  contactNumber1: z.string().min(10, "Phone must be 10 digits"),
-  contactNumber2: z.string().optional(),
-  address: z.string().min(2, "Address required"),
-  dateOfJoining: z.string().min(1, "Date required"),
-  dateOfBirth: z.string().min(1, "Date required"),
-  description: z.string().optional(),
-  deviceUserId: z.coerce.number(),
-  isActive: z.boolean(),
-  marriedStatus: z.coerce.number(),
-  gender: z.coerce.number(),
-  designationId: z.string().uuid("Invalid designation"),
-  departmentId: z.string().uuid("Invalid department"),
-});
+interface Props {
+  isEditing?: boolean;
+  defaultValues?: Employee | null;
+  onSubmitSuccess: () => void;
+}
 
-type EmployeeFormValues = z.infer<typeof employeeSchema>;
-
-export default function EmployeeForm() {
-  const {
-    control,
-    register,
-    watch,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<EmployeeFormValues>({
-    resolver: zodResolver(employeeSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      contactNumber1: "",
-      contactNumber2: "",
-      address: "",
-      dateOfJoining: "",
-      dateOfBirth: "",
-      description: "",
-      deviceUserId: 0,
-      isActive: true,
-      marriedStatus: 1,
-      gender: 1,
-      designationId: "",
-      departmentId: "",
-    },
-  });
-
-  const selectedDepartmentId = watch("departmentId");
-
-
+export default function EmployeeForm({
+  isEditing = false,
+  defaultValues = null,
+  onSubmitSuccess,
+}: Props) {
   const { data: departments } = useDepartments();
-
-
   const {
     data: designations,
-    isLoading: isDesignationLoading,
     refetch,
-  } = useDesignationsByDepartment(selectedDepartmentId);
+    isLoading: isDesignationLoading,
+  } = useDesignationsByDepartment(defaultValues?.departmentId ?? "");
+
+  const createMutation = useCreateEmployee();
+  const updateMutation = useUpdateEmployee();
+
+  const {
+    handleSubmit,
+    control,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<any>({
+    resolver: zodResolver(employeeSchema),
+    defaultValues: defaultValues
+      ? {
+          ...defaultValues,
+          dateOfBirth: defaultValues.dateOfBirth?.slice(0, 10),
+          dateOfJoining: defaultValues.dateOfJoining?.slice(0, 10),
+        }
+      : {
+          isActive: true,
+        },
+  });
+
+  const [isActive, setIsActive] = useState(defaultValues?.isActive ?? true);
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+
 
   useEffect(() => {
-    if (selectedDepartmentId) refetch();
-  }, [selectedDepartmentId]);
+    if (defaultValues?.imageUrl) {
+      const base = import.meta.env.VITE_API_BASE_URL ?? window.location.origin;
+      const filename = defaultValues.imageUrl.split(/[\\/]/).pop();
+      if (filename) setPreview(`${base}/Files/${filename}`);
+    }
+  }, [defaultValues]);
 
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0] || null;
+    setFile(f);
+    if (f) setPreview(URL.createObjectURL(f));
+  };
+
+  const selectedDept = watch("departmentId");
+  useEffect(() => {
+    if (selectedDept) refetch();
+  }, [selectedDept]);
 
   const departmentOptions =
-    departments?.map((d) => ({
-      label: d.name,
-      value: d.id,
-    })) ?? [];
-
-
+    departments?.map((d) => ({ label: d.name, value: d.id })) ?? [];
   const designationOptions =
-    designations?.map((d) => ({
-      label: d.designationName,
-      value: d.designationId,
-    })) ?? [];
-
-  const marriedStatusOptions = [
-    { label: "Single", value: 1 },
-    { label: "Married", value: 2 },
-  ];
+    designations?.map((d) => ({ label: d.designationName, value: d.designationId })) ?? [];
 
   const genderOptions = [
     { label: "Male", value: 1 },
     { label: "Female", value: 2 },
   ];
+  const marriedStatusOptions = [
+    { label: "Single", value: 1 },
+    { label: "Married", value: 2 },
+  ];
 
-  const onSubmit = (data: EmployeeFormValues) => {
-    console.log("Employee Data Submitted:", data);
+  const onSubmit = (data: FormValues) => {
+    data.isActive = isActive;
+    const fd = new FormData();
+
+    Object.entries(data).forEach(([key, val]) => {
+      if (key !== "id") fd.append(key, val as any);
+    });
+
+    if (file) fd.append("image", file);
+
+    if (isEditing && defaultValues?.id) {
+      fd.append("id", defaultValues.id);
+      updateMutation.mutate({ id: defaultValues.id, formData: fd }, { onSuccess: onSubmitSuccess });
+    } else {
+      createMutation.mutate(fd, { onSuccess: onSubmitSuccess });
+    }
   };
 
   return (
+    <form id="employee-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-    <div className="grid grid-cols-2 gap-5 ">
-      <div>
-        <ControlledInput
-          name="firstName"
-          control={control}
-          label="First Name"
-          placeholder="Enter first name"
-          errors={errors}
-        />
+        <div className="space-y-2">
+          <ControlledInput name="firstName" control={control} label="First Name" errors={errors} />
+          <ControlledInput name="lastName" control={control} label="Last Name" errors={errors} />
+          <ControlledInput name="Email" control={control} label="Email" errors={errors} />
+          <ControlledInput name="contactNumber1" control={control} label="Primary Contact" errors={errors} />
+          <ControlledInput name="contactNumber2" control={control} label="Secondary Contact" errors={errors} />
+          <ControlledInput name="address" control={control} label="Address" errors={errors} />
+          <ControlledInput name="dateOfJoining" control={control} type="date" label="Date Of Joining" errors={errors} />
 
-        <ControlledInput
-          name="lastName"
-          control={control}
-          label="Last Name"
-          placeholder="Enter last name"
-          errors={errors}
-        />
-
-        <ControlledInput
-          name="email"
-          control={control}
-          label="Email"
-          type="email"
-          placeholder="example@gmail.com"
-          errors={errors}
-        />
-
-        <ControlledInput
-          name="contactNumber1"
-          control={control}
-          label="Primary Contact"
-          placeholder="9863xxxxxx"
-          errors={errors}
-        />
-
-        <ControlledInput
-          name="contactNumber2"
-          control={control}
-          label="Secondary Contact"
-          placeholder="Optional"
-          errors={errors}
-        />
-
-        <ControlledInput
-          name="address"
-          control={control}
-          label="Address"
-          placeholder="Enter address"
-          errors={errors}
-        />
-
-        <ControlledInput
-          name="dateOfJoining"
-          control={control}
-          label="Date Of Joining"
-          type="date"
-          errors={errors}
-        />
-      </div>
-      <div>
-        <ControlledInput
-          name="dateOfBirth"
-          control={control}
-          label="Date Of Birth"
-          type="date"
-          errors={errors}
-        />
-
-        <ControlledInput
-          name="description"
-          control={control}
-          label="Description"
-          placeholder="Short description"
-          errors={errors}
-        />
-
-        <ControlledInput
-          name="deviceUserId"
-          control={control}
-          label="Device User ID"
-          type="number"
-          placeholder="1887"
-          errors={errors}
-        />
-
-        <div className="flex items-center gap-3">
-          <Switch {...register("isActive")} />
-          <Label>Is Active</Label>
+          <div className="flex flex-col gap-2 mt-2">
+            <Label>Profile Image</Label>
+            <input type="file" accept="image/*" onChange={onFileChange} />
+            {preview ? (
+              <img src={preview} className="h-28 w-28 object-cover border rounded-md" />
+            ) : (
+              <div className="h-28 w-28 flex items-center justify-center border rounded-md text-sm text-gray-400">
+                No Image
+              </div>
+            )}
+          </div>
         </div>
+        <div className="space-y-2">
+          <ControlledInput name="dateOfBirth" control={control} type="date" label="Date Of Birth" errors={errors} />
+          <ControlledInput name="description" control={control} label="Description" errors={errors} />
+          <ControlledInput name="deviceUserId" control={control} label="Device User ID" type="number" errors={errors} />
 
-        <ControlledSelect
-          name="marriedStatus"
-          control={control}
-          label="Marital Status"
-          placeholder="Select marital status"
-          options={marriedStatusOptions}
-          errors={errors}
-        />
+          <ControlledSelect name="marriedStatus" control={control} label="Marital Status" options={marriedStatusOptions} errors={errors} />
+          <ControlledSelect name="gender" control={control} label="Gender" options={genderOptions} errors={errors} />
+          <ControlledSelect name="departmentId" control={control} label="Department" options={departmentOptions} errors={errors} />
 
-        {/* Gender */}
-        <ControlledSelect
-          name="gender"
-          control={control}
-          label="Gender"
-          placeholder="Select gender"
-          options={genderOptions}
-          errors={errors}
-        />
-
-
-        <ControlledSelect
-          name="departmentId"
-          control={control}
-          label="Department"
-          placeholder="Select Department"
-          options={departmentOptions}
-          errors={errors}
-        />
-
-        {/* Designation */}
-        <ControlledSelect
-          name="designationId"
-          control={control}
-          label="Designation"
-          placeholder={
-            isDesignationLoading
-              ? "Loading designations..."
-              : "Select Designation"
-          }
-          options={designationOptions}
-          errors={errors}
-        />
+          <ControlledSelect
+            name="designationId"
+            control={control}
+            label="Designation"
+            options={designationOptions}
+            placeholder={isDesignationLoading ? "Loading..." : "Select Designation"}
+            errors={errors}
+          />
+          <div className="flex items-center space-x-2 mt-2">
+            <Switch
+              id="active-status"
+              checked={isActive}
+              onCheckedChange={setIsActive}
+              className="relative inline-flex h-6 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out 
+              data-[state=checked]:bg-green-500
+              data-[state=unchecked]:bg-red-500"
+            />
+            <Label htmlFor="active-status">{isActive ? "Active" : "Inactive"}</Label>
+          </div>
+        </div>
       </div>
-    </div>
-
-
-
+    </form>
   );
 }

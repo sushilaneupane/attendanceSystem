@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../../components/ui/button";
 import { Input } from "../../../components/ui/input";
@@ -6,24 +6,21 @@ import { Badge } from "../../../components/ui/badge";
 import { Search, Plus, Edit, Trash2 } from "lucide-react";
 import { DataTable } from "../../../components/table/DataTable";
 import { useDepartments, useDeleteDepartment } from "../../../hooks/useDepartments";
-import { Department } from "@/api/departmentApi";
+import { Department } from "@/types/department";
 import DepartmentRegister from "./Register";
-import { SlideSheet, SlideSheetRef } from "../../../components/App-sheet/AppSheet";
 import { TableCell } from "@/components/ui/table";
+import { DialogBox } from "@/components/Dialogs/Dialogbox";
 
 export function DepartmentPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [editingDepartment, setEditingDepartment] = useState<Department | null>(null);
   const [departmentToDelete, setDepartmentToDelete] = useState<Department | null>(null);
 
+  const [departmentDialogOpen, setDepartmentDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const { data: departments } = useDepartments();
   const deleteDepartment = useDeleteDepartment();
-
   const navigate = useNavigate();
-
-  const sheetRef = useRef<SlideSheetRef>(null);
-  const deleteSheetRef = useRef<SlideSheetRef>(null);
-  const sheetSubmitFn = useRef<() => void | undefined>(undefined);
 
   const filteredDepartments =
     departments?.filter((d) =>
@@ -32,24 +29,26 @@ export function DepartmentPage() {
 
   const handleEditDepartment = (department: Department) => {
     setEditingDepartment(department);
-    sheetRef.current?.openSheet();
+    setDepartmentDialogOpen(true);
   };
 
   const handleAddDepartment = () => {
     setEditingDepartment(null);
-    sheetRef.current?.openSheet();
+    setDepartmentDialogOpen(true);
   };
 
   const handleDeleteDepartment = (department: Department) => {
     setDepartmentToDelete(department);
-    deleteSheetRef.current?.openSheet();
+    setDeleteDialogOpen(true);
   };
-
   const confirmDelete = () => {
     if (departmentToDelete) {
-      deleteDepartment.mutate(departmentToDelete.id);
-      deleteSheetRef.current?.closeSheet();
-      setDepartmentToDelete(null);
+      deleteDepartment.mutate(departmentToDelete.id, {
+        onSuccess: () => {
+          setDeleteDialogOpen(false);
+          setDepartmentToDelete(null);
+        },
+      });
     }
   };
 
@@ -73,11 +72,36 @@ export function DepartmentPage() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
+          <DialogBox
+            variant="default"
+            open={departmentDialogOpen}
+            onOpenChange={setDepartmentDialogOpen}
+            triggerButtonText={
+              <Button className="bg-blue-800 hover-none" onClick={handleAddDepartment}>
+                <Plus className="mr-2 h-4 w-4" />
+                Add Department
+              </Button>
+            }
+            header={editingDepartment ? "Edit Department" : "Add Department"}
+            footer={
+              <div className="flex justify-end gap-3">
+                <Button variant="outline" onClick={() => setDepartmentDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit" form="department-form" className="bg-blue-800">
+                  {editingDepartment ? "Update Department" : "Create Department"}
+                </Button>
+              </div>
+            }
+          >
+            <DepartmentRegister
+              isEditing={!!editingDepartment}
+              defaultValues={editingDepartment}
+              onSubmitSuccess={() => setDepartmentDialogOpen(false)}
+            />
+          </DialogBox>
 
-          <Button onClick={handleAddDepartment}>
-            <Plus className="mr-2 h-4 w-4" />
-            Add Department
-          </Button>
+
         </div>
       </div>
       <DataTable
@@ -89,72 +113,55 @@ export function DepartmentPage() {
             <TableCell
               className="font-semibold cursor-pointer hover:underline px-6 py-4"
               onClick={() => navigate(`/department/${department.id}`)}
-           
-
             >
               {department.name}
             </TableCell>
 
-            <TableCell className="px-6 py-4">
+            <TableCell className="px-6">
               <Badge variant={department.isActive ? "default" : "secondary"}>
                 {department.isActive ? "Active" : "Inactive"}
               </Badge>
             </TableCell>
 
-            <TableCell className="px-6 py-4">
+            <TableCell className="px-6">
               <div className="flex justify-end items-center space-x-3">
                 <Edit
                   className="h-4 w-4 cursor-pointer text-blue-600"
                   onClick={() => handleEditDepartment(department)}
                 />
-                <Trash2
-                  className="h-4 w-4 cursor-pointer text-red-600"
-                  onClick={() => handleDeleteDepartment(department)}
-                />
+
+                <DialogBox
+                  open={deleteDialogOpen}
+                  onOpenChange={setDeleteDialogOpen}
+                  header="Confirm Delete"
+                  variant="default"
+                  triggerButtonText={
+                    <div
+                      onClick={() => handleDeleteDepartment(department)}
+                      className="cursor-pointer"
+                    >
+                      <Trash2 className="h-4 w-4 text-red-600" />
+                    </div>
+                  }
+                >
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Are you sure you want to delete “{departmentToDelete?.name}”?
+                  </p>
+
+                  <div className="mt-4 flex justify-end gap-2">
+                    <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+                      Cancel
+                    </Button>
+                    <Button variant="destructive" onClick={confirmDelete}>
+                      Delete
+                    </Button>
+                  </div>
+                </DialogBox>
               </div>
             </TableCell>
           </>
         )}
       />
-      <SlideSheet
-        ref={sheetRef}
-        title={editingDepartment ? "Edit Department" : "Add Department"}
-        width="w-96"
-        submitText={editingDepartment ? "Update" : "Save"}
-        onSubmit={() => sheetSubmitFn.current?.()}
-      >
-        <DepartmentRegister
-          isEditing={!!editingDepartment}
-          defaultValues={editingDepartment}
-          onSubmitSuccess={() => sheetRef.current?.closeSheet()}
-          submitHandler={(submitFn) => {
-            sheetSubmitFn.current = submitFn;
-          }}
-        />
-      </SlideSheet>
-
-      <SlideSheet
-        ref={deleteSheetRef}
-        title="Confirm Delete"
-        width="w-80"
-        showSubmit={false}
-      >
-        <p className="mt-2 text-sm text-muted-foreground">
-          Are you sure you want to delete “{departmentToDelete?.name}”?
-        </p>
-
-        <div className="mt-4 flex justify-end gap-2">
-          <Button
-            variant="outline"
-            onClick={() => deleteSheetRef.current?.closeSheet()}
-          >
-            Cancel
-          </Button>
-          <Button variant="destructive" onClick={confirmDelete}>
-            Delete
-          </Button>
-        </div>
-      </SlideSheet>
     </div>
   );
 }

@@ -1,52 +1,54 @@
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  CreateEmployee,
   getEmployee,
   registerEmployee,
   updateEmployee,
   deleteEmployee,
+  getEmployeeById,
 } from "@/api/employeeApi";
-import { Employee } from "@/api/employeeApi"; // assuming this is the type
 
-// Fetch all employees
-export const useEmployee = () => {
-  return useQuery({
+interface UpdateEmployeeParams {
+  id: string;
+  formData: FormData;
+}
+
+export const useEmployee = () =>
+  useQuery({
     queryKey: ["employee"],
     queryFn: getEmployee,
-    select: (response) => response.data,
+    select: (res) => res.data,
   });
-};
 
-// Create a new employee
+  export const useEmployeeById = (id?: string | number) => {
+    return useQuery({
+      queryKey: ["employee", id],
+      queryFn: () => getEmployeeById(id as string | number),
+      enabled: !!id,
+    });
+  }
+
 export const useCreateEmployee = () => {
-  const queryClient = useQueryClient();
+  const qc = useQueryClient();
   return useMutation({
-    mutationFn: (employee: CreateEmployee) => registerEmployee(employee),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["employee"] });
-    },
+    mutationFn: (formData: FormData) => registerEmployee(formData),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["employee"] }),
   });
 };
 
-// Update an existing employee
+
 export const useUpdateEmployee = () => {
-  const queryClient = useQueryClient();
+  const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, employee }: { id: string; employee: CreateEmployee }) =>
-      updateEmployee(id, employee),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["employee"] });
-    },
+    mutationFn: ({ id, formData }: UpdateEmployeeParams) => updateEmployee(id, formData),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["employee"] }),
   });
 };
-
 
 export const useDeleteEmployee = () => {
-  const queryClient = useQueryClient();
+  const qc = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => deleteEmployee(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["employee"] });
-    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["employee"] }),
   });
 };
