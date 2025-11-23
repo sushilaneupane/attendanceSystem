@@ -4,24 +4,11 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-
 import { Button } from "../../../components/ui/button";
 import { Eye } from "lucide-react";
 import { useRegisterTenants } from "../../../hooks/useTenants";
 import { ControlledInput } from "../../../components/Form/ControlledInput";
-
-const tenantRegisterSchema = z.object({
-  name: z.string().min(3, "Company name must be at least 3 characters"),
-  server: z.string().min(1, "Server is required"),
-  database: z.string().min(1, "Database is required"),
-  useWindowsAuth: z.boolean(),
-  userId: z.string().optional(),
-  password: z.string().optional(),
-  frontendUrl: z
-    .string()
-    .min(3, "Frontend subdomain is required")
-    .regex(/^[a-z0-9-]+$/, "Only lowercase letters, numbers, and hyphens allowed"),
-});
+import { tenantRegisterSchema } from "@/Validator/tenant";
 
 type TenantRegisterForm = z.infer<typeof tenantRegisterSchema>;
 

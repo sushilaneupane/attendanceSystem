@@ -9,7 +9,8 @@ import {
   CardDescription,
   CardContent,
 } from "../../../components/ui/card";
-import { Search, LayoutDashboard, Users, Layers } from "lucide-react";
+import { Search } from "lucide-react";
+import { TableRow, TableCell } from "../../../components/ui/table";
 
 interface EmployeeAttendance {
   id: string;
@@ -39,18 +40,17 @@ export default function TenantAttendanceDashboard() {
   const presentCount = attendanceData.filter((r) => r.status === "Present").length;
   const absentCount = attendanceData.filter((r) => r.status === "Absent").length;
   const lateCount = attendanceData.filter((r) => r.status === "Late").length;
-  const totalDepartments = 4; 
+  const totalDepartments = 4;
 
   return (
     <>
       <div className="p-6 md:ml-5">
-
-      
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4 mt-5">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Attendance Dashboard</h1>
             <p className="text-muted-foreground">View all employees' attendance records</p>
           </div>
+
           <div className="relative max-w-sm flex-1">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
@@ -62,6 +62,7 @@ export default function TenantAttendanceDashboard() {
           </div>
         </div>
 
+        {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           <Card className="bg-blue-100 border-blue-300">
             <CardHeader>
@@ -99,7 +100,6 @@ export default function TenantAttendanceDashboard() {
           </Card>
         </div>
 
-        
         <Card>
           <CardHeader>
             <CardTitle>Employees Attendance</CardTitle>
@@ -113,12 +113,12 @@ export default function TenantAttendanceDashboard() {
               data={filteredAttendance}
               emptyMessage="No attendance records found."
               renderRow={(record: EmployeeAttendance) => (
-                <>
-                  <td>{record.name}</td>
-                  <td>{new Date(record.date).toLocaleDateString()}</td>
-                  <td>{record.checkIn || "-"}</td>
-                  <td>{record.checkOut || "-"}</td>
-                  <td>
+                <TableRow>
+                  <TableCell>{record.name}</TableCell>
+                  <TableCell>{new Date(record.date).toLocaleDateString()}</TableCell>
+                  <TableCell>{record.checkIn || "-"}</TableCell>
+                  <TableCell>{record.checkOut || "-"}</TableCell>
+                  <TableCell>
                     <Badge
                       variant={
                         record.status === "Present"
@@ -130,8 +130,8 @@ export default function TenantAttendanceDashboard() {
                     >
                       {record.status}
                     </Badge>
-                  </td>
-                </>
+                  </TableCell>
+                </TableRow>
               )}
             />
           </CardContent>
