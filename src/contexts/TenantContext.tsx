@@ -1,12 +1,9 @@
 import React, { createContext, useContext, ReactNode, useEffect } from "react";
-import { useTenantByFrontendUrl } from "../hooks/useTenants"; // the hook we created
-import { Tenant } from "../api/tenantApi";
+import { useTenantByFrontendUrl } from "../hooks/useTenants"; 
 
-interface TenantContextType {
-  tenant: Tenant | null;
-  loading: boolean;
-  error: string | null;
-}
+import { Tenant } from "@/types/tenant";
+import { TenantContextType } from "@/types/tenantContext";
+
 
 const TenantContext = createContext<TenantContextType>({
   tenant: null,
@@ -17,14 +14,17 @@ const TenantContext = createContext<TenantContextType>({
 export const useTenant = () => useContext(TenantContext);
 
 export const TenantProvider = ({ children }: { children: ReactNode }) => {
-  const frontendUrl = "Bijay"; 
+  const frontendUrl = " "; 
   const { data, isLoading, isError, error } = useTenantByFrontendUrl(frontendUrl);
 const tenantData: Tenant | null = data ?? null;
 
 useEffect(() => {
   if(tenantData){
     localStorage.setItem("tenant",JSON.stringify(tenantData))
+  }else if(!tenantData){
+    localStorage.removeItem(JSON.stringify(tenantData))
   }
+  
 })
   return (
     <TenantContext.Provider
