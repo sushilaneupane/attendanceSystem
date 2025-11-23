@@ -31,7 +31,7 @@ export function DataTable<T>({
             {headers.map((header, index) => (
               <TableHead
                 key={index}
-                className={`text-left text-sm font-medium text-gray-600 px-6 py-3 uppercase tracking-wider ${
+                className={`px-6 py-3 text-left text-sm font-medium text-gray-600 uppercase tracking-wider ${
                   index === headers.length - 1 ? "text-right" : ""
                 }`}
               >
@@ -41,40 +41,24 @@ export function DataTable<T>({
           </TableRow>
         </TableHeader>
 
-        <TableBody className="divide-y divide-gray-200">
-        
-          {isLoading && (
+        <TableBody>
+          {isLoading ? (
             <TableRow>
-              <TableCell
-                colSpan={headers.length}
-                className="py-6 text-center"
-              >
+              <TableCell colSpan={headers.length} className="px-6 py-6 text-center">
                 <div className="flex justify-center">
                   <div className="animate-spin h-6 w-6 rounded-full border-2 border-gray-300 border-t-blue-500" />
                 </div>
               </TableCell>
             </TableRow>
-          )}
-
-       
-          {!isLoading && data.length > 0 &&
+          ) : data.length > 0 ? (
             data.map((item, index) => (
-              <TableRow
-                key={index}
-                className="hover:bg-gray-50 transition-colors duration-200"
-              >
+              <React.Fragment key={index}>
                 {renderRow(item)}
-              </TableRow>
+              </React.Fragment>
             ))
-          }
-
-        
-          {!isLoading && data.length === 0 && (
+          ) : (
             <TableRow>
-              <TableCell
-                colSpan={headers.length}
-                className="text-center py-8 text-gray-400"
-              >
+              <TableCell colSpan={headers.length} className="px-6 py-8 text-center text-gray-400">
                 {emptyMessage}
               </TableCell>
             </TableRow>

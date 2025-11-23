@@ -12,9 +12,11 @@ import {
   Layers,
   ChevronDown,
   ChevronUp,
-  LogOut
+  LogOut,
+  Building
 } from "lucide-react";
-import { Button } from "../ui/button";
+
+import { useAuth } from "@/contexts/AuthContext"; 
 
 interface NavLinkItem { name: string; path: string; icon: React.ReactNode; }
 
@@ -26,10 +28,8 @@ interface SidebarProps {
 export function Sidebar({ open, setOpen }: SidebarProps) {
   const location = useLocation();
   const navigate = useNavigate();
-  const role = localStorage.getItem("role");
-  const userString = localStorage.getItem("user");
-  const user = userString ? JSON.parse(userString) : null;
-
+const { user} = useAuth();
+ 
 
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -46,15 +46,17 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
     { name: "Employees", path: "/employee", icon: <Users size={20} /> },
     { name: "Department", path: "/department", icon: <Layers size={20} /> },
     { name: "Change Password", path: "/change-password", icon: <KeyRound size={20} /> },
+     { name: "Organization", path: "/organizations", icon: <Building size={20} /> },
+
   ];
 
-  const finalLinks = role === "SuperAdmin" ? superAdminLinks : tenantLinks;
+   const finalLinks = user?.role === "SuperAdmin" ? superAdminLinks : tenantLinks;
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");
     localStorage.removeItem("role");
-    // localStorage.removeItem("tenant");
+    localStorage.removeItem("tenant")
     navigate("/login");
   };
 
@@ -102,7 +104,7 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
         >
           <div className="flex items-center gap-2">
             <User size={18} />
-            {open && <span className="font-semibold text-gray-800">{user.email}</span>}
+            {open && <span className="font-semibold text-gray-800">{user?.email}</span>}
           </div>
           {open && (dropdownOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />)}
         </div>

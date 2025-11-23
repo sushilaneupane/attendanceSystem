@@ -14,7 +14,7 @@ import { DepartmentPage } from "./pages/tenant/Department";
 import DepartmentRegister from "./pages/tenant/Department/Register";
 import EmployeePage from "./pages/tenant/Employee";
 import { EmployeeOverview } from "./pages/tenant/Employee/Overview";
-
+import OrganizationsPage from "./pages/tenant/Organization";
 
 
 
@@ -40,6 +40,12 @@ export default function App() {
             <Route path="/employee" element={<EmployeePage />} />
             <Route path="/department/:id" element={<DepartmentOverviewPage />} />
             <Route path="/employee/:id" element={<EmployeeOverview/>} />
+          <Route path="/tenant-dashboard" element={<TenantAttendanceDashboard />} />
+          <Route path="/department" element={<DepartmentPage/>} />
+          <Route path="/department-register" element={<DepartmentRegister/>} />
+          <Route path="/department/:id" element={<DepartmentOverviewPage />} />
+           <Route path="/organizations" element={<OrganizationsPage/>} />
+
           </Route>
         </Route>
   

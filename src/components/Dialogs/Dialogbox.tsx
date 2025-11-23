@@ -19,7 +19,6 @@ interface DialogBoxProps {
   footer?: React.ReactNode;   // ✅ FIXED TYPE
   onOpenChange?: (open: boolean) => void;
 }
-
 export function DialogBox({
   triggerButtonText,
   children,
