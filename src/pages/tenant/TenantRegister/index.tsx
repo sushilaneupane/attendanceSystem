@@ -4,13 +4,11 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-
 import { Button } from "../../../components/ui/button";
 import { Eye } from "lucide-react";
 import { useRegisterTenants } from "../../../hooks/useTenants";
 import { ControlledInput } from "../../../components/Form/ControlledInput";
 import { tenantRegisterSchema } from "@/Validator/tenant";
-
 
 type TenantRegisterForm = z.infer<typeof tenantRegisterSchema>;
 

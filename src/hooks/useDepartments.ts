@@ -5,7 +5,6 @@ import {
   updateDepartment,
   deleteDepartment,
  
-  
   getDepartmentById
 } from "../api/departmentApi";
 import { CreateDepartment} from "@/types/department";

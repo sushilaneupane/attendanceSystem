@@ -5,7 +5,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ReactNode } from "react";
@@ -17,7 +16,6 @@ interface DialogBoxProps {
   open?: boolean; 
   onOpenChange?: (open: boolean) => void; 
 }
-
 export function DialogBox({
   triggerButtonText,
   children,
@@ -27,12 +25,9 @@ export function DialogBox({
 }: DialogBoxProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-     
       <DialogTrigger asChild>
         <Button variant="ghost" >{triggerButtonText}</Button>
       </DialogTrigger>
-
-    
        <DialogContent>
         {header && (
           <DialogHeader>
