@@ -88,10 +88,10 @@ export default function EmployeePage() {
                 Add Employee
               </Button>
             }
-            width="min-w-5xl"
+            width="min-w-4xl"
             header={editingEmployee ? "Edit Employee" : "Add Employee"}
             footer={
-              <div className="flex justify-end gap-3">
+              <div className="flex justify-center gap-3">
                 <Button variant="outline" onClick={() => setEmployeeDialogOpen(false)}>
                   Cancel
                 </Button>
@@ -109,8 +109,6 @@ export default function EmployeePage() {
           </DialogBox>
         </div>
       </div>
-
-      {/* Employee Table */}
       <DataTable
         headers={["Name", "Department", "Designation", "Joining Date", "Status", "Actions"]}
         data={filteredEmployees}

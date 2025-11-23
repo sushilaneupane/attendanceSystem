@@ -84,11 +84,11 @@ export function DepartmentPage() {
             }
             header={editingDepartment ? "Edit Department" : "Add Department"}
             footer={
-              <div className="flex justify-end gap-3">
+              <div className="flex justify-center gap-3">
                 <Button variant="outline" onClick={() => setDepartmentDialogOpen(false)}>
                   Cancel
                 </Button>
-                <Button type="submit" form="department-form" className="bg-blue-800">
+                <Button type="submit" form="department-form" className="">
                   {editingDepartment ? "Update Department" : "Create Department"}
                 </Button>
               </div>
@@ -132,7 +132,7 @@ export function DepartmentPage() {
                 />
 
                 <DialogBox
-                  open={deleteDialogOpen}
+                  open={deleteDialogOpen  && departmentToDelete?.id === department.id}
                   onOpenChange={setDeleteDialogOpen}
                   header="Confirm Delete"
                   variant="default"
