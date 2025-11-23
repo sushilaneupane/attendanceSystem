@@ -1,9 +1,9 @@
 import { useMutation, UseMutationResult, useQueryClient } from "@tanstack/react-query";
-import { loginUser as loginApi, createUser as registerApi, logoutUser as logoutApi } from "../api/loginApi";
+import { loginUser as loginApi, createUser as registerApi, logoutUser as logoutApi } from "@/api/loginApi";
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "sonner";
 import type { UserData, LoginCredentials, ApiResponse } from "@/types/login";
-import { USER_KEY } from "../utils/queryKeys";
+
 type User = UserData; 
 
 

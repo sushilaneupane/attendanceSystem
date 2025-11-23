@@ -14,7 +14,7 @@ const TenantContext = createContext<TenantContextType>({
 export const useTenant = () => useContext(TenantContext);
 
 export const TenantProvider = ({ children }: { children: ReactNode }) => {
-  const frontendUrl = " "; 
+  const frontendUrl = "Test"; 
   const { data, isLoading, isError, error } = useTenantByFrontendUrl(frontendUrl);
 const tenantData: Tenant | null = data ?? null;
 
@@ -22,10 +22,10 @@ useEffect(() => {
   if(tenantData){
     localStorage.setItem("tenant",JSON.stringify(tenantData))
   }else if(!tenantData){
-    localStorage.removeItem(JSON.stringify(tenantData))
+    localStorage.removeItem("tenant");
   }
   
-})
+},[tenantData])
   return (
     <TenantContext.Provider
       value={{

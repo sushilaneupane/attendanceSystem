@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search, Plus, Edit, Trash2 } from "lucide-react";
 import { DataTable } from "@/components/table/DataTable";
-import { TableCell } from "@/components/ui/table";
+import { TableCell, TableRow } from "@/components/ui/table";
 import { DialogBox } from "@/components/Dialogs/Dialogbox";
 import { useEmployee, useDeleteEmployee } from "@/hooks/useEmployee";
 import EmployeeForm from "./Register";
@@ -26,11 +26,11 @@ export default function EmployeePage() {
   if (isLoading) return <div>Loading employees...</div>;
   if (error) return <div>Error loading employees</div>;
 
-  const filteredEmployees = (employees ?? []).filter((emp) =>
+  const filteredEmployees = (employees ?? []).filter((emp: { firstName: any; lastName: any; }) =>
     `${emp.firstName} ${emp.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // --- Handlers ---
+
   const handleAddEmployee = () => {
     setEditingEmployee(null);
     setEmployeeDialogOpen(true);
@@ -58,14 +58,14 @@ export default function EmployeePage() {
 
   return (
     <div className="flex-1 space-y-6">
-      {/* Header */}
+  
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h2 className="text-3xl font-bold">Employees</h2>
           <p className="text-muted-foreground">Manage your employees</p>
         </div>
 
-        {/* Search + Add Button */}
+      
         <div className="flex items-center gap-3 max-w-md w-full">
           <div className="relative w-full">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -77,7 +77,7 @@ export default function EmployeePage() {
             />
           </div>
 
-          {/* Add/Edit Employee Dialog */}
+      
           <DialogBox
             variant="default"
             open={employeeDialogOpen}
@@ -117,6 +117,7 @@ export default function EmployeePage() {
         emptyMessage="No employees found."
         renderRow={(emp: Employee) => (
           <>
+          <TableRow>
             <TableCell
               className="font-semibold cursor-pointer hover:underline px-6 py-4"
               onClick={() => navigate(`/employee/${emp.id}`)}
@@ -173,6 +174,7 @@ export default function EmployeePage() {
                 </DialogBox>
               </div>
             </TableCell>
+            </TableRow>
           </>
         )}
       />

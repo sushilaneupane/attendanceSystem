@@ -16,6 +16,12 @@ axiosInstance.interceptors.request.use((config: any) => {
   }
   const isSuperAdmin = user?.role === "SuperAdmin";
 
+  
+    if (config.url?.includes("by-frontend-url")) {
+    delete config.headers["X-Tenant-ID"];
+    return config;
+  }
+
   if (config.requiresAuth !== false && tenant?.id && !isSuperAdmin) {
     config.headers["X-Tenant-ID"] = tenant.id;
   }

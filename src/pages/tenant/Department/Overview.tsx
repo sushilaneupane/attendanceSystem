@@ -79,6 +79,8 @@ export default function DepartmentOverviewPage() {
         </h1>
 
         <DialogBox
+        variant=""
+       
           header="Add Designation"
           open={isAddOpen}
           onOpenChange={(open) => {
@@ -101,9 +103,15 @@ export default function DepartmentOverviewPage() {
               placeholder="Enter designation name"
               errors={errors}
             />
-            <Button type="submit" className="ml-50">
+            
+                  <div className="mt-4 flex justify-end gap-2">
+              <Button variant="outline" type="button" onClick={() => setIsAddOpen(false)}>
+                      Cancel
+                    </Button>
+            <Button type="submit" >
               Save
             </Button>
+            </div>
           </form>
         </DialogBox>
       </div>
@@ -139,6 +147,7 @@ export default function DepartmentOverviewPage() {
                 <div className="flex justify-end items-center space-x-3">
                   
                   <DialogBox
+                  variant=""
                     header="Edit Designation"
                     triggerButtonText={
                       <Edit className="h-4 w-4 cursor-pointer text-blue-600" />
@@ -198,6 +207,7 @@ export default function DepartmentOverviewPage() {
                           {isActive ? "Active" : "Inactive"}
                         </Label>
                       </div>
+                      
 
                       <Button type="submit" className="ml-50">
                         Update
@@ -207,6 +217,7 @@ export default function DepartmentOverviewPage() {
 
                 
                   <DialogBox
+                  variant=""
                     header="Confirm Delete"
                     open={openDeleteId === d.designationId}
                     onOpenChange={(state) => {

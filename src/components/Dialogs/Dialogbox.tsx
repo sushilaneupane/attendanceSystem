@@ -16,7 +16,7 @@ interface DialogBoxProps {
   open?: boolean;
   width?: string;
   variant: string;
-  footer?: React.ReactNode;   // ✅ FIXED TYPE
+  footer?: React.ReactNode;   
   onOpenChange?: (open: boolean) => void;
 }
 export function DialogBox({

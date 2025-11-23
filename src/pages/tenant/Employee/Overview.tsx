@@ -20,7 +20,7 @@ export function EmployeeOverview() {
 
   return (
     // <div className="flex items-center justify-center p-6 bg-green-400 h-[700px]">
-    <div className="bg-white shadow-lg rounded-lg w-full max-w-6xl flex flex-col md:flex-row overflow-hidden h-[690px] bg-gray-800">
+    <div className="bg-gray-800 shadow-lg rounded-lg w-full max-w-6xl flex flex-col md:flex-row overflow-hidden h-[690px] ">
       <div className="md:w-1/3 bg-pink-100 flex items-center justify-center p-4 ">
         {emp.imageUrl ? (
           <img

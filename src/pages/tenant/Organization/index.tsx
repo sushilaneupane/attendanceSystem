@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { DataTable } from "@/components/table/DataTable";
 import {
   useOrganizations,
-  useDeleteOrganization,
+
   useUpdateOrganization,
 } from "@/hooks/useOrganization";
 import { Organization, OrganizationFormValues } from "@/types/organization";
@@ -10,7 +10,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { DialogBox } from "@/components/Dialogs/Dialogbox";
 import { Edit, ChevronDown, ChevronRight, ExternalLink } from "lucide-react";
-import { OrganizationForm } from "./form";
+import { OrganizationForm } from "./register";
 import { toast } from "sonner";
 
 export const OrganizationsPage: React.FC = () => {
@@ -106,6 +106,7 @@ export const OrganizationsPage: React.FC = () => {
           <TableCell className="px-6">
             <div className="flex justify-end items-center space-x-3">
               <DialogBox
+              variant=""
                 header="Edit Organization"
                 triggerButtonText={
                   <Edit className="h-4 w-4 text-blue-600 cursor-pointer" />

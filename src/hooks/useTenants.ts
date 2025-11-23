@@ -1,5 +1,5 @@
-import { useMutation,useQuery ,UseQueryOptions} from "@tanstack/react-query";
-import type { Tenant ,RegisterTenantData, RegisterTenantResponse } from "../api/tenantApi";
+import { useMutation,useQuery } from "@tanstack/react-query";
+import  { Tenant ,RegisterTenantData, RegisterTenantResponse } from "@/types/tenant";
 import { getAllTenants, registerTenant } from "../api/tenantApi";
 
 import { getTenantByFrontendUrl } from "../api/tenantApi";

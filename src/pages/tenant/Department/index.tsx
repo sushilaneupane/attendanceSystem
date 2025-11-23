@@ -8,7 +8,7 @@ import { DataTable } from "../../../components/table/DataTable";
 import { useDepartments, useDeleteDepartment } from "../../../hooks/useDepartments";
 import { Department } from "@/types/department";
 import DepartmentRegister from "./Register";
-import { TableCell } from "@/components/ui/table";
+import { TableCell, TableRow } from "@/components/ui/table";
 import { DialogBox } from "@/components/Dialogs/Dialogbox";
 
 export function DepartmentPage() {
@@ -110,6 +110,7 @@ export function DepartmentPage() {
         emptyMessage="No departments found."
         renderRow={(department: Department) => (
           <>
+          <TableRow>
             <TableCell
               className="font-semibold cursor-pointer hover:underline px-6 py-4"
               onClick={() => navigate(`/department/${department.id}`)}
@@ -159,6 +160,7 @@ export function DepartmentPage() {
                 </DialogBox>
               </div>
             </TableCell>
+            </TableRow>
           </>
         )}
       />
