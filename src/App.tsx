@@ -9,9 +9,12 @@ import HomePage from "./pages/Home";
 import TenantAttendanceDashboard from "./pages/tenant/TenantDashboard";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminLayout from "./layouts/AdminLayout";
-import DepartmentOverviewPage from "./pages/tenant/Department/departmentOverview";
+import DepartmentOverviewPage from "./pages/tenant/Department/Overview";
 import { DepartmentPage } from "./pages/tenant/Department";
-import DepartmentRegister from "./pages/tenant/Department/departmentRegister";
+import DepartmentRegister from "./pages/tenant/Department/Register";
+import EmployeePage from "./pages/tenant/Employee";
+import { EmployeeOverview } from "./pages/tenant/Employee/Overview";
+
 
 
 
@@ -19,7 +22,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        
+
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route element={<ProtectedRoute allowedRoles={["SuperAdmin"]} />}>
           <Route element={<MainLayout />}>
@@ -31,17 +34,18 @@ export default function App() {
 
         <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
           <Route element={<AdminLayout />}>
-          <Route path="/tenant-dashboard" element={<TenantAttendanceDashboard />} />
-          <Route path="/department" element={<DepartmentPage/>} />
-          <Route path="/department-register" element={<DepartmentRegister/>} />
-     
-          <Route path="/department/:id" element={<DepartmentOverviewPage />} />
+            <Route path="/tenant-dashboard" element={<TenantAttendanceDashboard />} />
+            <Route path="/department" element={<DepartmentPage />} />
+            <Route path="/department-register" element={<DepartmentRegister />} />
+            <Route path="/employee" element={<EmployeePage />} />
+            <Route path="/department/:id" element={<DepartmentOverviewPage />} />
+            <Route path="/employee/:id" element={<EmployeeOverview/>} />
           </Route>
         </Route>
-
+  
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
-       
+
       </Routes>
     </BrowserRouter>
   );

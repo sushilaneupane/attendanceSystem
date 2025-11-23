@@ -1,20 +1,54 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { CreateEmployee, getEmployee, registerEmployee } from "@/api/employeeApi";
 
-export const useEmployee= () => {
-  return useQuery({
-    queryKey: ["Employee"],
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  getEmployee,
+  registerEmployee,
+  updateEmployee,
+  deleteEmployee,
+  getEmployeeById,
+} from "@/api/employeeApi";
+
+interface UpdateEmployeeParams {
+  id: string;
+  formData: FormData;
+}
+
+export const useEmployee = () =>
+  useQuery({
+    queryKey: ["employee"],
     queryFn: getEmployee,
-    select: (response) => response.data,
+    select: (res) => res.data,
+  });
+
+  export const useEmployeeById = (id?: string | number) => {
+    return useQuery({
+      queryKey: ["employee", id],
+      queryFn: () => getEmployeeById(id as string | number),
+      enabled: !!id,
+    });
+  }
+
+export const useCreateEmployee = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (formData: FormData) => registerEmployee(formData),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["employee"] }),
   });
 };
-export const useCreateEmployee = () => {
-  const queryClient = useQueryClient();
+
+
+export const useUpdateEmployee = () => {
+  const qc = useQueryClient();
   return useMutation({
-    mutationFn: (employee: CreateEmployee) =>
-      registerEmployee(employee),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["employee"] });
-    },
+    mutationFn: ({ id, formData }: UpdateEmployeeParams) => updateEmployee(id, formData),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["employee"] }),
+  });
+};
+
+export const useDeleteEmployee = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteEmployee(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["employee"] }),
   });
 };

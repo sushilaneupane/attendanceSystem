@@ -43,7 +43,7 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
 
   const tenantLinks: NavLinkItem[] = [
     { name: "Dashboard", path: "/tenant-dashboard", icon: <LayoutDashboard size={20} /> },
-    { name: "Employees", path: "/employees", icon: <Users size={20} /> },
+    { name: "Employees", path: "/employee", icon: <Users size={20} /> },
     { name: "Department", path: "/department", icon: <Layers size={20} /> },
     { name: "Change Password", path: "/change-password", icon: <KeyRound size={20} /> },
   ];

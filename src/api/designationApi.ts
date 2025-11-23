@@ -1,12 +1,27 @@
-import { AddDesignationData, DeleteDesignationResponse, Designation, UpdateDesignationData } from "@/types/designation";
 import { axiosInstance } from "../api/axiosInstance";
 
+export interface Designation {
+  designationId: string;
+  designationName: string;
+  departmentId: string;
+  
+  isActive: boolean;
+}
+export interface AddDesignationData{
+   departmentId: string;
+  designationName: string;
+
+}
+export interface DeleteDesignationResponse {
+  success: boolean;
+}
 export const getDesignations = async (departmentId: string) => {
   const { data } = await axiosInstance.get(`/Designation`, {
     params: { departmentId }, 
   });
   return data as Designation[];
 };
+
 
 export const getDesignationsByDepartment = async ( departmentId: string) => {
  const res = await axiosInstance.get(`/Designation/${departmentId}/Department`);
@@ -22,11 +37,4 @@ export const deleteDesignation = async (id: string): Promise<DeleteDesignationRe
   return response.data;
 };
 
-export const updateDesignation = async (
-  id: string,
-  data: UpdateDesignationData
-) => {
-  const response = await axiosInstance.patch(`/Designation/${id}`, data);
-  return response.data;
-};
 

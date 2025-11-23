@@ -1,6 +1,5 @@
 import { useQuery ,useMutation} from "@tanstack/react-query";
-import{getDesignations, getDesignationsByDepartment,addDesignation, deleteDesignation,  updateDesignation} from "../api/designationApi"
-import {Designation,AddDesignationData,UpdateDesignationData,} from "@/types/designation"
+import{getDesignations,Designation, getDesignationsByDepartment,AddDesignationData,addDesignation} from "../api/designationApi"
 
 
 export const useDesignations = (departmentId: string) => {
@@ -26,19 +25,8 @@ export const useAddDesignation = () => {
 };
 
 export const useDeleteDesignation = ()=>{
-  return useMutation({
-    mutationFn: (id:string) => deleteDesignation(id)
-  })
   
 }
-export const useUpdateDesignation = () => {
-  return useMutation({
-    mutationFn: ({
-      id,
-      data,
-    }: {
-      id: string;
-      data: UpdateDesignationData;
-    }) => updateDesignation(id, data),
-  });
-};
+export const useUpdateDesignation = ()=>{
+  
+}

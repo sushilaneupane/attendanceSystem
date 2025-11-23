@@ -1,6 +1,6 @@
 import React, { createContext, useContext, ReactNode, useEffect } from "react";
 import { useTenantByFrontendUrl } from "../hooks/useTenants"; // the hook we created
-import { Tenant } from "@/types/tenant";
+import { Tenant } from "../api/tenantApi";
 
 interface TenantContextType {
   tenant: Tenant | null;
@@ -17,7 +17,7 @@ const TenantContext = createContext<TenantContextType>({
 export const useTenant = () => useContext(TenantContext);
 
 export const TenantProvider = ({ children }: { children: ReactNode }) => {
-  const frontendUrl = "Ajay"; 
+  const frontendUrl = "Bijay"; 
   const { data, isLoading, isError, error } = useTenantByFrontendUrl(frontendUrl);
 const tenantData: Tenant | null = data ?? null;
 

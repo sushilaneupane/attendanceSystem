@@ -20,7 +20,7 @@ export function ControlledInput({
   errors,
 }: ControlledInputProps) {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 ">
       <Label>{label}</Label>
       <Controller
         name={name}
