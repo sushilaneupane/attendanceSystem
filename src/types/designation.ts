@@ -14,7 +14,14 @@ export interface UpdateDesignationData {
   designationName: string;
   isActive: boolean;
   departmentId: string;
+  designationId:string;
 }
 export interface DeleteDesignationResponse {
   success: boolean;
+}
+export interface DesignationRowProps{
+  designation: Designation,
+  departmentId:string,
+  onEdit: () => void,
+  onDelete : () => void;
 }
