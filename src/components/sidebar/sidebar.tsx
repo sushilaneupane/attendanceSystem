@@ -13,7 +13,7 @@ import {
   ChevronDown,
   ChevronUp,
   LogOut,
-  Building
+  Building,CalendarOff
 } from "lucide-react";
 
 import { useAuth } from "@/contexts/AuthContext"; 
@@ -30,9 +30,7 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
   const navigate = useNavigate();
 const { user} = useAuth();
  
-
-
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const superAdminLinks: NavLinkItem[] = [
     { name: "Dashboard", path: "/admin/dashboard", icon: <LayoutDashboard size={20} /> },
@@ -47,6 +45,7 @@ const { user} = useAuth();
     { name: "Department", path: "/department", icon: <Layers size={20} /> },
     { name: "Change Password", path: "/change-password", icon: <KeyRound size={20} /> },
      { name: "Organization", path: "/organizations", icon: <Building size={20} /> },
+      { name: "Leave Management", path: "/leave", icon: <CalendarOff size={20} /> },
 
   ];
 

@@ -8,7 +8,7 @@ import { TenantProvider } from "./contexts/TenantContext";
 const queryClient = new QueryClient({
   defaultOptions:{
     queries:{
-      staleTime:60 * 1000,
+      staleTime:30 * 1000,
       refetchOnReconnect: true,
       refetchOnWindowFocus: true,
       retry: 2,

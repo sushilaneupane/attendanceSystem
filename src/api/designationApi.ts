@@ -9,7 +9,7 @@ export const getDesignations = async (departmentId: string) => {
 };
 
 export const getDesignationsByDepartment = async ( departmentId: string) => {
- const res = await axiosInstance.get(`/designation/?DepartmentId:${departmentId}`);
+ const res = await axiosInstance.get(`/designation/?DepartmentId=${departmentId}`);
   return res.data.data as Designation[];
 };
 export const addDesignation = async (data: AddDesignationData) => {
