@@ -27,7 +27,7 @@ export function ControlledInput({
         control={control}
         render={({ field }) => <Input {...field} type={type} placeholder={placeholder} />}
       />
-      <p className="text-sm text-red-500 min-h-5">
+      <p className="text-sm text-red-500 min-h-2">
         {errors?.[name]?.message?.toString() || " "}
       </p>
     </div>

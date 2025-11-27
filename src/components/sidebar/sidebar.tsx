@@ -43,7 +43,6 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
     { name: "Dashboard", path: "/tenant-dashboard", icon: <LayoutDashboard size={20} /> },
     { name: "Employees", path: "/employee", icon: <Users size={20} /> },
     { name: "Department", path: "/department", icon: <Layers size={20} /> },
-    { name: "Change Password", path: "/change-password", icon: <KeyRound size={20} /> },
      { name: "Organization", path: "/organizations", icon: <Building size={20} /> },
       { name: "Leave Management", path: "/leave", icon: <CalendarOff size={20} /> },
 
@@ -113,10 +112,10 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
 
             <button
               className="w-full flex items-center gap-2 px-4 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-100"
-              onClick={() => navigate("/profile")}
+              onClick={() => navigate("/password")}
             >
-              <User size={16} />
-              View Profile
+              <KeyRound size={16} />
+              Change Password
             </button>
 
             <div className="border-t border-gray-200 my-1" />

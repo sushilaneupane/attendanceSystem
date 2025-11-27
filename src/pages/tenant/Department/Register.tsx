@@ -81,7 +81,11 @@ export default function DepartmentRegister({
   };
 
   return (
-    <form id="department-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form
+      id="department-form"
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-4"
+    >
       <ControlledInput
         name="name"
         control={control}
@@ -91,15 +95,19 @@ export default function DepartmentRegister({
       />
 
       <div className="flex items-center space-x-2 mt-2">
-        <Switch
-          id="active-status"
-          checked={isActive}
-          onCheckedChange={setIsActive}
-          className="relative inline-flex h-6 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out 
-          data-[state=checked]:bg-green-500
-          data-[state=unchecked]:bg-red-500"
-        />
-        <Label htmlFor="active-status">{isActive ? "Active" : "Inactive"}</Label>
+        {isEditing && (
+          <>
+            <Switch
+              id="active-status"
+              checked={isActive}
+              onCheckedChange={setIsActive}
+              className="relative inline-flex h-6 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out 
+              data-[state=checked]:bg-green-500
+              data-[state=unchecked]:bg-red-500"
+            />
+            <Label htmlFor="active-status">{isActive ? "Active" : "Inactive"}</Label>
+          </>
+        )}
       </div>
     </form>
   );

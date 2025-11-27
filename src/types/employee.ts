@@ -1,4 +1,6 @@
 import { ReactNode } from "react";
+import { GenderEnum } from "./enum/gender";
+import{marriedStatusEnum} from "./enum/marriedStatus"
 
 export interface Employee {
   id: string;
@@ -14,13 +16,14 @@ export interface Employee {
   description?: string;
   deviceUserId?: string;
   isActive: boolean;
-  marriedStatus?: string;
-  gender?: string;
+  marriedStatus: marriedStatusEnum;
+  gender: GenderEnum;
   designationId?: string;
   departmentId?: string;
   imageUrl?: string;
   departmentName?: string;
   designationName?: string;
+  password:string;
 }
 
 export interface CreateEmployee {

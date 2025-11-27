@@ -9,8 +9,8 @@ interface ImageUploadProps {
 export function ImageUpload({ onFileSelect, initialPreview = null }: ImageUploadProps) {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(initialPreview);
+    const DEFAULT_AVATAR = "/images/default-avatar.png";
 
-  // Sync preview when initialPreview changes
   useEffect(() => {
     setPreview(initialPreview);
   }, [initialPreview]);
@@ -18,12 +18,14 @@ export function ImageUpload({ onFileSelect, initialPreview = null }: ImageUpload
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0] || null;
     setFile(f);
+
     if (f) {
       const url = URL.createObjectURL(f);
       setPreview(url);
     } else {
-      setPreview(initialPreview); // reset to initial preview if user removes file
+      setPreview(DEFAULT_AVATAR);  
     }
+
     if (onFileSelect) onFileSelect(f);
   };
 
