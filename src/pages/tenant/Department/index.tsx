@@ -119,7 +119,13 @@ export function DepartmentPage() {
             </TableCell>
 
             <TableCell className="px-6">
-              <Badge variant={department.isActive ? "default" : "secondary"}>
+              <Badge
+                   className={
+                    department.isActive
+                      ? "bg-green-200 text-green-700"
+                      : "bg-red-200 text-red-700"
+                  }
+               variant={department.isActive ? "default" : "secondary"}>
                 {department.isActive ? "Active" : "Inactive"}
               </Badge>
             </TableCell>

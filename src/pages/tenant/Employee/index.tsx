@@ -21,6 +21,7 @@ export default function EmployeePage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const { data: employees, isLoading, error } = useEmployee();
+console.log(employees, "Employees Data");
   const deleteMutation = useDeleteEmployee();
 
   if (isLoading) return <div>Loading employees...</div>;
@@ -88,7 +89,7 @@ export default function EmployeePage() {
                 Add Employee
               </Button>
             }
-            width="min-w-4xl"
+            width="min-w-3xl"
             header={editingEmployee ? "Edit Employee" : "Add Employee"}
             footer={
               <div className="flex justify-center gap-3">
@@ -128,20 +129,22 @@ export default function EmployeePage() {
               {emp.dateOfJoining ? new Date(emp.dateOfJoining).toLocaleDateString() : "-"}
             </TableCell>
             <TableCell className="px-6">
-              <Badge variant={emp.isActive ? "default" : "destructive"}>
+              <Badge  className={
+                    emp.isActive
+                      ? "bg-green-200 text-green-700"
+                      : "bg-red-200 text-red-700"
+                  }
+                variant={emp.isActive ? "default" : "destructive"}>
                 {emp.isActive ? "Active" : "Inactive"}
               </Badge>
             </TableCell>
 
-            {/* Actions */}
             <TableCell className="px-6">
               <div className="flex justify-end items-center space-x-3">
                 <Edit
                   className="h-4 w-4 cursor-pointer text-blue-600"
                   onClick={() => handleEditEmployee(emp)}
                 />
-
-                {/* Delete Dialog */}
                 <DialogBox
                   open={deleteDialogOpen && employeeToDelete?.id === emp.id}
                   onOpenChange={setDeleteDialogOpen}
