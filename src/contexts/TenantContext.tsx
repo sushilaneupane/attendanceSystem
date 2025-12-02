@@ -13,7 +13,7 @@ const TenantContext = createContext<TenantContextType>({
 
 export const useTenant = () => useContext(TenantContext);
 export const TenantProvider = ({ children }: { children: ReactNode }) => {
-  const frontendUrl = "attendancebe.hamrosystem.com"; 
+  const frontendUrl = "attendancebe.hamosystem.com"; 
   const { data, isLoading, isError, error } = useTenantByFrontendUrl(frontendUrl);
 const tenantData: Tenant | null = data ?? null;
 

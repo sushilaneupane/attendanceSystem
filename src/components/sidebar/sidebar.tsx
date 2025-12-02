@@ -13,7 +13,7 @@ import {
   ChevronDown,
   ChevronUp,
   LogOut,
-  Building,CalendarOff
+  Building,Calendar
 } from "lucide-react";
 
 import { useAuth } from "@/contexts/AuthContext"; 
@@ -44,7 +44,7 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
     { name: "Employees", path: "/employee", icon: <Users size={20} /> },
     { name: "Department", path: "/department", icon: <Layers size={20} /> },
      { name: "Organization", path: "/organizations", icon: <Building size={20} /> },
-      { name: "Leave Management", path: "/leave", icon: <CalendarOff size={20} /> },
+      { name: "Leave Management", path: "/leave", icon: <Calendar size={20} /> },
 
   ];
 
