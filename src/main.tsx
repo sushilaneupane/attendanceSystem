@@ -5,6 +5,7 @@ import App from "./App";
 import { AuthProvider } from "./contexts/AuthContext";
 import "./index.css";
 import { TenantProvider } from "./contexts/TenantContext";
+import { Toaster } from "sonner";
 const queryClient = new QueryClient({
   defaultOptions:{
     queries:{
@@ -22,7 +23,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
     <TenantProvider>
       <AuthProvider>
-        
+           <Toaster richColors position="top-right" />
         <App />
      
       </AuthProvider>

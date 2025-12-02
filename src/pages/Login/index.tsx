@@ -20,6 +20,7 @@ import {
 import { useUser } from "../../hooks/useUser";
 import { Eye, EyeOff } from "lucide-react";
 import { useTenant } from "@/contexts/TenantContext";
+import { AxiosError } from "axios";
 
 const loginSchema = z.object({
   username: z
@@ -67,23 +68,23 @@ export default function LoginPage() {
           if (role === "Admin") {
             navigate("/tenant-dashboard");
           } else if (role === "SuperAdmin") {
-            navigate('/home')
-          }
-          else {
+            navigate("/home");
+          } else {
             navigate("/login");
           }
         }
       },
-      onError: (error: any) => {
-        const status = error?.response?.status;
-
+      onError: (err) => {
+        debugger;
+        const error = err as AxiosError;
+        const errResp = error?.response?.data;
+        const status = error?.status;
         if (status === 401) {
-
           toast.error("Invalid username or password.");
           return;
+        }else{
+           toast.error("Something went wrong");
         }
-
-
       },
     });
   };

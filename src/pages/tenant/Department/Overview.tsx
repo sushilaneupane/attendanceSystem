@@ -248,13 +248,12 @@ export default function DepartmentOverviewPage() {
     );
   };
 
-  if (!department) return <p>Department not found</p>;
-
+  
   return (
     <div className="p-4 space-y-6">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <h1 className="font-bold text-3xl">
-          Welcome to {department.data.name}
+         Manage Designation
         </h1>
 
         <DialogBox

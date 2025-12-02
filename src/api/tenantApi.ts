@@ -34,7 +34,7 @@ export const registerTenant = async (
 };
 
 export const getAllTenants = async (): Promise<Tenant[]> => {
-  const response = await axiosInstance.get<Tenant[]>(`/Tenants`,{
+  const response = await axiosInstance.get<Tenant[]>(`tenants`,{
     headers: {
       'X-Tenant-ID': null
     }
@@ -43,7 +43,7 @@ export const getAllTenants = async (): Promise<Tenant[]> => {
 };
 
 export const getTenantByFrontendUrl = async (frontendUrl: string): Promise<Tenant> => {
-  const res = await axiosInstance.get(`/Tenants/by-frontend-url`, {
+  const res = await axiosInstance.get(`/tenants/by-frontend-url`, {
     params: { frontendUrl },
     
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Toaster } from "sonner";
+
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "../components/sidebar/sidebar";
 
@@ -12,7 +12,8 @@ export default function MainLayout() {
       <main className="flex-1 p-6 overflow-y-auto">
         <Outlet />
       </main>
-      <Toaster richColors position="top-right" />
+
+   
     </div>
   );
 }
