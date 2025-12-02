@@ -90,73 +90,77 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <Card className="w-full max-w-md shadow-lg rounded-lg border-0 bg-white">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Login</CardTitle>
-          <CardDescription>Enter your credentials to sign in</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="flex flex-col">
-              <Label>Username</Label>
-              <Input
-                placeholder="Enter your username"
-                className="mt-1 border border-gray-500 focus:border-transparent focus:outline-none focus:ring-0 hover:border-gray-500"
-                {...register("username")}
-              />
-              {errors.username && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.username.message}
-                </p>
-              )}
-            </div>
-            <div className="relative">
-              <Input
-                type={showPassword ? "text" : "password"}
-                placeholder="Enter your password"
-                className="mt-1 pr-10 border border-gray-500 focus:border-transparent 
-                 focus:outline-none focus:ring-0 hover:border-gray-500"
-                {...register("password")}
-              />
+  <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-6 sm:py-12">
+  <Card className="w-full max-w-md sm:max-w-lg lg:max-w-md shadow-lg rounded-lg border-0 bg-white">
+    <CardHeader className="text-center px-6 pt-6 sm:pt-8">
+      <CardTitle className="text-2xl sm:text-3xl font-bold">Login</CardTitle>
+      <CardDescription className="text-sm sm:text-base">
+        Enter your credentials to sign in
+      </CardDescription>
+    </CardHeader>
+    <CardContent className="px-6 sm:px-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div className="flex flex-col">
+          <Label className="text-sm sm:text-base">Username</Label>
+          <Input
+            placeholder="Enter your username"
+            className="mt-1 border border-gray-500 focus:border-transparent focus:outline-none focus:ring-0 hover:border-gray-500 text-sm sm:text-base"
+            {...register("username")}
+          />
+          {errors.username && (
+            <p className="text-red-500 text-xs sm:text-sm mt-1">
+              {errors.username.message}
+            </p>
+          )}
+        </div>
 
-              <span
-                className="absolute right-3 inset-y-0 flex items-center cursor-pointer"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-              </span>
-            </div>
-            <div className="flex items-center">
-              <a
-                href="#"
-                className="text-sm text-blue-600 hover:underline ml-auto"
-              >
-                Forgot Password?
-              </a>
-            </div>
+        <div className="relative">
+          <Input
+            type={showPassword ? "text" : "password"}
+            placeholder="Enter your password"
+            className="mt-1 pr-10 border border-gray-500 focus:border-transparent focus:outline-none focus:ring-0 hover:border-gray-500 text-sm sm:text-base"
+            {...register("password")}
+          />
+          <span
+            className="absolute right-3 inset-y-0 flex items-center cursor-pointer"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </span>
+        </div>
 
-            <Button
-              type="submit"
-              className="w-full bg-black text-white hover:bg-gray-900"
-              disabled={isPending}
-            >
-              {isPending ? "Logging in..." : "Login"}
-            </Button>
-          </form>
-        </CardContent>
-        <CardFooter className="text-center">
-          <p className="text-sm text-gray-600">
-            Don’t have an account?{" "}
-            <span
-              onClick={() => navigate("/register")}
-              className="text-blue-600 cursor-pointer hover:underline"
-            >
-              Sign up
-            </span>
-          </p>
-        </CardFooter>
-      </Card>
-    </div>
+        <div className="flex items-center">
+          <a
+            href="#"
+            className="text-xs sm:text-sm text-blue-600 hover:underline ml-auto"
+          >
+            Forgot Password?
+          </a>
+        </div>
+
+        <Button
+          type="submit"
+          className="w-full bg-black text-white hover:bg-gray-900 py-2 sm:py-3 text-sm sm:text-base"
+          disabled={isPending}
+        >
+          {isPending ? "Logging in..." : "Login"}
+        </Button>
+      </form>
+    </CardContent>
+
+    <CardFooter className="text-center px-6 pb-6 sm:pb-8">
+      <p className="text-xs sm:text-sm text-gray-600">
+        Don’t have an account?{" "}
+        <span
+          onClick={() => navigate("/register")}
+          className="text-blue-600 cursor-pointer hover:underline"
+        >
+          Sign up
+        </span>
+      </p>
+    </CardFooter>
+  </Card>
+</div>
+
   );
 }

@@ -16,9 +16,10 @@ interface DialogBoxProps {
   open?: boolean;
   width?: string;
   variant: string;
-  footer?: React.ReactNode;   
+  footer?: React.ReactNode;
   onOpenChange?: (open: boolean) => void;
 }
+
 export function DialogBox({
   triggerButtonText,
   children,
@@ -34,17 +35,20 @@ export function DialogBox({
         <Button variant="ghost">{triggerButtonText}</Button>
       </DialogTrigger>
 
-      <DialogContent className={`${width} max-h-[80vh] overflow-y-auto`}>
+      <DialogContent className={`${width} max-h-[80vh] flex flex-col`}>
         {header && (
           <DialogHeader>
-            <DialogTitle>{header}</DialogTitle>
-            <DialogDescription></DialogDescription>
+            <DialogTitle className="text-sm">{header}</DialogTitle>
+            <DialogDescription />
           </DialogHeader>
         )}
 
-        <div className="mt-5">{children}</div>
+        {/* SCROLL AREA ONLY FOR CONTENT */}
+        <div className="mt-4 overflow-y-auto flex-1 pr-1">
+          {children}
+        </div>
 
-        {footer && <div className="mt-6">{footer}</div>}
+        {footer && <div className="mt-4">{footer}</div>}
       </DialogContent>
     </Dialog>
   );

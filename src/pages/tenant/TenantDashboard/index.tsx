@@ -43,100 +43,100 @@ export default function TenantAttendanceDashboard() {
   const totalDepartments = 4;
 
   return (
-    <>
-      <div className="p-6 md:ml-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4 mt-5">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Attendance Dashboard</h1>
-            <p className="text-muted-foreground">View all employees' attendance records</p>
-          </div>
-
-          <div className="relative max-w-sm flex-1">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search by name or date..."
-              className="pl-8"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+    <div className="p-2 sm:p-4 md:p-6 lg:p-8">
+      {/* Header and Search */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4 mb-4 sm:mb-6">
+        <div>
+          <h1 className="text-xs sm:text-2xl mt-4 md:text-3xl font-bold tracking-tight">Attendance Dashboard</h1>
+          <p className="text-xs sm:text-sm text-muted-foreground">View all employees' attendance records</p>
         </div>
 
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-          <Card className="bg-blue-100 border-blue-300">
-            <CardHeader>
-              <CardTitle>Total Employees</CardTitle>
-              <CardDescription className="text-2xl font-bold text-blue-800">{totalEmployees}</CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className="bg-green-100 border-green-300">
-            <CardHeader>
-              <CardTitle>Present Today</CardTitle>
-              <CardDescription className="text-2xl font-bold text-green-800">{presentCount}</CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className="bg-red-100 border-red-300">
-            <CardHeader>
-              <CardTitle>Absent Today</CardTitle>
-              <CardDescription className="text-2xl font-bold text-red-800">{absentCount}</CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className="bg-yellow-100 border-yellow-300">
-            <CardHeader>
-              <CardTitle>Late Check-ins</CardTitle>
-              <CardDescription className="text-2xl font-bold text-yellow-800">{lateCount}</CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className="bg-purple-100 border-purple-300">
-            <CardHeader>
-              <CardTitle>Departments</CardTitle>
-              <CardDescription className="text-2xl font-bold text-purple-800">{totalDepartments}</CardDescription>
-            </CardHeader>
-          </Card>
+        <div className="relative w-full sm:max-w-xs">
+          <Search className="absolute left-2 top-2 h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search by name or date..."
+            className="pl-7 sm:pl-8 text-xs sm:text-sm w-50"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
+      </div>
 
-        <Card>
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 sm:gap-4 mb-6 sm:mb-8">
+        <Card className="bg-blue-100 border-blue-300 p-2 sm:p-4 w-30">
           <CardHeader>
-            <CardTitle>Employees Attendance</CardTitle>
-            <CardDescription>
-              {filteredAttendance.length} record{filteredAttendance.length !== 1 ? "s" : ""} found
-            </CardDescription>
+            <CardTitle className="text-xs sm:text-sm">Total Employees</CardTitle>
+            <CardDescription className="text-lg sm:text-xl font-bold text-blue-800">{totalEmployees}</CardDescription>
           </CardHeader>
-          <CardContent>
-            <DataTable
-              headers={["Employee", "Date", "Check-in", "Check-out", "Status"]}
-              data={filteredAttendance}
-              emptyMessage="No attendance records found."
-              renderRow={(record: EmployeeAttendance) => (
-                <TableRow>
-                  <TableCell>{record.name}</TableCell>
-                  <TableCell>{new Date(record.date).toLocaleDateString()}</TableCell>
-                  <TableCell>{record.checkIn || "-"}</TableCell>
-                  <TableCell>{record.checkOut || "-"}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        record.status === "Present"
-                          ? "default"
-                          : record.status === "Late"
-                          ? "secondary"
-                          : "destructive"
-                      }
-                    >
-                      {record.status}
-                    </Badge>
-                  </TableCell>
-                </TableRow>
-              )}
-            />
-          </CardContent>
+        </Card>
+
+        <Card className="bg-green-100 border-green-300 p-2 sm:p-4 w-30">
+          <CardHeader>
+            <CardTitle className="text-xs sm:text-sm">Present Today</CardTitle>
+            <CardDescription className="text-lg sm:text-xl font-bold text-green-800">{presentCount}</CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="bg-red-100 border-red-300 p-2 sm:p-4 w-30">
+          <CardHeader>
+            <CardTitle className="text-xs sm:text-sm">Absent Today</CardTitle>
+            <CardDescription className="text-lg sm:text-xl font-bold text-red-800">{absentCount}</CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="bg-yellow-100 border-yellow-300 p-2 sm:p-4 w-30">
+          <CardHeader>
+            <CardTitle className="text-xs sm:text-sm">Late Check-ins</CardTitle>
+            <CardDescription className="text-lg sm:text-xl font-bold text-yellow-800">{lateCount}</CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="bg-purple-100 border-purple-300 p-2 sm:p-4 w-30">
+          <CardHeader>
+            <CardTitle className="text-xs sm:text-sm">Departments</CardTitle>
+            <CardDescription className="text-lg sm:text-xl font-bold text-purple-800">{totalDepartments}</CardDescription>
+          </CardHeader>
         </Card>
       </div>
-    </>
+
+      {/* Attendance Table */}
+      <Card className="w-80">
+        <CardHeader>
+          <CardTitle className="text-sm sm:text-base">Employees Attendance</CardTitle>
+          <CardDescription className="text-xs sm:text-sm">
+            {filteredAttendance.length} record{filteredAttendance.length !== 1 ? "s" : ""} found
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="overflow-x-auto">
+          <DataTable
+            headers={["Employee", "Date", "Check-in", "Check-out", "Status"]}
+            data={filteredAttendance}
+            emptyMessage="No attendance records found."
+            renderRow={(record: EmployeeAttendance) => (
+              <TableRow key={record.id}>
+                <TableCell className="whitespace-nowrap text-xs sm:text-sm">{record.name}</TableCell>
+                <TableCell className="whitespace-nowrap text-xs sm:text-sm">{new Date(record.date).toLocaleDateString()}</TableCell>
+                <TableCell className="whitespace-nowrap text-xs sm:text-sm">{record.checkIn || "-"}</TableCell>
+                <TableCell className="whitespace-nowrap text-xs sm:text-sm">{record.checkOut || "-"}</TableCell>
+                <TableCell className="whitespace-nowrap text-xs sm:text-sm">
+                  <Badge
+                    variant={
+                      record.status === "Present"
+                        ? "default"
+                        : record.status === "Late"
+                        ? "secondary"
+                        : "destructive"
+                    }
+                  >
+                    {record.status}
+                  </Badge>
+                </TableCell>
+              </TableRow>
+            )}
+          />
+        </CardContent>
+      </Card>
+    </div>
   );
 }
