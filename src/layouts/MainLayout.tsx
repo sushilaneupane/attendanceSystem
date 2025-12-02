@@ -7,14 +7,11 @@ export default function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
-
-      {/* Main content */}
-      <main className={`flex-1 transition-all duration-300 md:ml-64 p-6`}>
+   <div className="flex min-h-screen bg-gray-100">
+      <Sidebar />
+      <main className="flex-1 p-6 overflow-y-auto">
         <Outlet />
       </main>
-
       <Toaster richColors position="top-right" />
     </div>
   );

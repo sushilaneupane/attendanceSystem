@@ -13,24 +13,22 @@ import { Employee } from "@/types/employee";
 
 export default function EmployeePage() {
   const navigate = useNavigate();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
   const [employeeDialogOpen, setEmployeeDialogOpen] = useState(false);
-
   const [employeeToDelete, setEmployeeToDelete] = useState<Employee | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const { data: employees, isLoading, error } = useEmployee();
-console.log(employees, "Employees Data");
   const deleteMutation = useDeleteEmployee();
 
-  if (isLoading) return <div>Loading employees...</div>;
-  if (error) return <div>Error loading employees</div>;
+  if (isLoading) return <div className="p-6 text-center">Loading employees...</div>;
+  if (error) return <div className="p-6 text-center">Error loading employees.</div>;
 
-  const filteredEmployees = (employees ?? []).filter((emp: { firstName: any; lastName: any; }) =>
+  const filteredEmployees = (employees ?? []).filter((emp: Employee) =>
     `${emp.firstName} ${emp.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
 
   const handleAddEmployee = () => {
     setEditingEmployee(null);
@@ -58,45 +56,42 @@ console.log(employees, "Employees Data");
   };
 
   return (
-    <div className="flex-1 space-y-6">
-  
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div className=" p-1 sm:p-6 lg:p-8 w-full md:max-w-4xl lg:max-w-7xl fixed">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-1 z-20 p-4 ">
         <div>
-          <h2 className="text-3xl font-bold">Employees</h2>
-          <p className="text-muted-foreground">Manage your employees</p>
+          <h1 className="text-xl mt-3 font-extrabold text-gray-900">Employees</h1>
         </div>
-
-      
-        <div className="flex items-center gap-3 max-w-md w-full">
-          <div className="relative w-full">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+        <div className="flex flex-wrap md:flex-nowrap items-center gap-3 mt-3 md:mt-0">
+          <div className="relative flex-shrink min-w-[120px] w-[130px] sm:w-64">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
             <Input
               placeholder="Search employees..."
-              className="pl-10"
+              className="pl-8 w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-
-      
           <DialogBox
             variant="default"
             open={employeeDialogOpen}
             onOpenChange={setEmployeeDialogOpen}
             triggerButtonText={
-              <Button className="bg-blue-800" onClick={handleAddEmployee}>
-                <Plus className="mr-2 h-4 w-4" />
+              <Button
+                className="bg-blue-800 text-white flex items-center gap-2 px-1 py-2 rounded-md shadow hover:bg-blue-700 flex-shrink-0"
+                onClick={handleAddEmployee}
+              >
+                <Plus className=" text-sm px-0 py-1.5  " />
                 Add Employee
               </Button>
             }
-            width="min-w-3xl"
+            width="min-w-[300px]"
             header={editingEmployee ? "Edit Employee" : "Add Employee"}
             footer={
-              <div className="flex justify-center gap-3">
+              <div className="flex justify-center gap-3 flex-wrap">
                 <Button variant="outline" onClick={() => setEmployeeDialogOpen(false)}>
                   Cancel
                 </Button>
-                <Button type="submit" form="employee-form" className="bg-blue-800">
+                <Button type="submit" form="employee-form" className="bg-blue-800 text-white">
                   {editingEmployee ? "Update Employee" : "Create Employee"}
                 </Button>
               </div>
@@ -110,75 +105,67 @@ console.log(employees, "Employees Data");
           </DialogBox>
         </div>
       </div>
-      <DataTable
-        headers={["Name", "Department", "Designation", "Joining Date", "Status", "Actions"]}
-        data={filteredEmployees}
-        emptyMessage="No employees found."
-        renderRow={(emp: Employee) => (
-          <>
-          <TableRow>
-            <TableCell
-              className="font-semibold cursor-pointer hover:underline px-6 py-4"
-              onClick={() => navigate(`/employee/${emp.id}`)}
-            >
-              {emp.firstName} {emp.lastName}
-            </TableCell>
-            <TableCell className="px-6">{emp.departmentName ?? "-"}</TableCell>
-            <TableCell className="px-6">{emp.designationName ?? "-"}</TableCell>
-            <TableCell className="px-6">
-              {emp.dateOfJoining ? new Date(emp.dateOfJoining).toLocaleDateString() : "-"}
-            </TableCell>
-            <TableCell className="px-6">
-              <Badge  className={
-                    emp.isActive
-                      ? "bg-green-200 text-green-700"
-                      : "bg-red-200 text-red-700"
-                  }
-                variant={emp.isActive ? "default" : "destructive"}>
-                {emp.isActive ? "Active" : "Inactive"}
-              </Badge>
-            </TableCell>
+      <div className="overflow-x-auto max-h-[60vh] overflow-y-auto border rounded">
+        <DataTable
+          headers={["Name", "Department", "Designation", "Joining Date", "Status", "Actions"]}
+          data={filteredEmployees}
+          emptyMessage="No employees found."
+          renderRow={(emp: Employee) => (
+            <TableRow className="text-xs">
+              <TableCell
+                className="font-semibold cursor-pointer hover:underline px-3 py-2 sm:px-4 sm:py-3 whitespace-nowrap"
+                onClick={() => navigate(`/employee/${emp.id}`)}
+              >
+                {emp.firstName} {emp.lastName}
+              </TableCell>
 
-            <TableCell className="px-6">
-              <div className="flex justify-end items-center space-x-3">
-                <Edit
-                  className="h-4 w-4 cursor-pointer text-blue-600"
-                  onClick={() => handleEditEmployee(emp)}
-                />
-                <DialogBox
-                  open={deleteDialogOpen && employeeToDelete?.id === emp.id}
-                  onOpenChange={setDeleteDialogOpen}
-                  header="Confirm Delete"
-                  variant="default"
-                  triggerButtonText={
-                    <div
-                      onClick={() => handleDeleteEmployee(emp)}
-                      className="cursor-pointer"
-                    >
-                      <Trash2 className="h-4 w-4 text-red-600" />
-                    </div>
-                  }
+              <TableCell className="px-2 py-2 text-xs sm:text-sm">{emp.departmentName ?? "-"}</TableCell>
+              <TableCell className="px-2 py-2 text-xs sm:text-sm">{emp.designationName ?? "-"}</TableCell>
+              <TableCell className="px-3 sm:px-4 whitespace-nowrap">
+                {emp.dateOfJoining ? new Date(emp.dateOfJoining).toLocaleDateString() : "-"}
+              </TableCell>
+
+              <TableCell className="px-3 sm:px-4 whitespace-nowrap">
+                <Badge
+                  className={emp.isActive ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"}
+                  variant={emp.isActive ? "default" : "destructive"}
                 >
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    Are you sure you want to delete “{employeeToDelete?.firstName}{" "}
-                    {employeeToDelete?.lastName}”?
-                  </p>
+                  {emp.isActive ? "Active" : "Inactive"}
+                </Badge>
+              </TableCell>
 
-                  <div className="mt-4 flex justify-end gap-2">
-                    <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
-                      Cancel
-                    </Button>
-                    <Button variant="destructive" onClick={confirmDelete}>
-                      Delete
-                    </Button>
-                  </div>
-                </DialogBox>
-              </div>
-            </TableCell>
+              <TableCell className="px-3 sm:px-4 whitespace-nowrap">
+                <div className="flex justify-end items-center space-x-2 sm:space-x-3 flex-wrap">
+                  <Edit className="h-4 w-4 cursor-pointer text-blue-600" onClick={() => handleEditEmployee(emp)} />
+                  <DialogBox
+                    open={deleteDialogOpen && employeeToDelete?.id === emp.id}
+                    onOpenChange={setDeleteDialogOpen}
+                    header="Confirm Delete"
+                    variant="default"
+                    triggerButtonText={
+                      <div onClick={() => handleDeleteEmployee(emp)} className="cursor-pointer">
+                        <Trash2 className="h-4 w-4 text-red-600" />
+                      </div>
+                    }
+                  >
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      Are you sure you want to delete “{employeeToDelete?.firstName} {employeeToDelete?.lastName}”?
+                    </p>
+                    <div className="mt-4 flex justify-end gap-2 flex-wrap">
+                      <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+                        Cancel
+                      </Button>
+                      <Button variant="destructive" onClick={confirmDelete}>
+                        Delete
+                      </Button>
+                    </div>
+                  </DialogBox>
+                </div>
+              </TableCell>
             </TableRow>
-          </>
-        )}
-      />
+          )}
+        />
+      </div>
     </div>
   );
 }
