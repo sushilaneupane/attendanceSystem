@@ -22,7 +22,6 @@ import { DialogBox } from "@/components/Dialogs/Dialogbox";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Designation, DesignationRowProps } from "@/types/designation";
-
 type DesignationForm = z.infer<typeof designationSchema>;
 
 function DesignationRow({

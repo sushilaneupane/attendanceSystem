@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import axios, { AxiosError } from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { Input } from "../../components/ui/input";
-import { Button } from "../../components/ui/button";
-import { Label } from "../../components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import {
   Card,
   CardHeader,
@@ -15,8 +15,8 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from "../../components/ui/card";
-import { useUser } from "../../hooks/useUser";
+} from "@/components/ui/card";
+import { useUser } from "@/hooks/useUser";
 import { Eye } from "lucide-react";
 
 const schema = z.object({
@@ -51,21 +51,27 @@ export default function RegisterPage() {
 
   const onSubmit: SubmitHandler<RegisterFormInputs> = (data) => {
     const payload = {
-      firstName: data.firstName || null,
-      lastName: data.lastName || null,
-      email: data.email || null,
-      username: data.username || null,
-      password: data.password || null,
-      confirmPassword: data.confirmPassword || null,
+      firstName: data.firstName || undefined,
+      lastName: data.lastName || undefined,
+      email: data.email || undefined,
+      username: data.username || undefined,
+      password: data.password || undefined,
+      confirmPassword: data.confirmPassword || undefined,
       role: "USER",
     };
 
     registerUser.mutate(payload, {
-      onError: (error: any) => {
-        const errorData: BackendErrors = error?.response?.data?.errors || {};
-        setBackendErrors(errorData);
-        toast.error("Registration failed");
-      },
+  onError: (error: unknown) => {
+  if (axios.isAxiosError(error)) {
+    toast.error(error.response?.data?.message ?? "Something went wrong!");
+    return;
+  }
+
+  // Fallback for non-Axios errors
+  const message =
+    error instanceof Error ? error.message : "Unexpected error occurred";
+  toast.error(message);
+},
       onSuccess: () => {
         toast.success("Account created successfully!");
         navigate("/login");
@@ -94,7 +100,6 @@ export default function RegisterPage() {
               {backendErrors.FirstName && <p className="text-red-500 text-sm">{backendErrors.FirstName[0]}</p>}
             </div>
 
-            {/* Last Name */}
             <div className="flex flex-col">
               <Label className="mb-1">Last Name</Label>
               <Input
@@ -104,8 +109,6 @@ export default function RegisterPage() {
               {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName.message}</p>}
               {backendErrors.LastName && <p className="text-red-500 text-sm">{backendErrors.LastName[0]}</p>}
             </div>
-
-            {/* Email */}
             <div className="flex flex-col">
               <Label className="mb-1">Email</Label>
               <Input
@@ -116,7 +119,6 @@ export default function RegisterPage() {
               {backendErrors.Email && <p className="text-red-500 text-sm">{backendErrors.Email[0]}</p>}
             </div>
 
-            {/* Password */}
             <div className="flex flex-col relative">
               <Label className="mb-1">Password</Label>
               <Input

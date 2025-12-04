@@ -1,12 +1,13 @@
 
-import { RegisterTenantData, RegisterTenantResponse, Tenant } from "@/types/tenant";
+import { RegisterTenantData, RegisterTenantResponse, Tenant, ValidationErrorResponse } from "@/types/tenant";
 import { axiosInstance } from "./axiosInstance";
+import { AxiosError } from "axios";
 
 
 class RegistrationError extends Error {
-  public backendError?: any;
+  public backendError?: ValidationErrorResponse;
   
-  constructor(message: string, backendError?: any) {
+  constructor(message: string, backendError?: ValidationErrorResponse) {
     super(message);
     this.name = "RegistrationError";
     this.backendError = backendError;
@@ -22,13 +23,16 @@ export const registerTenant = async (
       data
     );
     return response.data;
-  } catch (error) {
-    console.error("Backend registration error:", error);
+  } catch (err) {
+    console.error("Backend registration error:", err);
+
+     const axiosError = err as AxiosError<ValidationErrorResponse>;
+
     
    
-    throw new RegistrationError(
-      "Registration failed. ",
-      error
+   throw new RegistrationError(
+      "Registration failed.",
+      axiosError.response?.data
     );
   }
 };

@@ -1,40 +1,34 @@
 import { z } from "zod";
-import { GenderEnum } from "@/types/enum/gender";
-import { marriedStatusEnum } from "@/types/enum/marriedStatus";
-
+export enum MarriedStatus {
+  Single = "Single",
+  Married = "Married",
+  Divorced = "Divorced",
+  Widowed = "Widowed",
+}
+export enum Gender {
+  Male = "Male",
+  Female = "Female",
+  Other = "Other",
+}
 export const employeeSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-
-  Email: z.string().email("Invalid email format"),
-
-  contactNumber1: z.string().min(5, "Primary contact is required"),
-  contactNumber2: z.string().optional().nullable(),
-
-  address: z.string().min(2, "Address is required"),
-
-  dateOfJoining: z.string().min(1, "Joining date required"),
-  dateOfBirth: z.string().min(1, "Birthdate required"),
-
-  description: z.string().optional().nullable(),
-
-  deviceUserId: z.coerce.number(),
-
-  isActive: z.boolean().default(true),
-
-  gender: z.nativeEnum(GenderEnum),
-
-  marriedStatus: z.nativeEnum(marriedStatusEnum),
-
-  designationId: z.string(),
-  departmentId: z.string(),
-
-  Password: z
-    .string()
-    .optional()
-    .refine((val) => !val || val.length >= 6, {
-      message: "Password must be at least 6 characters",
-    }),
+  id: z.string().uuid(),
+  firstName: z.string().max(50),
+  lastName: z.string().max(50),
+  dateOfJoining: z.date(),
+  email: z.string().email().max(100).optional(),
+  contactNumber1: z.string().max(20).optional(),
+  contactNumber2: z.string().max(20).optional(),
+  address: z.string().max(250).optional(),
+  dateOfBirth: z.date(),
+  description: z.string().max(500).optional(),
+  deviceUserId: z.number().int().nonnegative(),
+  isActive: z.boolean(),
+  marriedStatus: z.nativeEnum(MarriedStatus),
+  gender: z.nativeEnum(Gender),
+  designationId: z.string().uuid(),
+  designationName: z.string().max(100).optional(),
+  departmentId: z.string().uuid(),
+  departmentName: z.string().max(100).optional(),
+  imageUrl: z.string().url().optional(),
 });
-
-export type EmployeeFormValues = z.infer<typeof employeeSchema>;
+export type GetEmployeeDto = z.infer<typeof employeeSchema>;

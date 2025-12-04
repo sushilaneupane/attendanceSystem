@@ -60,7 +60,7 @@ export default function EmployeeForm({
   useEffect(() => {
     if (defaultValues?.imageUrl) {
       const base =
-        (import.meta as any).env?.VITE_IMAGE_URL ?? window.location.origin;
+        import.meta.env?.VITE_IMAGE_URL ?? window.location.origin;
       const filename = defaultValues.imageUrl.split(/[\\/]/).pop();
       if (filename) setPreview(`${base}/Files/${filename}`);
     }

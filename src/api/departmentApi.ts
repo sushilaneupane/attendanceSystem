@@ -1,33 +1,8 @@
 
-import { ReactNode } from "react";
 import { axiosInstance } from "./axiosInstance";
 
-export interface Department {
-  id: string;
-  name: string;
-  description?: string;
-  isActive: boolean;
-}
-
-export interface CreateDepartment {
-  name: string;
-  description?: string;
-  isActive: boolean;
-  department: string;
-}
-
-export interface ApiResponse<T> {
-    id: ReactNode;
-    isActive: any;
-    name: ReactNode;
-  data: T;
-  message?: string;
-  status?: string;
-   success: boolean;
-  errorMessage: string | null;
-  detailErrorMessage: string | null;
-  statusCode: number;
-}
+import { Department, CreateDepartment } from "@/types/department";
+import { ApiResponse } from "@/types/department";
 
 export const getDepartments = async (): Promise<ApiResponse<Department[]>> => {
   const response = await axiosInstance.get<ApiResponse<Department[]>>(

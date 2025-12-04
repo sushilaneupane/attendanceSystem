@@ -1,21 +1,12 @@
 import { useState } from "react";
-import { Input } from "../../../components/ui/input";
+import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/card";
-import { Badge } from "../../../components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { Search, Plus } from "lucide-react";
-import { DataTable } from "../../../components/table/DataTable";
+import { DataTable } from "@/components/table/DataTable";
 import { useTenantsQuery } from "@/hooks/useTenants";
 import { DialogBox } from "@/components/Dialogs/Dialogbox";
 import TenantSignUp from "../TenantRegister";
-
-interface Tenant {
-  id: string;
-  name: string;
-  frontendUrl: string;
-  isActive: boolean;
-  createdAt: string;
-}
-
 export function TenantsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const { data: tenants = [], isLoading, isError, error } = useTenantsQuery();

@@ -1,9 +1,12 @@
-import axios from "axios";
+import axios, {  InternalAxiosRequestConfig } from "axios";
+interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
+  requiresAuth?: boolean;
+}
 export const axiosInstance = axios.create({
-  baseURL: (import.meta as any).env?.VITE_BASE_URL as string
+  baseURL: import.meta.env?.VITE_API_URL as string
 });
 
-axiosInstance.interceptors.request.use((config: any) => {
+axiosInstance.interceptors.request.use((config: CustomAxiosRequestConfig) => {
   const token = localStorage.getItem("authToken");
   const tenant = JSON.parse(localStorage.getItem("tenant") || "{}");
   const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -15,8 +18,6 @@ axiosInstance.interceptors.request.use((config: any) => {
     return config;
   }
   const isSuperAdmin = user?.role === "SuperAdmin";
-
-  
     if (config.url?.includes("by-frontend-url")) {
     delete config.headers["X-Tenant-ID"];
     return config;

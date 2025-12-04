@@ -1,10 +1,30 @@
-import { ReactNode } from "react";
+
 import { GenderEnum } from "./enum/gender";
-import{marriedStatusEnum} from "./enum/marriedStatus"
+import { marriedStatusEnum } from "./enum/marriedStatus";
 
 export interface Employee {
   id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
+  email?: string;
+  contactNumber1: string;
+  contactNumber2?: string;
+  address?: string;
+  dateOfJoining: string; 
+  dateOfBirth: string;   
+  description?: string;
+  deviceUserId: number;  
+  isActive: boolean;
+  marriedStatus: marriedStatusEnum;
+  gender: GenderEnum;
+  designationId: string;  
+  designationName?: string;
+  departmentId: string;   
+  departmentName?: string;
+  imageUrl?: string;
+  password?: string; 
+}
+export interface CreateEmployee {
   firstName: string;
   lastName: string;
   email?: string;
@@ -14,25 +34,15 @@ export interface Employee {
   dateOfJoining?: string;
   dateOfBirth?: string;
   description?: string;
-  deviceUserId?: string;
+  deviceUserId?: number;
   isActive: boolean;
   marriedStatus: marriedStatusEnum;
   gender: GenderEnum;
   designationId?: string;
   departmentId?: string;
   imageUrl?: string;
-  departmentName?: string;
-  designationName?: string;
-  password:string;
+  password: string;
 }
-
-export interface CreateEmployee {
-  name: string;
-  description?: string;
-  isActive: boolean;
-  employee: string;
-}
-
 export interface ApiResponse<T> {
   data: T;
   message?: string;
@@ -42,7 +52,6 @@ export interface ApiResponse<T> {
   detailErrorMessage: string | null;
   statusCode: number;
 }
-
 export interface Props {
   isEditing?: boolean;
   defaultValues?: Employee | null;

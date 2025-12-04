@@ -1,5 +1,5 @@
 import { axiosInstance } from "./axiosInstance";
-import { CreateEmployee, Employee } from "@/types/employee";
+import { Employee } from "@/types/employee";
 import { ApiResponse } from "@/types/login";
 
 export const getEmployee = async (): Promise<ApiResponse<Employee[]>> => {

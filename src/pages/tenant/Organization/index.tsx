@@ -17,7 +17,6 @@ export const OrganizationsPage: React.FC = () => {
   const {
     data: organizations = [],
     isLoading,
-    error,
     refetch,
   } = useOrganizations();
  
