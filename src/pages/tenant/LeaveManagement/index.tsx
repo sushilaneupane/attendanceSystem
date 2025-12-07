@@ -33,7 +33,7 @@ const LeaveManagementDashboard = () => {
   );
 
   const { data: leavesResponse, isLoading } = useLeaves(params);
-  const leaves: Leave[] = leavesResponse?.data || [];
+  const leaves = leavesResponse?.data || [];
 
   const stats: LeaveStats = {
     total: leaves.length,
