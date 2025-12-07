@@ -7,13 +7,14 @@ import { ControlledSelect } from "@/components/Form/ControlledSelect";
 import { useDepartments } from "@/hooks/useDepartments";
 import { useDesignationsByDepartment } from "@/hooks/useDesignations";
 import { useCreateEmployee, useUpdateEmployee } from "@/hooks/useEmployee";
-import { Employee } from "@/types/employee";
-import { employeeSchema } from "@/Validator/employee";
+import { employeeEditSchema, employeeCreateSchema } from "@/Validator/employee";
 import { ImageUpload } from "@/components/EmployeeProfile/ProfileImageUpload";
-import z from "zod";
 import { Label } from "@radix-ui/react-label";
+import { Employee } from "@/types/employee";
+import z from "zod";
 
-type FormValues = z.infer<typeof employeeSchema>;
+type EditFormValues = z.infer<typeof employeeEditSchema>;
+type CreateFormValues = z.infer<typeof employeeCreateSchema>;
 
 interface Props {
   isEditing?: boolean;
@@ -33,15 +34,28 @@ export default function EmployeeForm({
     control,
     watch,
     formState: { errors },
-  } = useForm<any>({
-    resolver: zodResolver(employeeSchema),
+  } = useForm<EditFormValues | CreateFormValues>({
+    resolver: zodResolver(isEditing ? employeeEditSchema : employeeCreateSchema),
     defaultValues: defaultValues
       ? {
           ...defaultValues,
           dateOfBirth: defaultValues.dateOfBirth?.slice(0, 10),
           dateOfJoining: defaultValues.dateOfJoining?.slice(0, 10),
         }
-      : { isActive: true },
+      : { 
+          isActive: true,
+          firstName: "",
+          lastName: "",
+          contactNumber1: "",
+          dateOfBirth: "",
+          dateOfJoining: "",
+          deviceUserId: 0,
+          gender: 1,
+          marriedStatus: 2,
+          departmentId: "",
+          designationId: "",
+          Password: "",
+        },
   });
 
   const defaultDept = defaultValues?.departmentId;
@@ -59,8 +73,7 @@ export default function EmployeeForm({
 
   useEffect(() => {
     if (defaultValues?.imageUrl) {
-      const base =
-        (import.meta as any).env?.VITE_IMAGE_URL ?? window.location.origin;
+      const base = import.meta.env?.VITE_IMAGE_URL ?? window.location.origin;
       const filename = defaultValues.imageUrl.split(/[\\/]/).pop();
       if (filename) setPreview(`${base}/Files/${filename}`);
     }
@@ -88,14 +101,14 @@ export default function EmployeeForm({
     { label: "Widowed", value: 4 },
   ];
 
-  const onSubmit = (data: FormValues) => {
-    data.isActive = isActive;
+  const onSubmit = (data: EditFormValues | CreateFormValues) => {
+    const formData = { ...data, isActive };
 
     const fd = new FormData();
 
-    Object.entries(data).forEach(([key, val]) => {
-      if (key !== "id" && val !== undefined && val !== null) {
-        fd.append(key, val as any);
+    (Object.entries(formData) as [string, unknown][]).forEach(([key, val]) => {
+      if (key !== "id" && val !== undefined && val !== null && val !== "") {
+        fd.append(key, val instanceof Blob ? val : String(val));
       }
     });
 
@@ -120,7 +133,6 @@ export default function EmployeeForm({
       className="space-y-2"
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* LEFT SIDE */}
         <div className="space-y-1">
           <ControlledInput
             name="deviceUserId"
@@ -181,7 +193,6 @@ export default function EmployeeForm({
           />
         </div>
 
-        {/* RIGHT SIDE */}
         <div className="space-y-1">
           <ControlledInput
             name="email"
@@ -249,7 +260,7 @@ export default function EmployeeForm({
           )}
 
           {isEditing && (
-            <div className="flex justify-center text-sm text-gray-500 min-h-2 mt-9">
+            <div className="flex items-center gap-2 text-sm text-gray-500 min-h-2 mt-9">
               <Switch
                 id="active-status"
                 checked={isActive}

@@ -1,34 +1,39 @@
-import { Controller, Control, FieldErrors } from "react-hook-form";
+import { Controller, Control, FieldErrors, Path, get, FieldValues } from "react-hook-form";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-
-interface ControlledInputProps {
-  name: string;
-  control: Control<any>;
+interface ControlledInputProps<T extends FieldValues> {
+  name: Path<T>;
+  control: Control<T>;
   label: string;
   placeholder?: string;
   type?: string;
-  errors?: FieldErrors;
+  errors?: FieldErrors<T>;
 }
 
-export function ControlledInput({
+export function ControlledInput<T extends FieldValues>({
   name,
   control,
   label,
   placeholder,
   type = "text",
   errors,
-}: ControlledInputProps) {
+}: ControlledInputProps<T>) {
+  const errorMessage = get(errors, name)?.message as string | undefined;
+
   return (
-    <div className="flex flex-col gap-1 ">
+    <div className="flex flex-col gap-1">
       <Label>{label}</Label>
+
       <Controller
         name={name}
         control={control}
-        render={({ field }) => <Input {...field} type={type} placeholder={placeholder} />}
+        render={({ field }) => (
+          <Input {...field} type={type} placeholder={placeholder} />
+        )}
       />
+
       <p className="text-sm text-red-500 min-h-2">
-        {errors?.[name]?.message?.toString() || " "}
+        {errorMessage || " "}
       </p>
     </div>
   );

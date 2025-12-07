@@ -9,7 +9,7 @@ import { Eye } from "lucide-react";
 import { useRegisterTenants } from "../../../hooks/useTenants";
 import { ControlledInput } from "../../../components/Form/ControlledInput";
 import { tenantRegisterSchema } from "@/Validator/tenant";
-
+import { AxiosError } from "axios";
 type TenantRegisterForm = z.infer<typeof tenantRegisterSchema>;
 
 export default function TenantSignUp() {
@@ -46,10 +46,21 @@ export default function TenantSignUp() {
         toast.success("Company registered successfully!");
         navigate("/");
       },
-      onError: (error: any) => {
-        const message = error?.response?.data?.message || error?.message || "Tenant registration failed";
+
+      onError: (error) => {
+        let message = "Tenant registration failed";
+
+
+        if ((error as AxiosError).isAxiosError) {
+          const axiosError = error as AxiosError<{ message?: string }>;
+          message = axiosError.response?.data?.message || axiosError.message || message;
+        } else {
+          message = error.message || message;
+        }
+
         toast.error(message);
       },
+
     });
   };
 
@@ -57,90 +68,90 @@ export default function TenantSignUp() {
     <>
 
       <div className="text-center">
-    <h2 className="text-2xl font-bold text-red-500">Register Your Company</h2>
-    <p className="text-gray-600 ">Fill in the details to create your tenant account</p>
-  </div>
-    <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-4 md:grid-cols-2 max-w-md mx-auto p-4">
-      <ControlledInput name="name" control={control} label="Company Name" placeholder="Enter company name" errors={errors} />
-      <ControlledInput name="server" control={control} label="Server" placeholder="Enter server" errors={errors} />
-      <ControlledInput name="database" control={control} label="Database" placeholder="Enter database" errors={errors} />
+        <h2 className="text-2xl font-bold text-red-500">Register Your Company</h2>
+        <p className="text-gray-600 ">Fill in the details to create your tenant account</p>
+      </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-4 md:grid-cols-2 max-w-md mx-auto p-4">
+        <ControlledInput name="name" control={control} label="Company Name" placeholder="Enter company name" errors={errors} />
+        <ControlledInput name="server" control={control} label="Server" placeholder="Enter server" errors={errors} />
+        <ControlledInput name="database" control={control} label="Database" placeholder="Enter database" errors={errors} />
 
-      <div className="flex items-center gap-1 md:col-span-2">
-        <Controller
-          name="useWindowsAuth"
+        <div className="flex items-center gap-1 md:col-span-2">
+          <Controller
+            name="useWindowsAuth"
+            control={control}
+            render={({ field }) => (
+              <input
+                type="checkbox"
+                id="useWindowsAuth"
+                className="mr-2"
+                checked={field.value}
+                onChange={(e) => field.onChange(e.target.checked)}
+                onBlur={field.onBlur}
+                ref={field.ref}
+              />
+            )}
+          />
+          <label htmlFor="useWindowsAuth" className="cursor-pointer">
+            Use Windows Authentication
+          </label>
+        </div>
+
+        {!useWindowsAuth && (
+          <>
+            <ControlledInput name="userId" control={control} label="User ID" placeholder="Enter user ID" errors={errors} />
+
+            <div className="flex flex-col gap-1">
+              <label>Password</label>
+              <Controller
+                name="password"
+                control={control}
+                render={({ field }) => (
+                  <div className="relative">
+                    <input
+                      {...field}
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter password"
+                      className="pr-10 border rounded px-2 py-1"
+                    />
+                    <button
+                      type="button"
+                      className="absolute transform -translate-y-1/2 cursor-pointer right-3 top-1/2"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      <Eye size={20} />
+                    </button>
+                  </div>
+                )}
+              />
+              <p className="text-sm text-red-500 min-h-5">{errors?.password?.message?.toString() || " "}</p>
+            </div>
+          </>
+        )}
+
+        <ControlledInput
+          name="frontendUrl"
           control={control}
-          render={({ field }) => (
-            <input
-              type="checkbox"
-              id="useWindowsAuth"
-              className="mr-2"
-              checked={field.value}
-              onChange={(e) => field.onChange(e.target.checked)}
-              onBlur={field.onBlur}
-              ref={field.ref}
-            />
-          )}
+          label="Frontend Subdomain"
+          placeholder="your-company (for subdomain)"
+          errors={errors}
         />
-        <label htmlFor="useWindowsAuth" className="cursor-pointer">
-          Use Windows Authentication
-        </label>
-      </div>
 
-      {!useWindowsAuth && (
-        <>
-          <ControlledInput name="userId" control={control} label="User ID" placeholder="Enter user ID" errors={errors} />
-          
-          <div className="flex flex-col gap-1">
-            <label>Password</label>
-            <Controller
-              name="password"
-              control={control}
-              render={({ field }) => (
-                <div className="relative">
-                  <input
-                    {...field}
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter password"
-                    className="pr-10 border rounded px-2 py-1"
-                  />
-                  <button
-                    type="button"
-                    className="absolute transform -translate-y-1/2 cursor-pointer right-3 top-1/2"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    <Eye size={20} />
-                  </button>
-                </div>
-              )}
-            />
-            <p className="text-sm text-red-500 min-h-5">{errors?.password?.message?.toString() || " "}</p>
-          </div>
-        </>
-      )}
+        <div className="md:col-span-2">
+          <Button type="submit" className="w-full text-white bg-black hover:bg-gray-900" disabled={isLoading}>
+            {isLoading ? "Registering..." : "Register Company"}
+          </Button>
+        </div>
 
-      <ControlledInput
-        name="frontendUrl"
-        control={control}
-        label="Frontend Subdomain"
-        placeholder="your-company (for subdomain)"
-        errors={errors}
-      />
-
-      <div className="md:col-span-2">
-        <Button type="submit" className="w-full text-white bg-black hover:bg-gray-900" disabled={isLoading}>
-          {isLoading ? "Registering..." : "Register Company"}
-        </Button>
-      </div>
-
-      <div className="md:col-span-2 text-center mt-2">
-        <p className="text-sm text-gray-600">
-          Already have a tenant account?{" "}
-          <button type="button" onClick={() => navigate("/tenant-login")} className="text-blue-600 cursor-pointer hover:underline">
-            Login
-          </button>
-        </p>
-      </div>
-    </form>
+        <div className="md:col-span-2 text-center mt-2">
+          <p className="text-sm text-gray-600">
+            Already have a tenant account?{" "}
+            <button type="button" onClick={() => navigate("/tenant-login")} className="text-blue-600 cursor-pointer hover:underline">
+              Login
+            </button>
+          </p>
+        </div>
+      </form>
     </>
   );
 }

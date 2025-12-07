@@ -1,35 +1,16 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { useTenant } from "./TenantContext";
-
-export interface User {
-  id?: string;
-  username?: string;
-  email?: string;
-    role?: string; 
- tenantId?: string;
-  [key: string]: any;
-}
-
-interface AuthContextType {
-  isAuthenticated: boolean;
-  user: User | null;
-  loading: boolean;
-  login: (token: string, userData: User) => void;
-  logout: () => void;
-}
-
+import { useState, useEffect, ReactNode } from "react";
+import { useTenant } from "../hooks/useTenants";
+import { AuthContext } from "@/lib/auth-context-utils";
+import { User } from "@/types/user";
 interface AuthProviderProps {
   children: ReactNode;
 }
-const AuthContext = createContext<AuthContextType | null>(null);
-
-
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const { tenant } = useTenant();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -45,18 +26,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     }
 
-      if (token && parsedUser) {
-     
+    if (token && parsedUser) {
       if (parsedUser.role === "SuperAdmin") {
         setIsAuthenticated(true);
         setUser(parsedUser);
-      }
-       else if (parsedUser.role === "Admin" && tenant) {
+      } else if (parsedUser.role === "Admin" && tenant) {
         if (parsedUser.tenantId === tenant.id) {
           setIsAuthenticated(true);
           setUser(parsedUser);
-        } 
-        else {
+        } else {
           logout();
         }
       } else {
@@ -69,7 +47,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [tenant]);
 
   const login = (token: string, userData: User) => {
-  
     localStorage.setItem("authToken", token);
     localStorage.setItem("user", JSON.stringify(userData));
 
@@ -85,18 +62,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, loading, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, user, loading, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
-};
-
-
-
-export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);  
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
 };
