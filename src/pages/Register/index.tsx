@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -38,7 +38,7 @@ export default function RegisterPage() {
   const { registerUser } = useUser();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
-  const [backendErrors, setBackendErrors] = useState<BackendErrors>({});
+  const [backendErrors] = useState<BackendErrors>({});
 
   const {
     register,

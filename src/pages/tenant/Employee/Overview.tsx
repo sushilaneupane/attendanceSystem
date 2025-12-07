@@ -24,7 +24,7 @@ export function EmployeeOverview() {
             <img
               src={
                 emp?.imageUrl
-                  ? `${(import.meta as any).env.VITE_IMAGE_URL}/${emp.imageUrl.replace(/\\/g, "/")}`
+                  ? `${import.meta.env.VITE_IMAGE_URL}/${emp.imageUrl.replace(/\\/g, "/")}`
                   : DEFAULT_AVATAR
               }
               alt={emp.firstName}

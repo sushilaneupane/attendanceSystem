@@ -207,7 +207,7 @@ function DesignationRow({
 export default function DepartmentOverviewPage() {
   const { id } = useParams<{ id: string }>();
 
-  const { data: department } = useDepartmentById(id!);
+  useDepartmentById(id!);
   const {
     data: designations,
     isLoading: isDesigLoading,

@@ -1,4 +1,4 @@
-import React, {ReactNode, useEffect } from "react";
+import {ReactNode, useEffect } from "react";
 import { useTenantByFrontendUrl } from "../hooks/useTenants";
 import { Tenant } from "@/types/tenant";
 import { TenantContext } from "./TenantContextValue";

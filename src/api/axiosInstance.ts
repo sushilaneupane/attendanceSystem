@@ -3,7 +3,7 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   requiresAuth?: boolean;
 }
 export const axiosInstance = axios.create({
-  baseURL: import.meta.env?.VITE_API_URL as string
+  baseURL: import.meta.env?.VITE_BASE_URL as string
 });
 
 axiosInstance.interceptors.request.use((config: CustomAxiosRequestConfig) => {

@@ -25,8 +25,14 @@ export const OrganizationsPage: React.FC = () => {
   
   const toggleExpand = (id: string) => {
     const copy = new Set(expanded);
-    copy.has(id) ? copy.delete(id) : copy.add(id);
+    if (copy.has(id)) {
+      copy.delete(id);
+    } else {
+      copy.add(id);
+    }
     setExpanded(copy);
+    
+   
   };
 
   const handleUpdate = (orgId: string, formData: OrganizationFormValues) => {
