@@ -9,7 +9,7 @@ export interface UserData {
 }
 export interface LoginCredentials {
    UserName: string;   
-  Password: string; 
+   Password: string; 
 }
 export interface ApiResponse<T = unknown> {
   isActive: boolean;
@@ -20,6 +20,6 @@ export interface ApiResponse<T = unknown> {
 export interface LoginData {
   token: string;
   userDto: UserData;
-  role?: string[];
+  role?: string[]; 
 }
 export type LoginApiResponse = ApiResponse<LoginData>;
