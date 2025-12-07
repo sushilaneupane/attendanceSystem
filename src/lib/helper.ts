@@ -4,5 +4,5 @@ export function getImageUrl(path?: string): string | undefined {
   const fileName = cleaned.split("/").pop();
 
   if (!fileName) return undefined;
-  return `${(import.meta as any).env?.VITE_FILE_URL}/${fileName}`;
+  return `${import.meta.env?.VITE_API_URL}/${fileName}`;
 }

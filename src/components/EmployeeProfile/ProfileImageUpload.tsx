@@ -7,7 +7,7 @@ interface ImageUploadProps {
 }
 
 export function ImageUpload({ onFileSelect, initialPreview = null }: ImageUploadProps) {
-  const [file, setFile] = useState<File | null>(null);
+  const [, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(initialPreview);
     const DEFAULT_AVATAR = "/images/avatar.png";
 

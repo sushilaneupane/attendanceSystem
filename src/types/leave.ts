@@ -1,21 +1,22 @@
 import { ReactNode } from "react";
 
-
 export interface Leave {
-  days: ReactNode;
-  dateTo: string ;
-  dateFrom: string ;
-  isApproved: any;
   id: string;
   employeeName: string;
   leaveType: number;
   startDate: string;
   endDate: string;
-  
+
+  days: ReactNode;
+  dateTo: string;
+  dateFrom: string;
+  isApproved: boolean;
+
   status: number;
   leaveReason: string;
   appliedOnDate: string;
 }
+
 export interface ApiResponse<T> {
   success: boolean;
   errorMessage: string | null;
@@ -23,7 +24,8 @@ export interface ApiResponse<T> {
   data: T;
   statusCode: number;
 }
- export type LeavesApiResponse = ApiResponse<Leave[]>;
+
+export type LeavesApiResponse = ApiResponse<Leave[]>;
 
 export interface LeaveStats {
   total: number;
@@ -31,6 +33,7 @@ export interface LeaveStats {
   approved: number;
   rejected: number;
 }
+
 export interface FetchLeavesParams {
   FromDate?: string;
   ToDate?: string;

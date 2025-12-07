@@ -15,8 +15,8 @@ import {
   LogOut,
   Building,Calendar
 } from "lucide-react";
+import { useAuth } from "@/lib/auth-context-utils";
 
-import { useAuth } from "@/contexts/AuthContext";
 
 interface NavLinkItem {
   name: string;

@@ -1,30 +1,21 @@
-import React, { createContext, useContext, ReactNode, useEffect } from "react";
-import { useTenantByFrontendUrl } from "../hooks/useTenants"; 
-
+import {ReactNode, useEffect } from "react";
+import { useTenantByFrontendUrl } from "../hooks/useTenants";
 import { Tenant } from "@/types/tenant";
-import { TenantContextType } from "@/types/tenantContext";
-
-
-const TenantContext = createContext<TenantContextType>({
-  tenant: null,
-  loading: true,
-  error: null,
-});
-
-export const useTenant = () => useContext(TenantContext);
+import { TenantContext } from "./TenantContextValue";
 export const TenantProvider = ({ children }: { children: ReactNode }) => {
-  const frontendUrl = "attendancebe.hamosystem.com"; 
+  const frontendUrl = "attendancebe.hamosystem.com";
   const { data, isLoading, isError, error } = useTenantByFrontendUrl(frontendUrl);
-const tenantData: Tenant | null = data ?? null;
 
-useEffect(() => {
-  if(tenantData){
-    localStorage.setItem("tenant",JSON.stringify(tenantData))
-  }else if(!tenantData){
-    localStorage.removeItem("tenant");
-  }
-  
-},[tenantData])
+  const tenantData: Tenant | null = data ?? null;
+
+  useEffect(() => {
+    if (tenantData) {
+      localStorage.setItem("tenant", JSON.stringify(tenantData));
+    } else {
+      localStorage.removeItem("tenant");
+    }
+  }, [tenantData]);
+
   return (
     <TenantContext.Provider
       value={{

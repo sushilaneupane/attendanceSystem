@@ -1,6 +1,5 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
 
 interface ProtectedRouteProps {
   allowedRoles: string[];
@@ -23,7 +22,6 @@ const decodeToken = (token: string) => {
     return null;
   }
 };
-
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
   const token = localStorage.getItem("authToken");
   const user = localStorage.getItem("user");
@@ -31,16 +29,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
   if (!token || !user) {
     return <Navigate to="/login" replace />;
   }
-
   const decoded = decodeToken(token);
   const userRole = decoded?.["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
 
-  // If no valid role found or not in allowedRoles
   if (!userRole || !allowedRoles.includes(userRole)) {
     return <Navigate to="/login" replace />;
   }
-
-  // Authorized — render the nested routes
   return <Outlet />;
 };
 

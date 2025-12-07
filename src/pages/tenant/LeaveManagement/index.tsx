@@ -21,23 +21,20 @@ import { TableRow, TableCell } from "@/components/ui/table";
 import { StatusEnum, LeaveTypeEnum } from "@/types/enum/leave";
 import { Input } from "@/components/ui/input";
 
-
 const LeaveManagementDashboard = () => {
-   const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState({
     FromDate: "",
     ToDate: "",
     Name: "",
   });
 
-  
   const params = Object.fromEntries(
-    Object.entries(filters).filter(([_, value]) => value !== "")
+    Object.entries(filters).filter(([, value]) => value !== "")
   );
 
   const { data: leavesResponse, isLoading } = useLeaves(params);
   const leaves: Leave[] = leavesResponse || [];
 
- 
   const stats: LeaveStats = {
     total: leaves.length,
     pending: leaves.filter((l) => l.status === StatusEnum.Pending).length,
@@ -45,9 +42,7 @@ const LeaveManagementDashboard = () => {
     rejected: leaves.filter((l) => l.status === StatusEnum.Rejected).length,
   };
 
-
-
-  const handleFilterChange = (key: string, value: any) => {
+  const handleFilterChange = (key: string, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -84,16 +79,20 @@ const LeaveManagementDashboard = () => {
         <TableCell className="px-6 py-4 font-medium text-gray-900">
           {leave.employeeName}
         </TableCell>
+
         <TableCell className="px-6 py-4">
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
             {LeaveTypeEnum[leave.leaveType]?.replace("Leave", "").trim() ||
               "Other"}
           </span>
         </TableCell>
+
         <TableCell className="px-6 py-4 text-gray-600">
           {fromDate.toLocaleDateString()} → {toDate.toLocaleDateString()}
         </TableCell>
+
         <TableCell className="px-6 py-4">{leave.leaveReason}</TableCell>
+
         <TableCell className="px-6 py-4">
           <span
             className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
@@ -103,9 +102,11 @@ const LeaveManagementDashboard = () => {
             {StatusEnum[leave.status] || "Unknown"}
           </span>
         </TableCell>
+
         <TableCell className="px-6 py-4 text-gray-600">
           {appliedDate.toLocaleDateString()}
         </TableCell>
+
         <TableCell className="px-6 py-4 text-right">
           <div className="flex justify-end space-x-2">
             <button className="p-1 text-blue-600 hover:text-blue-800 transition-colors">
@@ -125,14 +126,12 @@ const LeaveManagementDashboard = () => {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-     
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
         <h1 className="text-3xl font-semibold text-slate-800 flex items-center gap-2 mb-6">
           <Calendar className="w-8 h-8 text-blue-600" /> Leave Management
         </h1>
 
         <div className="flex gap-4">
-       
           <div className="mt-7 w-2xs">
             <Input
               placeholder="Search by employee name..."
@@ -140,15 +139,9 @@ const LeaveManagementDashboard = () => {
               onChange={(e) => handleFilterChange("Name", e.target.value)}
             />
           </div>
-
-        
-      
         </div>
       </div>
 
-   
-
- 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <Card className="bg-blue-100 border-blue-300">
           <CardHeader className="flex items-center justify-between">
@@ -198,12 +191,12 @@ const LeaveManagementDashboard = () => {
           </CardHeader>
         </Card>
       </div>
-       
+
       <div className="flex gap-4 mb-6">
-        <div className="flex-1  w-2xs">
+        <div className="flex-1 w-2xs">
           <label className="text-sm font-medium">From Date</label>
           <Input
-          className="w-50"
+            className="w-50"
             type="date"
             value={filters.FromDate?.split("T")[0] || ""}
             onChange={(e) =>
@@ -218,7 +211,7 @@ const LeaveManagementDashboard = () => {
         <div className="flex-1">
           <label className="text-sm font-medium">To Date</label>
           <Input
-          className="w-50"
+            className="w-50"
             type="date"
             value={filters.ToDate?.split("T")[0] || ""}
             onChange={(e) =>
@@ -231,7 +224,6 @@ const LeaveManagementDashboard = () => {
         </div>
       </div>
 
-     
       <DataTable
         headers={tableHeaders}
         data={leaves}
