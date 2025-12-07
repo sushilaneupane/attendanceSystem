@@ -1,53 +1,59 @@
-import { useMutation, UseMutationResult, useQueryClient } from "@tanstack/react-query";
-import { loginUser as loginApi, createUser as registerApi, logoutUser as logoutApi } from "@/api/loginApi";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  loginUser as loginApi,
+  createUser as registerApi,
+  logoutUser as logoutApi,
+} from "@/api/loginApi";
 import { useAuth } from "@/lib/auth-context-utils";
 import { toast } from "sonner";
-import type { UserData, LoginCredentials, ApiResponse } from "@/types/login";
 
-type User = UserData; 
-type LoginMutationResult = ApiResponse<{
-  role: string;
-  token: string;
-  userDto: User;
-}>;
-
-
-type RegisterMutationResult = ApiResponse;
-
-
-type LogoutMutationResult = ApiResponse;
+import type {
+  UserData,
+  LoginCredentials,
+  ApiResponse,
+  LoginApiResponse,
+} from "@/types/login";
 
 export function useUser() {
   const queryClient = useQueryClient();
   const auth = useAuth();
-  if (!auth) throw new Error("useUser must be used inside AuthProvider");
 
-  const login: UseMutationResult<LoginMutationResult, unknown, LoginCredentials> = useMutation({
+  if (!auth) {
+    throw new Error("useUser must be used inside AuthProvider");
+  }
+
+  const login = useMutation<LoginApiResponse, unknown, LoginCredentials>({
     mutationFn: loginApi,
-    onSuccess: (data) => {
-      auth.login(data.data.token, data.data.userDto); 
+    onSuccess: (response) => {
+      const { token, userDto } = response.data;
+
+      auth.login(token, userDto);
       toast.success("Logged in successfully!");
+
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },
   });
 
-  
-  const registerUser: UseMutationResult<RegisterMutationResult, unknown, UserData> = useMutation({
+  const registerUser = useMutation<ApiResponse, unknown, UserData>({
     mutationFn: registerApi,
     onSuccess: () => {
       toast.success("Registered successfully! Please login.");
     },
   });
 
- 
-  const logout: UseMutationResult<LogoutMutationResult, unknown> = useMutation({
+  const logout = useMutation<ApiResponse>({
     mutationFn: logoutApi,
     onSuccess: () => {
-      auth.logout(); 
+      auth.logout();
+
       queryClient.invalidateQueries({ queryKey: ["users"] });
       toast.success("Logged out successfully!");
     },
   });
 
-  return { login, registerUser, logout };
+  return {
+    login,
+    registerUser,
+    logout,
+  };
 }
