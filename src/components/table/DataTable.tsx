@@ -11,7 +11,7 @@ import {
 interface DataTableProps<T> {
   headers: string[];
   data: T[];
-  renderRow: (item: T) => React.ReactNode;
+ renderRow: (item: T, index: number) => React.ReactNode;
   emptyMessage?: string;
   isLoading?: boolean;
 }
@@ -46,7 +46,7 @@ export function DataTable<T>({
        
           <TableBody>
             {data.length > 0 ? (
-              data.map((item) => renderRow(item))
+             data.map((item, index) => renderRow(item, index))
             ) : (
               <TableRow >
                 <TableCell

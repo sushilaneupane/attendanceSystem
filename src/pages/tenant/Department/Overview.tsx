@@ -29,6 +29,7 @@ function DesignationRow({
   departmentId,
   onEdit,
   onDelete,
+  index,
 }: DesignationRowProps) {
   const [isActive, setIsActive] = useState<boolean>(designation.isActive);
   const [openDeleteId, setOpenDeleteId] = useState<string | null>(null);
@@ -83,6 +84,7 @@ function DesignationRow({
 
   return (
     <TableRow key={designation.designationId}>
+      <TableCell className="px-6">{index + 1}</TableCell>
       <TableCell className="px-6">{designation.designationName}</TableCell>
 
       <TableCell className="px-6">
@@ -297,17 +299,18 @@ export default function DepartmentOverviewPage() {
       </div>
 
       <DataTable
-        headers={["Designation Name", "Status", "Actions"]}
+        headers={["SN","Designation Name", "Status", "Actions"]}
         data={designations || []}
         emptyMessage="No designations found"
         isLoading={isDesigLoading}
-        renderRow={(designation: Designation) => (
+        renderRow={(designation: Designation, index: number) => (
           <DesignationRow
             key={designation.designationId}
             designation={designation}
             departmentId={id!}
             onEdit={refetch}
             onDelete={refetch}
+              index={index} 
           />
         )}
       />

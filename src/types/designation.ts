@@ -22,4 +22,5 @@ export interface DesignationRowProps{
   departmentId:string,
   onEdit: () => void,
   onDelete : () => void;
+  index: number;
 }

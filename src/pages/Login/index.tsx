@@ -106,8 +106,9 @@ export default function LoginPage() {
         <CardContent className="px-6 sm:px-8">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="flex flex-col">
-              <Label className="text-sm sm:text-base">Username</Label>
+              <Label htmlFor="username" className="text-sm sm:text-base">Username</Label>
               <Input
+                id="username"
                 placeholder="Enter your username"
                 className="mt-1 border border-gray-500 focus:border-transparent focus:outline-none focus:ring-0 hover:border-gray-500 text-sm sm:text-base"
                 {...register("username")}
@@ -119,14 +120,16 @@ export default function LoginPage() {
               )}
             </div>
             <div className="relative">
+             <Label htmlFor="password" className="text-sm sm:text-base">Password</Label>
               <Input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
+                id="password"
                 className="mt-1 pr-10 border border-gray-500 focus:border-transparent focus:outline-none focus:ring-0 hover:border-gray-500 text-sm sm:text-base"
                 {...register("password")}
               />
               <span
-                className="absolute right-3 inset-y-0 flex items-center cursor-pointer"
+                className="absolute right-3 inset-y-0 flex items-center cursor-pointer mt-8"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -144,7 +147,7 @@ export default function LoginPage() {
 
             <Button
               type="submit"
-              className="w-full bg-black text-white hover:bg-gray-900 py-2 sm:py-3 text-sm sm:text-base"
+              className="w-full bg-blue-800 text-white hover:bg-blue-700 py-2 sm:py-3 text-sm sm:text-base "
               disabled={isPending}
             >
               {isPending ? "Logging in..." : "Login"}

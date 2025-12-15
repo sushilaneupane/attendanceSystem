@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, Plus, Edit, Trash2 } from "lucide-react";
+import { Search, Plus, Edit, Trash2,TriangleAlert  } from "lucide-react";
 import { DataTable } from "@/components/table/DataTable";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { DialogBox } from "@/components/Dialogs/Dialogbox";
@@ -56,7 +56,7 @@ export default function EmployeePage() {
   };
 
   return (
-    <div className=" p-1 sm:p-6 lg:p-8 w-full md:max-w-4xl lg:max-w-7xl fixed">
+    <div className=" p-1 sm:p-6 lg:p-8 w-full md:max-w-5xl lg:max-w-7xl fixed">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-1 z-20 p-4 ">
         <div>
           <h1 className="text-xl mt-3 font-extrabold text-gray-900">Employees</h1>
@@ -75,19 +75,19 @@ export default function EmployeePage() {
             variant="default"
             open={employeeDialogOpen}
             onOpenChange={setEmployeeDialogOpen}
+              width="w-full px-4a sm:min-w-3xl"
             triggerButtonText={
               <Button
                 className="bg-blue-800 text-white flex items-center gap-2 px-1 py-2 rounded-md shadow hover:bg-blue-700 flex-shrink-0"
                 onClick={handleAddEmployee}
               >
-                <Plus className=" text-sm px-0 py-1.5  " />
+                <Plus/>
                 Add Employee
               </Button>
             }
-            width="min-w-[300px]"
             header={editingEmployee ? "Edit Employee" : "Add Employee"}
             footer={
-              <div className="flex justify-center gap-3 flex-wrap">
+              <div className="flex justify-end gap-3 flex-wrap">
                 <Button variant="outline" onClick={() => setEmployeeDialogOpen(false)}>
                   Cancel
                 </Button>
@@ -107,11 +107,12 @@ export default function EmployeePage() {
       </div>
       <div className="overflow-x-auto max-h-[60vh] overflow-y-auto border rounded">
         <DataTable
-          headers={["Name", "Department", "Designation", "Joining Date", "Status", "Actions"]}
+          headers={["SN","Name", "Department", "Designation", "Joining Date", "Status", "Actions"]}
           data={filteredEmployees}
           emptyMessage="No employees found."
-          renderRow={(emp: Employee) => (
+          renderRow={(emp: Employee, index: number) => (
             <TableRow className="text-xs">
+              <TableCell className="px-3 sm:px-4 whitespace-nowrap">{index + 1}</TableCell>
               <TableCell
                 className="font-semibold cursor-pointer hover:underline px-3 py-2 sm:px-4 sm:py-3 whitespace-nowrap"
                 onClick={() => navigate(`/employee/${emp.id}`)}
@@ -140,7 +141,7 @@ export default function EmployeePage() {
                   <DialogBox
                     open={deleteDialogOpen && employeeToDelete?.id === emp.id}
                     onOpenChange={setDeleteDialogOpen}
-                    header="Confirm Delete"
+                    header="⚠️Confirm Delete"
                     variant="default"
                     triggerButtonText={
                       <div onClick={() => handleDeleteEmployee(emp)} className="cursor-pointer">
@@ -148,7 +149,7 @@ export default function EmployeePage() {
                       </div>
                     }
                   >
-                    <p className="mt-2 text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                       Are you sure you want to delete “{employeeToDelete?.firstName} {employeeToDelete?.lastName}”?
                     </p>
                     <div className="mt-4 flex justify-end gap-2 flex-wrap">
