@@ -35,7 +35,8 @@ export function DialogBox({
         <Button variant="ghost">{triggerButtonText}</Button>
       </DialogTrigger>
 
-      <DialogContent className={`${width} max-h-[80vh] flex flex-col`}>
+     <DialogContent className={`${width} max-w-none max-h-[80vh] flex flex-col`}>
+
         {header && (
           <DialogHeader>
             <DialogTitle className="text-sm">{header}</DialogTitle>

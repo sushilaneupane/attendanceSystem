@@ -42,13 +42,7 @@ export function EmployeeOverview() {
           <h2 className="text-2xl md:text-xl font-bold text-blue-400 mb-4">
             {emp.firstName} {emp.lastName}
           </h2>
-
-          <ul className="space-y-4 mb-6 text-sm md:text-base">
-
-            <li className="flex items-center gap-3">
-              <span className="w-8 h-8 bg-black text-white flex items-center justify-center rounded-full text-sm">
-                1
-              </span>
+          <div className="space-y-2">
               <p>
                 <span className="font-semibold">Age: </span>
                 {emp.dateOfBirth
@@ -58,40 +52,22 @@ export function EmployeeOverview() {
                     )
                   : "N/A"}
               </p>
-            </li>
-
-            <li className="flex items-center gap-3">
-              <span className="w-8 h-8 bg-black text-white flex items-center justify-center rounded-full text-sm">
-                2
-              </span>
+            
               <p>
                 <span className="font-semibold">Gender:</span>{" "}
                 {emp.gender && GenderEnum[emp.gender]}
               </p>
-            </li>
-
-            <li className="flex items-center gap-3">
-              <span className="w-8 h-8 bg-black text-white flex items-center justify-center rounded-full text-sm">
-                3
-              </span>
               <p>
                 <span className="font-semibold">Married Status:</span>{" "}
                 {emp.marriedStatus && marriedStatusEnum[emp.marriedStatus]}
               </p>
-            </li>
-
-            <li className="flex items-center gap-3">
-              <span className="w-8 h-8 bg-black text-white flex items-center justify-center rounded-full text-sm">
-                4
-              </span>
               <p>
                 <span className="font-semibold">Joining Date: </span>
                 {emp.dateOfJoining?.slice(0, 10) || "N/A"}
               </p>
-            </li>
-          </ul>
+              </div>
 
-          <h3 className="text-xl font-bold text-blue-400 mb-3">About Employee</h3>
+          <h3 className="text-xl font-bold text-blue-400 mb-4  mt-10 ">About Employee</h3>
           <p className="text-gray-700 text-sm md:text-base leading-relaxed">
             {emp.description || "No description available."}
           </p>
@@ -122,12 +98,10 @@ export function EmployeeOverview() {
               {emp.address && (
                 <p><span className="font-semibold">Address:</span> {emp.address}</p>
               )}
+               <p><span className="font-semibold">Email:</span> {emp.email || "N/A"}</p>
             </div>
           </div>
 
-          <div className="mt-8 bg-blue-400 text-white p-4 rounded-lg text-center text-sm md:text-base">
-            <p><span className="font-semibold">Email:</span> {emp.email || "N/A"}</p>
-          </div>
         </div>
       </div>
     </div>

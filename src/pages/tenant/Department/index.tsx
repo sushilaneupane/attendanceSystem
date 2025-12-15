@@ -82,14 +82,14 @@ export function DepartmentPage() {
                 className="bg-blue-800 text-white flex items-center gap-2 px-1 py-2 rounded-md shadow hover:bg-blue-700 flex-shrink-0"
                 onClick={handleAddDepartment}
               >
-                <Plus className="text-sm px-0 py-1.5" />
+                <Plus/>
                 Add Department
               </Button>
             }
             width="min-w-[300px]"
             header={editingDepartment ? "Edit Department" : "Add Department"}
             footer={
-              <div className="flex justify-center gap-3 flex-wrap">
+              <div className="flex justify-end gap-3 flex-wrap">
                 <Button variant="outline" onClick={() => setDepartmentDialogOpen(false)}>
                   Cancel
                 </Button>
@@ -110,11 +110,12 @@ export function DepartmentPage() {
 
       <div className="overflow-x-auto max-h-[60vh] overflow-y-auto border rounded">
         <DataTable
-          headers={["Department", "Status", "Actions"]}
+          headers={["SN","Department", "Status", "Actions"]}
           data={filteredDepartments}
           emptyMessage="No departments found."
-          renderRow={(department: Department) => (
+          renderRow={(department: Department, index: number) => (
             <TableRow className="text-xs">
+              <TableCell className="px-3 sm:px-4 whitespace-nowrap">{index + 1}</TableCell>
               <TableCell
                 className="font-semibold cursor-pointer hover:underline px-3 py-2 sm:px-4 sm:py-3 whitespace-nowrap"
                 onClick={() => navigate(`/department/${department.id}`)}

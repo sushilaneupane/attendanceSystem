@@ -7,14 +7,12 @@ import { ControlledSelect } from "@/components/Form/ControlledSelect";
 import { useDepartments } from "@/hooks/useDepartments";
 import { useDesignationsByDepartment } from "@/hooks/useDesignations";
 import { useCreateEmployee, useUpdateEmployee } from "@/hooks/useEmployee";
-import { employeeEditSchema, employeeCreateSchema } from "@/Validator/employee";
+import { employeeEditSchema, employeeSchema, EditFormValues, EmployeeFormValues } from "@/Validator/employee";
 import { ImageUpload } from "@/components/EmployeeProfile/ProfileImageUpload";
 import { Label } from "@radix-ui/react-label";
 import { Employee } from "@/types/employee";
-import z from "zod";
 
-type EditFormValues = z.infer<typeof employeeEditSchema>;
-type CreateFormValues = z.infer<typeof employeeCreateSchema>;
+
 
 interface Props {
   isEditing?: boolean;
@@ -34,8 +32,8 @@ export default function EmployeeForm({
     control,
     watch,
     formState: { errors },
-  } = useForm<EditFormValues | CreateFormValues>({
-    resolver: zodResolver(isEditing ? employeeEditSchema : employeeCreateSchema),
+  } = useForm<EditFormValues | EmployeeFormValues>({
+    resolver: zodResolver(isEditing ? employeeEditSchema : employeeSchema),
     defaultValues: defaultValues
       ? {
           ...defaultValues,
@@ -101,7 +99,7 @@ export default function EmployeeForm({
     { label: "Widowed", value: 4 },
   ];
 
-  const onSubmit = (data: EditFormValues | CreateFormValues) => {
+  const onSubmit = (data: EditFormValues | EmployeeFormValues) => {
     const formData = { ...data, isActive };
 
     const fd = new FormData();
@@ -265,7 +263,7 @@ export default function EmployeeForm({
                 id="active-status"
                 checked={isActive}
                 onCheckedChange={setIsActive}
-                className="relative inline-flex h-6 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-red-500"
+                className=" data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-red-500"
               />
               <Label htmlFor="active-status">
                 {isActive ? "Active" : "Inactive"}

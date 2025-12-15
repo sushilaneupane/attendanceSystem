@@ -60,6 +60,7 @@ const LeaveManagementDashboard = () => {
   };
 
   const tableHeaders = [
+    "SN",
     "Employee",
     "Leave Type",
     "Dates",
@@ -69,13 +70,14 @@ const LeaveManagementDashboard = () => {
     "Actions",
   ];
 
-  const renderLeaveRow = (leave: Leave) => {
+  const renderLeaveRow = (leave: Leave, index: number) => {
     const fromDate = new Date(leave.dateFrom);
     const toDate = new Date(leave.dateTo);
     const appliedDate = new Date(leave.appliedOnDate);
 
     return (
       <TableRow key={leave.id} className="hover:bg-gray-50">
+        <TableCell className="px-6 py-4 font-medium text-gray-900">{index + 1}</TableCell>
         <TableCell className="px-6 py-4 font-medium text-gray-900">
           {leave.employeeName}
         </TableCell>

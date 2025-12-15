@@ -22,7 +22,7 @@ export default defineConfig({
 
     rollupOptions: {
       output: {
-        manualChunks: undefined, // disables splitting → fewer JS files
+        manualChunks: undefined, 
       },
     },
   },

@@ -60,7 +60,7 @@ export function ControlledSelect<T extends FieldValues>({
         )}
       />
 
-      <p className="text-sm text-red-500 min-h-5">{errorMessage || " "}</p>
+      <p className="text-sm text-red-500 min-h-2">{errorMessage || " "}</p>
     </div>
   );
 }

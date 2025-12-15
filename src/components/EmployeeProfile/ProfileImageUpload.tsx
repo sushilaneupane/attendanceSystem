@@ -31,7 +31,7 @@ export function ImageUpload({ onFileSelect, initialPreview = null }: ImageUpload
 
   return (
     <div className="space-y-1">
-      <Label>Profile Image</Label>
+      <Label className="font-semibold text-xm">Profile Image</Label>
       <input
         type="file"
         accept="image/*"
