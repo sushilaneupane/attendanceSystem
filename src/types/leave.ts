@@ -1,17 +1,17 @@
+import { leaveEditSchema } from "@/Validator/leave";
 import { ReactNode } from "react";
-
+import z from "zod";
 export interface Leave {
+  employeeId: string;
   id: string;
   employeeName: string;
   leaveType: number;
   startDate: string;
   endDate: string;
-
   days: ReactNode;
   dateTo: string;
   dateFrom: string;
-  isApproved: boolean;
-
+ leaveApproval: boolean;
   status: number;
   leaveReason: string;
   appliedOnDate: string;
@@ -40,3 +40,12 @@ export interface FetchLeavesParams {
   Approved?: boolean;
   Name?: string;
 }
+export interface UpdateLeaveData{
+  status:number;
+ 
+
+
+
+}
+export type UpdateLeaveDatas = z.infer<typeof leaveEditSchema> 
+

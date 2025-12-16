@@ -1,3 +1,4 @@
+import { SubscriptionTypes } from "@/types/enum/org";
 import { z } from "zod";
 export const organizationFormSchema = z.object({
  
@@ -17,7 +18,8 @@ export const organizationFormSchema = z.object({
   website: z.url("Please enter a valid URL").optional().or(z.literal("")),
   logo_url: z.string().optional(),
   isActive: z.boolean(),
-  subscription: z.number().min(1, "Subscription type is required"),
+  subscription: z.nativeEnum(SubscriptionTypes,  "Please select a valid subscription type" ),
+ 
 });
 export type OrganizationFormValues = z.infer<typeof organizationFormSchema>;
 export interface Organization {
@@ -37,7 +39,7 @@ export interface Organization {
   isActive: boolean;
   createdAt: string;
   deviceName: string;
-  subscription: number;
+  subscription: SubscriptionTypes;
   subscriptionEndDate: string;
 }
 export const getDefaultValues = (initialData?: Partial<OrganizationFormValues>): OrganizationFormValues => ({
@@ -55,6 +57,7 @@ export const getDefaultValues = (initialData?: Partial<OrganizationFormValues>):
   logo_url: initialData?.logo_url ?? "",
   isActive: initialData?.isActive ?? true,
   deviceName: initialData?.deviceName ?? "",
-  subscription: initialData?.subscription ?? 1,
+  subscription: initialData?.subscription ?? SubscriptionTypes.Basic,
+ 
   subscriptionEndDate: initialData?.subscriptionEndDate ?? "",
 });

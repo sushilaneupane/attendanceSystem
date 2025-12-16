@@ -135,7 +135,7 @@ function DesignationRow({
                     id={`active-status-${designation.designationId}`}
                     checked={isActive}
                     onCheckedChange={setIsActive}
-                    className="relative inline-flex h-6 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out 
+                    className="
                       data-[state=checked]:bg-green-500
                       data-[state=unchecked]:bg-red-500"
                   />
@@ -145,7 +145,7 @@ function DesignationRow({
                 </Label>
               </div>
 
-              <div className="flex justify-center gap-2 pt-4">
+              <div className="flex justify-end gap-2 pt-4">
                 <Button
                   variant="outline"
                   type="button"
@@ -184,7 +184,7 @@ function DesignationRow({
               {designation.designationName}&rdquo;?
             </p>
 
-            <div className="mt-4 flex justify-center gap-2">
+            <div className="mt-4 flex justify-end gap-2">
               <Button
                 variant="outline"
                 onClick={() => setOpenDeleteId(null)}
@@ -281,7 +281,7 @@ export default function DepartmentOverviewPage() {
               errors={errors}
             />
 
-            <div className="mt-4 flex justify-center gap-2">
+            <div className="mt-4 flex justify-end gap-2">
               <Button
                 variant="outline"
                 type="button"

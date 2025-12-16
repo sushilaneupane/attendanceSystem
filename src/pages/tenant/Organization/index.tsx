@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { DataTable } from "@/components/table/DataTable";
 import {
   useOrganizations,
-
   useUpdateOrganization,
 } from "@/hooks/useOrganization";
 import { Organization, OrganizationFormValues } from "@/types/organization";
@@ -22,6 +21,8 @@ export const OrganizationsPage: React.FC = () => {
  
   const updateOrganizationMutation = useUpdateOrganization();
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
+  const [editingOrgId, setEditingOrgId] = useState<string | null>(null);
   
   const toggleExpand = (id: string) => {
     const copy = new Set(expanded);
@@ -31,8 +32,6 @@ export const OrganizationsPage: React.FC = () => {
       copy.add(id);
     }
     setExpanded(copy);
-    
-   
   };
 
   const handleUpdate = (orgId: string, formData: OrganizationFormValues) => {
@@ -42,12 +41,26 @@ export const OrganizationsPage: React.FC = () => {
         onSuccess: () => {
           toast.success("Organization updated!");
           refetch();
+          setEditDialogOpen(false); 
+          setEditingOrgId(null); 
         },
         onError: () => {
           toast.error("Failed to update organization");
         },
       }
     );
+  };
+
+  const handleEditClick = (orgId: string) => {
+    setEditingOrgId(orgId);
+    setEditDialogOpen(true);
+  };
+
+  const handleDialogOpenChange = (open: boolean) => {
+    setEditDialogOpen(open);
+    if (!open) {
+      setEditingOrgId(null); 
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -72,7 +85,6 @@ export const OrganizationsPage: React.FC = () => {
     
     return (
       <React.Fragment key={org.id}>
-        
         <TableRow className="hover:bg-gray-50 transition-colors">
           <TableCell className="px-6 ">
             <div 
@@ -110,29 +122,18 @@ export const OrganizationsPage: React.FC = () => {
           
           <TableCell className="px-6">
             <div className="flex justify-end items-center space-x-3">
-              <DialogBox
-              variant=""
-                header="Edit Organization"
-                triggerButtonText={
-                  <Edit className="h-4 w-4 text-blue-600 cursor-pointer" />
-                }
-              >
-                <OrganizationForm
-                  initialData={org}
-                  isEdit={true}
-                  onSubmit={(data) => handleUpdate(org.id, data)}
-                />
-              </DialogBox>
+              <Edit 
+                className="h-4 w-4 text-blue-600 cursor-pointer hover:text-blue-800"
+                onClick={() => handleEditClick(org.id)}
+              />
             </div>
           </TableCell>
         </TableRow>
 
-    
         {isExpanded && (
           <TableRow className="bg-blue-50">
             <TableCell colSpan={5} className="px-6 py-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          
                 <div className="space-y-4">
                   <h3 className="font-semibold text-gray-900 text-sm uppercase tracking-wide border-b pb-2">
                     Financial Details
@@ -155,7 +156,6 @@ export const OrganizationsPage: React.FC = () => {
                   </div>
                 </div>
 
-            
                 <div className="space-y-4">
                   <h3 className="font-semibold text-gray-900 text-sm uppercase tracking-wide border-b pb-2">
                     Contract Details
@@ -211,6 +211,11 @@ export const OrganizationsPage: React.FC = () => {
     );
   };
 
+ 
+  const editingOrganization = editingOrgId 
+    ? organizations.find(org => org.id === editingOrgId)
+    : null;
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Organization Details</h1>
@@ -221,6 +226,23 @@ export const OrganizationsPage: React.FC = () => {
         isLoading={isLoading}
         emptyMessage="No organizations found."
       />
+      
+     
+      {editingOrganization && (
+        <DialogBox
+          open={editDialogOpen}
+          onOpenChange={handleDialogOpenChange}
+          header="Edit Organization"
+          variant=""
+        >
+          <OrganizationForm
+            initialData={editingOrganization}
+            isEdit={true}
+            onSubmit={(data) => handleUpdate(editingOrganization.id, data)}
+            isLoading={updateOrganizationMutation.isPending}
+          />
+        </DialogBox>
+      )}
     </div>
   );
 };
