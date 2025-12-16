@@ -45,6 +45,7 @@ export function Sidebar() {
     { name: "Department", path: "/department", icon: <Layers size={20} /> },
      { name: "Organization", path: "/organizations", icon: <Building size={20} /> },
       { name: "Leave Management", path: "/leave", icon: <Calendar size={20} /> },
+      { name: "Attendance", path: "/attendance", icon: <FileText size={20} /> },
 
   ];
 

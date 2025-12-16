@@ -60,6 +60,7 @@ export default function EmployeePage() {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-1 z-20 p-4 ">
         <div>
           <h1 className="text-xl mt-3 font-extrabold text-gray-900">Employees</h1>
+          <p className="text-muted-foreground mt-1">Manage your employees and their information</p>
         </div>
         <div className="flex flex-wrap md:flex-nowrap items-center gap-3 mt-3 md:mt-0">
           <div className="relative flex-shrink min-w-[120px] w-[130px] sm:w-64">

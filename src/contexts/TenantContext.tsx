@@ -3,7 +3,7 @@ import { useTenantByFrontendUrl } from "../hooks/useTenants";
 import { Tenant } from "@/types/tenant";
 import { TenantContext } from "./TenantContextValue";
 export const TenantProvider = ({ children }: { children: ReactNode }) => {
-  const frontendUrl = "attendancebe.hamosystem.com";
+  const frontendUrl = "attendancebe.hamrosystem.com";
   const { data, isLoading, isError, error } = useTenantByFrontendUrl(frontendUrl);
 
   const tenantData: Tenant | null = data ?? null;

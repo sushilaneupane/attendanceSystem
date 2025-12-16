@@ -58,7 +58,6 @@ export default function EmployeeForm({
 
   const defaultDept = defaultValues?.departmentId;
   const selectedDept = watch("departmentId");
-
   const { data: designations, isLoading: isDesignationLoading } =
     useDesignationsByDepartment(selectedDept || defaultDept || "");
 
@@ -266,7 +265,7 @@ export default function EmployeeForm({
                 className=" data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-red-500"
               />
               <Label htmlFor="active-status">
-                {isActive ? "Active" : "Inactive"}
+                {isActive ? "Active" : "Inactive"}  
               </Label>
             </div>
           )}
