@@ -50,6 +50,7 @@ export interface OrganizationFormProps {
   isLoading?: boolean;
   initialData?: Partial<OrganizationFormValues>;
   isEdit?: boolean;
+  onSuccess?: () => void; 
 }
 
 
