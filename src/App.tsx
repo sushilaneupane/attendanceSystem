@@ -16,6 +16,7 @@ import EmployeePage from "./pages/tenant/Employee";
 import { EmployeeOverview } from "./pages/tenant/Employee/Overview";
 import OrganizationsPage from "./pages/tenant/Organization";
 import LeaveManagementDashboard from "./pages/tenant/LeaveManagement";
+import AttendancePage from "./pages/tenant/Attendance";
 
 
 
@@ -47,6 +48,7 @@ export default function App() {
           <Route path="/department/:id" element={<DepartmentOverviewPage />} />
            <Route path="/organizations" element={<OrganizationsPage/>} />
            <Route path="/leave" element={<LeaveManagementDashboard/>}/>
+           <Route path="/attendance" element={<AttendancePage/>}/>
 
           </Route>
         </Route>
